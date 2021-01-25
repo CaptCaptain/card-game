@@ -49,6 +49,10 @@ rule "Global Huds":
 
     hudSubtext(getAllPlayers(), STR_GAME_NAME, HudPosition.RIGHT, -3, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
+    hudSubtext(getAllPlayers(), "{}:".format(STR_CARD_INSTRUCTION), HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+
+    hudHeader(getAllPlayers(), cardSentence, HudPosition.TOP, 3, SUB_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+
 rule "Player Setup":
     @Event eachPlayer
 
@@ -61,7 +65,7 @@ rule "Player Setup":
     eventPlayer.setMeleeEnabled(false)
 
     createEffect(getAllPlayers(), Effect.RING, SUB_COLOR if cardJudge == eventPlayer else VOTE_COLOR if eventPlayer.playedCard else PRIMARY_COLOR, getSpot, 1.5, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
-
+    
     eventPlayer.teleport(getSpot)
     eventPlayer.setFacing(directionTowards(eventPlayer.getEyePosition(), CENTER[mapData.POSITION] + Vector.UP), Relativity.TO_WORLD)
 

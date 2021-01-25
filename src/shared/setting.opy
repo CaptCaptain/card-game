@@ -12,7 +12,7 @@ settings {
     "gamemodes": {
         "ffa": {
             "enabledMaps": [
-                "petra", "havana"
+                "petra", "havana", "workshopIsland", "workshopIslandNight", "workshopExpanseNight"
             ]
         },
         "general": {

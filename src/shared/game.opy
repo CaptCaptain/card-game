@@ -52,7 +52,7 @@ globalvar lastDummy
 
 rule "Create Effects":
     # Create Center Effect
-    createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, PRIMARY_COLOR if currentGameState != gameState.VOTING else Color.BLACK, CENTER[mapData.POSITION], 2, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
+    createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.BLACK, CENTER[mapData.POSITION], 2, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     
     # Create Title
     createInWorldText(getAllPlayers(), STR_TITLE_MESSAGE, CENTER[mapData.POSITION] + (Vector.UP * 4), 5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, PRIMARY_COLOR, SpecVisibility.DEFAULT)
@@ -104,13 +104,10 @@ rule "Round":
     cardSentence = random.choice(sentences.exclude(cardSentence))
 
     # Create center text
-    createInWorldText(getAllPlayers(), STR_CARD_INSTRUCTION, CENTER[mapData.POSITION] + (Vector.UP * 4), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
+    createInWorldText(getAllPlayers(), STR_WAIT_FOR_CARDS, CENTER[mapData.POSITION] + (Vector.UP * 2), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, PRIMARY_COLOR, SpecVisibility.DEFAULT)
     hud_gameMessages.append(getLastCreatedText())
 
-    createInWorldText(getAllPlayers(), cardSentence, CENTER[mapData.POSITION] + (Vector.UP * 3), 1.25, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, PRIMARY_COLOR, SpecVisibility.DEFAULT)
-    hud_gameMessages.append(getLastCreatedText())
-
-    createInWorldText(getAllPlayers(), round(roundTime), CENTER[mapData.POSITION] + (Vector.UP * 0.5), 5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
+    createInWorldText(getAllPlayers(), round(roundTime), CENTER[mapData.POSITION] + (Vector.UP * 0.5), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
     hud_gameMessages.append(getLastCreatedText())
 
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, SUB_COLOR, CENTER[mapData.POSITION] + (Vector.UP * 3.5), 10)
@@ -134,6 +131,8 @@ rule "Round":
     # Any players automatically play their cards if they haven't already
     getAllPlayers().exclude(cardJudge).playedCard = true
 
+    destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
+
     currentGameState = gameState.VOTING
 
 rule "Voting":
@@ -142,6 +141,12 @@ rule "Voting":
     setObjectiveDescription(getAllPlayers(), STR_VOTING, HudReeval.VISIBILITY)
     
     roundTime = WS_SET_VOTING_TIME
+
+    createInWorldText(getAllPlayers(), STR_WAIT_FOR_JUDGE, CENTER[mapData.POSITION] + (Vector.UP * 2), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, PRIMARY_COLOR, SpecVisibility.DEFAULT)
+    hud_gameMessages.append(getLastCreatedText())
+
+    createInWorldText(getAllPlayers(), round(roundTime), CENTER[mapData.POSITION] + (Vector.UP * 0.5), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
+    hud_gameMessages.append(getLastCreatedText())
 
     chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
 
@@ -158,14 +163,17 @@ rule "Voting":
     # If the judge does not vote, force them to
     if not entityExists(cardJudge.cardVoted): cardJudge.cardVoted = getJudgeCards[cardJudge.selectedCardJudge]
 
+    destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
+
+    createInWorldText(getAllPlayers(), STR_JUDGE_VOTED, CENTER[mapData.POSITION] + (Vector.UP * 2), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, PRIMARY_COLOR, SpecVisibility.DEFAULT)
+    hud_gameMessages.append(getLastCreatedText())
+
     # Play effect
     wait(0.1)
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, VOTE_COLOR, cardJudge.cardVoted.getPosition(), 2)
     playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, VOTE_COLOR, cardJudge.cardVoted.getPosition(), 10)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, cardJudge.cardVoted.getPosition(), 100)
     cardJudge.cardVoted.addToScore(1)
-
-    smallMessage(getAllPlayers(), STR_JUDGE_VOTED)
 
     wait(3)
 

@@ -2,7 +2,7 @@ const availableLanguages = ["en-US"]
 const practiceRangeTranslations = ['"Practice Range"']
 const translations = {
     GAME_NAME: {
-        "en-US": "All Bad Cards by CaptCaptain#11421"
+        "en-US": "Cards Against Humanity by CaptCaptain#11421"
     },
     WEBLINK: {
         "en-US": ""
@@ -17,7 +17,7 @@ const translations = {
         "en-US": "Card Czar is Voting"
     },
     TITLE_MESSAGE: {
-        "en-US": "All Bad Cards"
+        "en-US": "Cards Against Humanity"
     },
     WAITING_FOR_PLAYERS: {
         "en-US": "Waiting For Players"
@@ -30,7 +30,7 @@ const translations = {
         format: 'abilityIconString(cardJudge.getCurrentHero(), Button.ULTIMATE)'
     },
     WAIT_FOR_CARDS: {
-        "en-US": "Wait for everyone to select their cards"
+        "en-US": "Waiting for everyone to select their cards"
     },
     WAIT_FOR_JUDGE: {
         "en-US": "Waiting for Card Czar"
@@ -54,10 +54,10 @@ const translations = {
         format: 'cardJudge.cardVoted'
     },
     SENTENCE_WIZARD: {
-        "en-US": "What will I bring back in time to convince people that I am a powerful wizard?"
+        "en-US": "What will I bring back in time to\nconvince people that I am a powerful wizard?"
     },
     SENTENCE_PRESIDENT: {
-        "en-US": "When I am President of the United States, I will create the Department of _________."
+        "en-US": "When I am President of the United States,\nI will create the Department of _________."
     },
     SENTENCE_BESTFRIEND: {
         "en-US": "What's a girl's best friend?"
@@ -69,7 +69,7 @@ const translations = {
         "en-US": "What's my secret power?"
     },
     SENTENCE_WW4: {
-        "en-US": "I do not know with what weapons World War III will be fought, but World War IV will be fought with ____________."
+        "en-US": "I do not know with what weapons World War III will be fought,\nbut World War IV will be fought with ____________."
     },
     SENTENCE_RELATIONSHIP: {
         "en-US": "What ended my last relationship?"
@@ -135,7 +135,7 @@ const translations = {
         "en-US": 'Hey Reddit! I’m __________________. Ask me anything.'
     },
     SENTENCE_BATHROOM: {
-        "en-US": 'Dude, do not goin that bathroom. There’s __________in there.'
+        "en-US": 'Dude, do not go in that bathroom. There’s __________ in there.'
     },
     SENTENCE_TSA: {
         "en-US": 'TSA guidelines now prohibit __________________ on airplanes.'
