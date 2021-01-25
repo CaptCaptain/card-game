@@ -19,7 +19,7 @@ var = []
     destroyEffect(var[i])\
 var = []
 
-#!define getJudgeCards [player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0]
+#!define getJudgeCards sorted([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0], lambda player: player.getSlot())
 
 enum mapData:
     POSITION = 0,
@@ -48,6 +48,7 @@ playervar selectedCardJudge = 0
 
 globalvar sentences = getSentence
 globalvar cards = getCard
+globalvar lastDummy
 
 rule "Create Effects":
     # Create Center Effect
@@ -59,10 +60,7 @@ rule "Create Effects":
     createInWorldText(getAllPlayers(), STR_WAITING_FOR_PLAYERS, CENTER[mapData.POSITION] + (Vector.UP * 3), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, PRIMARY_COLOR, SpecVisibility.DEFAULT)
     hud_gameMessages.append(getLastCreatedText())
 
-    hudHeader(getAllPlayers(), getServerLoad(), HudPosition.RIGHT, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-    hudHeader(getAllPlayers(), currentGameState, HudPosition.RIGHT, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
-
-rule "Update Match Time":
+rule "Disable Inspector / Update Match Time":
     disableInspector()
     waitUntil(isGameInProgress(), 9999)
     
@@ -87,6 +85,10 @@ rule "Waiting For Players":
 
 rule "Round":
     @Condition currentGameState == gameState.ROUND
+
+    setObjectiveDescription(getAllPlayers(), STR_PLAY_CARDS, HudReeval.VISIBILITY)
+
+    # Each player takes turns, the game skips any players that have not spawned in or do not exist.
     slot += 1
     while not entityExists(getPlayersInSlot(slot, Team.ALL)) and not getPlayersInSlot(slot, Team.ALL).hasSpawned():
         if slot > 12:
@@ -97,9 +99,11 @@ rule "Round":
         wait()
     roundTime = WS_SET_PICK_TIME
 
+    # Select judge and sentence
     cardJudge = getPlayersInSlot(slot, Team.ALL)
-    cardSentence = random.choice(sentences)
+    cardSentence = random.choice(sentences.exclude(cardSentence))
 
+    # Create center text
     createInWorldText(getAllPlayers(), STR_CARD_INSTRUCTION, CENTER[mapData.POSITION] + (Vector.UP * 4), 2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
     hud_gameMessages.append(getLastCreatedText())
 
@@ -112,50 +116,58 @@ rule "Round":
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, SUB_COLOR, CENTER[mapData.POSITION] + (Vector.UP * 3.5), 10)
     playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, SUB_COLOR, CENTER[mapData.POSITION] + (Vector.UP * 3.5), 100)
 
+    # Wait for everyone to get their cards
     waitUntil(all([len(player.cards) > 0 for player in getLivingPlayers(Team.ALL).exclude(cardJudge)]), 9999)
 
     chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
 
-    # Dummy bots automatically play
+    # Dummy bots automatically play cards
     [player for player in getAllPlayers() if player.isDummy()].playedCard = true
 
-    wait()
+    wait(0.1)
     
+    # Wait until everyone plays their cards or the time runs out
     waitUntil(roundTime == 0 or all([player.playedCard == true for player in getAllPlayers().exclude(cardJudge)]), 9999)
 
     stopChasingVariable(roundTime)
-
+    
+    # Any players automatically play their cards if they haven't already
     getAllPlayers().exclude(cardJudge).playedCard = true
 
     currentGameState = gameState.VOTING
 
 rule "Voting":
     @Condition currentGameState == gameState.VOTING
+
+    setObjectiveDescription(getAllPlayers(), STR_VOTING, HudReeval.VISIBILITY)
     
     roundTime = WS_SET_VOTING_TIME
 
     chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
 
     # Dummy bots automatically vote
-    if cardJudge.isDummy(): cardJudge.cardVoted = cardJudge.getPlayerClosestToReticle(getOppositeTeam(cardJudge.getTeam()))
+    if cardJudge.isDummy(): cardJudge.cardVoted = getJudgeCards[cardJudge.selectedCardJudge]
 
-    wait()
+    wait(0.1)
 
+    # Wait until time runs out or judge has voted
     waitUntil(roundTime == 0 or entityExists(cardJudge.cardVoted), 9999)
 
     stopChasingVariable(roundTime)
 
+    # If the judge does not vote, force them to
     if not entityExists(cardJudge.cardVoted): cardJudge.cardVoted = getJudgeCards[cardJudge.selectedCardJudge]
 
+    # Play effect
+    wait(0.1)
     playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, VOTE_COLOR, cardJudge.cardVoted.getPosition(), 2)
     playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, VOTE_COLOR, cardJudge.cardVoted.getPosition(), 10)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, cardJudge.cardVoted.getPosition(), 100)
-
     cardJudge.cardVoted.addToScore(1)
 
-    #smallMessage(getAllPlayers(), STR_JUDGE_VOTED)
+    smallMessage(getAllPlayers(), STR_JUDGE_VOTED)
 
-    wait(2)
+    wait(3)
 
     cardJudge.selectedCardJudge = 0
     cardJudge.cardVoted = null
@@ -173,9 +185,8 @@ rule "Player Reached Score":
     enableMusic()
 
 rule "Debug: Spawn Bots":
-    @Condition hostPlayer.isCommunicating(Comms.READY)    
-
     while getNumberOfPlayers(Team.ALL) < 12:
         createDummy(random.choice(getAllHeroes()), Team.ALL, -1, nearestWalkablePosition(getSpawnPoints(Team.1)), null)
+        lastDummy = getLastCreatedEntity()
         wait(0.25)
     wait(9999)
