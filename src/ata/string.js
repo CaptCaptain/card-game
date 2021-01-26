@@ -5,7 +5,7 @@ const translations = {
         "en-US": "Apples to Apples by CaptCaptain#11421"
     },
     WEBLINK: {
-        "en-US": ""
+        "en-US": "https://workshop.codes/apples-to-apples"
     },
     VERSION: {
         "en-US": "Version: 1.0.0"
