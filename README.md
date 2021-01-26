@@ -15,5 +15,5 @@ To compile this gamemode, you'll need:
 4. Paste the code as workshop code in Overwatch.
 
 # Credits
-* Apples to Apples is made by Mattel Games
-* Cards Against Humanity is made by Cards Against Humanity LLC
+* Apples to Apples is made by Mattel Games / https://www.mattelgames.com/games/en-us/family/apples-apples
+* Cards Against Humanity is made by Cards Against Humanity LLC / https://www.cardsagainsthumanity.com/
