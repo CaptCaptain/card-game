@@ -46,8 +46,8 @@ globalvar cardVotedName = []
 playervar playedCard = false
 playervar selectedCardJudge = 0
 
-globalvar sentences = getSentence
-globalvar cards = getCard
+globalvar sentences = []
+globalvar cards = []
 globalvar lastDummy
 
 rule "Create Effects":
@@ -119,7 +119,9 @@ rule "Round":
     chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
 
     # Dummy bots automatically play cards
-    [player for player in getAllPlayers() if player.isDummy()].playedCard = true
+    if any([player.isDummy() for player in getAllPlayers()]):
+        wait(2)
+        [player for player in getAllPlayers() if player.isDummy()].playedCard = true
 
     wait(0.1)
     
@@ -152,8 +154,11 @@ rule "Voting":
 
     # Dummy bots automatically vote
     if cardJudge.isDummy():
+        wait(2)
         cardJudge.selectedCardJudge = random.randint(0, len(getJudgeCards) - 1)
         cardJudge.cardVoted = getJudgeCards[cardJudge.selectedCardJudge]
+        if cardJudge.cardVoted.isDummy():
+            cardJudge.cardVoted.communicate(Comms.THANKS)
 
     wait(0.1)
 
@@ -196,6 +201,7 @@ rule "Player Reached Score":
     enableMusic()
 
 rule "Debug: Spawn Bots":
+    if not WS_SET_ENABLE_BOTS: return
     while getNumberOfPlayers(Team.ALL) < 12:
         createDummy(random.choice(getAllHeroes()), Team.ALL, -1, nearestWalkablePosition(getSpawnPoints(Team.1)), null)
         lastDummy = getLastCreatedEntity()

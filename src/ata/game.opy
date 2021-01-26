@@ -1,8 +1,42 @@
+settings {
+    "main": {
+        "description": 'The Game of Hilarious Comparisons! Based on the Apples to Apples card game by Mattel Games. [Gamemode created by CaptCaptain#11421]'
+    },
+    "lobby": {
+        "mapRotation": "afterGame",
+        "enableMatchVoiceChat": true,
+        "ffaSlots": 12,
+        "spectatorSlots": 12,
+        "returnToLobby": "never",
+        "allowPlayersInQueue": true
+    },
+    "gamemodes": {
+        "ffa": {
+            "enabledMaps": [
+                "petra", "havana", "workshopIsland", "workshopIslandNight", "iliosRuins", "volskaya", "blizzWorld", "dorado", "lijiangNightMarket", "lijiangNightMarketLny"
+            ]
+        },
+        "general": {
+            "gamemodeStartTrigger": "immediately",
+            "heroLimit": "off",
+            "scoreToWin": 1,
+            "spawnHealthPacks": "disabled"
+        }
+    },
+    "heroes": {
+        "allTeams": {
+            "general": {
+                "enableInfiniteAmmo": true,
+                "enableUlt": false
+            }
+        }
+    }
+}
+
+#!optimizeForSize
+
 #!define GetStrings() __script__("string.js")
 GetStrings()
-
-#!define getSentence [STR_GREEN_ABSURD, STR_GREEN_ABUNDANT, STR_GREEN_ADDICTIVE, STR_GREEN_ADORABLE, STR_GREEN_AGED, STR_GREEN_AMAZING, STR_GREEN_AMERICAN, STR_GREEN_ANCIENT, STR_GREEN_ANIMATED, STR_GREEN_ANNOYING, STR_GREEN_APPETIZING, STR_GREEN_ARMED_DANGEROUS]
-#!define getCard [STR_RED_BAD_HAIRCUT, STR_RED_BAKERY, STR_RED_BROKEN_LEG, STR_RED_BULL_FIGHT, STR_RED_CABIN, STR_RED_CAN_WORMS, STR_RED_CAR_CRASH, STR_RED_CHEAP_MOTEL, STR_RED_COOKBOOK, STR_RED_CRAWL_SPACE, STR_RED_CROWN, STR_RED_DESERT, STR_RED_DOLLAR, STR_RED_DOZEN_ROSES, STR_RED_FAIRY, STR_RED_GOOD_MEN]
 
 #!define PRIMARY_COLOR Color.WHITE
 #!define SUB_COLOR Color.ROSE
@@ -11,3 +45,6 @@ GetStrings()
 #!include "../shared/setting.opy"
 #!include "../shared/game.opy"
 #!include "../shared/player.opy"
+
+#!define GetGameData() __script__("cards.js")
+GetGameData()

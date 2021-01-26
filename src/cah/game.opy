@@ -1,8 +1,42 @@
+settings {
+    "main": {
+        "description": ''
+    },
+    "lobby": {
+        "mapRotation": "afterGame",
+        "enableMatchVoiceChat": true,
+        "ffaSlots": 12,
+        "spectatorSlots": 12,
+        "returnToLobby": "never",
+        "allowPlayersInQueue": true
+    },
+    "gamemodes": {
+        "ffa": {
+            "enabledMaps": [
+                "petra", "havana", "workshopIsland", "workshopIslandNight", "iliosRuins", "volskaya", "blizzWorld", "dorado", "lijiangNightMarket", "lijiangNightMarketLny"
+            ]
+        },
+        "general": {
+            "gamemodeStartTrigger": "immediately",
+            "heroLimit": "off",
+            "scoreToWin": 1,
+            "spawnHealthPacks": "disabled"
+        }
+    },
+    "heroes": {
+        "allTeams": {
+            "general": {
+                "enableInfiniteAmmo": true,
+                "enableUlt": false
+            }
+        }
+    }
+}
+
+#!optimizeForSize
+
 #!define GetStrings() __script__("string.js")
 GetStrings()
-
-#!define getSentence [STR_SENTENCE_WIZARD, STR_SENTENCE_PRESIDENT, STR_SENTENCE_BESTFRIEND, STR_SENTENCE_WW4, STR_SENTENCE_RELATIONSHIP, STR_SENTENCE_BROADWAY, STR_SENTENCE_RELATIONSHIP_STATUS, STR_SENTENCE_BOND, STR_SENTENCE_CHICKEN, STR_SENTENCE_HMT, STR_SENTENCE_MAYBE_IAM, STR_SENTENCE_TODAY_MAURY, STR_SENTENCE_MTV, STR_SENTENCE_CANT_HAVE, STR_SENTENCE_ROMANTIC_DINNER, STR_SENTENCE_SMITH_MUSEUM, STR_SENTENCE_VIRGIN, STR_SENTENCE_WORLD_ENDS, STR_SENTENCE_20_20, STR_SENTENCE_DR_PHIL, STR_SENTENCE_SHOW_N_TELL, STR_SENTENCE_HIGH_SCHOOL, STR_SENTENCE_SHOWING, STR_SENTENCE_REDDIT, STR_SENTENCE_BATHROOM, STR_SENTENCE_TSA, STR_SENTENCE_HW, STR_SENTENCE_GO_DOWN, STR_SENTENCE_WAR]
-#!define getCard [STR_CARD_HOLYBIBLE, STR_CARD_BATMAN, STR_CARD_BATMAN_NORMAL, STR_CARD_HANDICAPPED, STR_CARD_PUPPIES, STR_CARD_UNDERPANTS, STR_CARD_BACTERIA, STR_CARD_BURRITO, STR_CARD_LASER, STR_CARD_POLICE, STR_CARD_SNIFFING, STR_CARD_CARE_BEAR, STR_CARD_TRAIL_TEARS, STR_CARD_SALTY_SURPRISE, STR_CARD_DRINKING_ALONE, STR_CARD_PEPSI, STR_CARD_GOGURT, STR_CARD_CHANDELIER, STR_CARD_CHEATING_OLYPIMCS, STR_CARD_MARRIAGE, STR_CARD_COURT_REHAB, STR_CARD_EX_WIFE, STR_CARD_GRAVE_ROBBING, STR_CARD_WOMEN_SUFFRAGE, STR_CARD_INCEST, STR_CARD_NO_PANTS, STR_CARD_ROLLERSKATES, STR_CARD_DARK_MYSTERIOUS_FORCE, STR_CARD_WHIPPING, STR_CARD_ESTROGEN, STR_CARD_MOUTH_HERPES, STR_CARD_MAN_MEAT, STR_CARD_STUPIDITY, STR_CARD_YEAST, STR_CARD_HOES, STR_CARD_POPEYES, STR_CARD_NUNCHUCK, STR_CARD_PATIO, STR_CARD_DECENCY, STR_CARD_WOMEN_PERSPECTIVE]
 
 #!define PRIMARY_COLOR Color.WHITE
 #!define SUB_COLOR Color.ORANGE
@@ -11,3 +45,6 @@ GetStrings()
 #!include "../shared/setting.opy"
 #!include "../shared/game.opy"
 #!include "../shared/player.opy"
+
+#!define GetGameData() __script__("cards.js")
+GetGameData()

@@ -27,6 +27,7 @@ def stopRenderingCards():
 subroutine renderCards
 def renderCards():
     if len(eventPlayer.hud_cards) > 0: return
+    if eventPlayer.isDummy(): return
     stopRenderingCards()
 
     # Title hud text
@@ -49,7 +50,7 @@ rule "Global Huds":
 
     hudSubtext(getAllPlayers(), STR_GAME_NAME, HudPosition.RIGHT, -3, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
-    hudSubtext(getAllPlayers(), "{}:".format(STR_CARD_INSTRUCTION), HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext(getAllPlayers().exclude(cardJudge if currentGameState == gameState.ROUND else null), "{}:".format(STR_CARD_INSTRUCTION), HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
     hudHeader(getAllPlayers(), cardSentence, HudPosition.TOP, 3, SUB_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
