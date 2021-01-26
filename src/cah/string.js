@@ -144,7 +144,7 @@ const translations = {
         "en-US": 'I’m sorry, Professor, but I couldn’t complete my homework because of __________.'
     },
     SENTENCE_GO_DOWN:{
-        "en-US": 'Fun tip! When your man asks you to go down on him, try surprising him with __________________ instead.'
+        "en-US": 'Fun tip! When your man asks you to go down on him,\ntry surprising him with __________________ instead.'
     },
     SENTENCE_WAR:{
         "en-US": 'War! What is it good for?'

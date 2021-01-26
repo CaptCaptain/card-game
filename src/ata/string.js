@@ -30,7 +30,7 @@ const translations = {
         format: 'abilityIconString(cardJudge.getCurrentHero(), Button.ULTIMATE)'
     },
     WAIT_FOR_CARDS: {
-        "en-US": "Wait for everyone to select their cards"
+        "en-US": "Waiting for everyone to select their cards"
     },
     WAIT_FOR_JUDGE: {
         "en-US": "Waiting for Judge"

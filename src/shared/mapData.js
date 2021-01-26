@@ -13,7 +13,6 @@ let availableMapData = {
 // Some maps share the same map data
 availableMapData.WORKSHOP_ISLAND_NIGHT = availableMapData.WORKSHOP_ISLAND
 availableMapData.WORKSHOP_CHAMBER = availableMapData.WORKSHOP_ISLAND
-availableMapData.WORKSHOP_EXPANSE_NIGHT = availableMapData.WORKSHOP_ISLAND
 availableMapData.WORKSHOP_GREEN_SCREEN = availableMapData.WORKSHOP_ISLAND
 
 let maps = ''

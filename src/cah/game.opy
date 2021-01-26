@@ -8,8 +8,6 @@ GetStrings()
 #!define SUB_COLOR Color.ORANGE
 #!define VOTE_COLOR Color.TURQUOISE
 
-globalvar WS_SET_CONTENT_FILTER = createWorkshopSetting(enum["FRIENDLY", "MATURE", "UNFILTERED"], "Ruleset", "Content Filter", 0, 5)
-
 #!include "../shared/setting.opy"
 #!include "../shared/game.opy"
 #!include "../shared/player.opy"

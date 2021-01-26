@@ -52,7 +52,7 @@ globalvar lastDummy
 
 rule "Create Effects":
     # Create Center Effect
-    createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.BLACK, CENTER[mapData.POSITION], 2, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
+    createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.BLACK if currentGameState == gameState.VOTING else PRIMARY_COLOR, CENTER[mapData.POSITION], 2, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     
     # Create Title
     createInWorldText(getAllPlayers(), STR_TITLE_MESSAGE, CENTER[mapData.POSITION] + (Vector.UP * 4), 5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, PRIMARY_COLOR, SpecVisibility.DEFAULT)
@@ -90,7 +90,7 @@ rule "Round":
 
     # Each player takes turns, the game skips any players that have not spawned in or do not exist.
     slot += 1
-    while not entityExists(getPlayersInSlot(slot, Team.ALL)) and not getPlayersInSlot(slot, Team.ALL).hasSpawned():
+    while not (entityExists(getPlayersInSlot(slot, Team.ALL)) and getPlayersInSlot(slot, Team.ALL).hasSpawned()):
         if slot > 12:
             slot = 0
             break
@@ -124,7 +124,7 @@ rule "Round":
     wait(0.1)
     
     # Wait until everyone plays their cards or the time runs out
-    waitUntil(roundTime == 0 or all([player.playedCard == true for player in getAllPlayers().exclude(cardJudge)]), 9999)
+    waitUntil(roundTime == 0 or all([player.playedCard == true for player in getLivingPlayers(Team.ALL).exclude(cardJudge)]), 9999)
 
     stopChasingVariable(roundTime)
     
@@ -151,17 +151,20 @@ rule "Voting":
     chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
 
     # Dummy bots automatically vote
-    if cardJudge.isDummy(): cardJudge.cardVoted = getJudgeCards[cardJudge.selectedCardJudge]
+    if cardJudge.isDummy():
+        cardJudge.selectedCardJudge = random.randint(0, len(getJudgeCards) - 1)
+        cardJudge.cardVoted = getJudgeCards[cardJudge.selectedCardJudge]
 
     wait(0.1)
 
     # Wait until time runs out or judge has voted
-    waitUntil(roundTime == 0 or entityExists(cardJudge.cardVoted), 9999)
+    waitUntil(roundTime == 0 or entityExists(cardJudge.cardVoted) or not entityExists(cardJudge), 9999)
 
     stopChasingVariable(roundTime)
 
     # If the judge does not vote, force them to
-    if not entityExists(cardJudge.cardVoted): cardJudge.cardVoted = getJudgeCards[cardJudge.selectedCardJudge]
+    if not entityExists(cardJudge.cardVoted):
+        cardJudge.cardVoted = getJudgeCards[cardJudge.selectedCardJudge]
 
     destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
 
