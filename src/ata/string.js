@@ -8,7 +8,7 @@ const translations = {
         "en-US": "https://workshop.codes/apples-to-apples"
     },
     VERSION: {
-        "en-US": "Version: 1.0.0"
+        "en-US": "Version: 1.1.0"
     },
     PLAY_CARDS: {
         "en-US": "Play your cards"

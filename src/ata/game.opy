@@ -13,7 +13,7 @@ settings {
     "gamemodes": {
         "ffa": {
             "enabledMaps": [
-                "petra", "havana", "workshopIsland", "workshopIslandNight", "iliosRuins", "volskaya", "blizzWorld", "dorado", "lijiangNightMarket", "lijiangNightMarketLny"
+                "petra", "havana", "workshopIsland", "workshopIslandNight", "iliosRuins", "volskaya", "blizzWorld", "blizzWorldWinter", "dorado", "lijiangNightMarket", "lijiangNightMarketLny", "nepalVillage", "blackForest", "blackForestWinter", "paris"
             ]
         },
         "general": {

@@ -22,11 +22,22 @@ let availableMapData = {
     },
     LIJIANG_NIGHT_MARKET: {
         CENTER: '[vect(1.193, -0.996, -60.635), 7]'
+    },
+    NEPAL_VILLAGE: {
+        CENTER: '[vect(-195.075, -93.874, -0.174), 6]'
+    },
+    BLACK_FOREST: {
+        CENTER: '[vect(-20.055, 12.057, 4.054), 6]'
+    },
+    PARIS: {
+        CENTER: '[vect(-95.152, 12, -82.360), 7]'
     }
 }
 
 // Some maps share the same map data
 availableMapData.WORKSHOP_ISLAND_NIGHT = availableMapData.WORKSHOP_ISLAND
+availableMapData.BLIZZ_WORLD_WINTER = availableMapData.BLIZZ_WORLD
+availableMapData.BLACK_FOREST_WINTER = availableMapData.BLACK_FOREST
 availableMapData.LIJIANG_NIGHT_MARKET_LNY = availableMapData.LIJIANG_NIGHT_MARKET
 
 let maps = ''

@@ -150,6 +150,9 @@ rule "Voting":
     createInWorldText(getAllPlayers(), round(roundTime), CENTER[mapData.POSITION] + (Vector.UP * 0.5), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
     hud_gameMessages.append(getLastCreatedText())
 
+    playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, SUB_COLOR, CENTER[mapData.POSITION] + (Vector.UP * 3.5), 10)
+    playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, SUB_COLOR, CENTER[mapData.POSITION] + (Vector.UP * 3.5), 100)
+
     chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
 
     # Dummy bots automatically vote

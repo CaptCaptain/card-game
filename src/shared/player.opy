@@ -63,7 +63,12 @@ rule "Player Setup":
     eventPlayer.setAbility1Enabled(false)
     eventPlayer.setAbility2Enabled(false)
     eventPlayer.setReloadEnabled(false)
-    eventPlayer.setMeleeEnabled(false)
+    eventPlayer.disallowButton(Button.SECONDARY_FIRE)
+    eventPlayer.disallowButton(Button.ABILITY_2)
+    eventPlayer.disallowButton(Button.ULTIMATE)
+    eventPlayer.disallowButton(Button.INTERACT)
+    eventPlayer.disallowButton(Button.RELOAD)
+    eventPlayer.disallowButton(Button.MELEE)
 
     createEffect(getAllPlayers(), Effect.RING, SUB_COLOR if cardJudge == eventPlayer else VOTE_COLOR if eventPlayer.playedCard else PRIMARY_COLOR, getSpot, 1.5, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     
