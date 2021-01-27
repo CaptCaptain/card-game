@@ -38,9 +38,9 @@ settings {
 #!define GetStrings() __script__("string.js")
 GetStrings()
 
-#!define PRIMARY_COLOR Color.WHITE
+#!define PRIMARY_COLOR Color.BLACK
 #!define SUB_COLOR Color.ORANGE
-#!define VOTE_COLOR Color.TURQUOISE
+#!define VOTE_COLOR Color.WHITE
 
 #!include "../shared/setting.opy"
 #!include "../shared/game.opy"

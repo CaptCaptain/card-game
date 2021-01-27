@@ -167,7 +167,7 @@ rule "Label Card Judge":
     createEffect(getAllPlayers().exclude(cardJudge if not entityExists(eventPlayer.cardVoted) else null) if currentGameState == gameState.VOTING else null, Effect.GOOD_AURA, VOTE_COLOR if entityExists(cardJudge.cardVoted) else SUB_COLOR, getJudgeCards[eventPlayer.selectedCardJudge], 1, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     eventPlayer.hud_cardJudge.append(getLastCreatedEntity())
 
-    createInWorldText(getAllPlayers().exclude(cardJudge if not entityExists(eventPlayer.cardVoted) else null) if currentGameState == gameState.VOTING else null, getJudgeCards[eventPlayer.selectedCardJudge].cards[getJudgeCards[eventPlayer.selectedCardJudge].selectedCard], getJudgeCards[eventPlayer.selectedCardJudge], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, PRIMARY_COLOR, SpecVisibility.DEFAULT)
+    createInWorldText(getAllPlayers().exclude(cardJudge if not entityExists(eventPlayer.cardVoted) else null) if currentGameState == gameState.VOTING else null, getJudgeCards[eventPlayer.selectedCardJudge].cards[getJudgeCards[eventPlayer.selectedCardJudge].selectedCard], getJudgeCards[eventPlayer.selectedCardJudge], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
     eventPlayer.hud_cardJudge.append(getLastCreatedText())
 
     waitUntil(cardJudge != eventPlayer, 9999)
