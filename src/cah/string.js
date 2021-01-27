@@ -2,7 +2,7 @@ const availableLanguages = ["en-US"]
 const practiceRangeTranslations = ['"Practice Range"']
 const translations = {
     GAME_NAME: {
-        "en-US": "Cards Against Humanity by CaptCaptain#11421"
+        "en-US": ""
     },
     WEBLINK: {
         "en-US": ""
