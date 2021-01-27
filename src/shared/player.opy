@@ -68,7 +68,7 @@ rule "Player Setup":
     eventPlayer.disallowButton(Button.ULTIMATE)
     eventPlayer.disallowButton(Button.INTERACT)
     eventPlayer.disallowButton(Button.RELOAD)
-    eventPlayer.disallowButton(Button.MELEE)
+    eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 9999)
 
     createEffect(getAllPlayers(), Effect.RING, SUB_COLOR if cardJudge == eventPlayer else VOTE_COLOR if eventPlayer.playedCard else PRIMARY_COLOR, getSpot, 1.5, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     
