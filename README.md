@@ -16,4 +16,3 @@ To compile this gamemode, you'll need:
 
 # Credits
 * Apples to Apples is made by Mattel Games / https://www.mattelgames.com/games/en-us/family/apples-apples
-* Cards Against Humanity is made by Cards Against Humanity LLC / https://www.cardsagainsthumanity.com/
