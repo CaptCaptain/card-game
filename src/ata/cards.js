@@ -2341,21 +2341,35 @@ arr.sort(() => Math.random() - 0.5);
 result += '\n'
 
 // Set Cards
-result += 'rule "Set Card Pack":\n'
+let remaining
+result += 'rule "Set Card Pack (Cards)":\n'
 shuffleArray(cards)
+remaining = 0
 for (var card of cards) {
-    if (cards.indexOf(card) > 310) {
-        break
+    if (remaining >= 600) {
+        remaining = 0
+        result += '    cards.remove([card for card in cards if strContains(card, "**")])\n'
+        result += 'rule "Set Card Pack (Cards)":\n'
+    } else {
+        remaining += 1
     }
     result += '    cards.append('+'"'+card+'"'+')\n'
 }
+result += '    cards.remove([card for card in cards if strContains(card, "**")])\n'
+
 shuffleArray(sentences)
+result += 'rule "Set Card Pack (Words)":\n'
+remaining = 0
 for (var sentence of sentences) {
-    if (sentences.indexOf(sentence) > 310) {
-        break
+    if (remaining >= 600) {
+        remaining = 0
+        result += '    sentences.remove([sentence for sentence in sentences if strContains(sentence, "**")])\n'
+        result += 'rule "Set Card Pack (Words)":\n'
+    } else {
+        remaining += 1
     }
     result += '    sentences.append('+'"'+sentence+'"'+')\n'
 }
-result += '    cards.remove([card for card in cards if strContains(card, "**")])\n'
 result += '    sentences.remove([sentence for sentence in sentences if strContains(sentence, "**")])\n'
+
 result

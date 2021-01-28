@@ -157,8 +157,8 @@ rule "Voting":
 
     # Dummy bots automatically vote
     if cardJudge.isDummy():
-        wait(2)
         cardJudge.selectedCardJudge = random.randint(0, len(getJudgeCards) - 1)
+        wait(2)
         cardJudge.cardVoted = getJudgeCards[cardJudge.selectedCardJudge]
         if cardJudge.cardVoted.isDummy():
             cardJudge.cardVoted.communicate(Comms.THANKS)
