@@ -55,9 +55,9 @@ rule "Create Effects":
     createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.BLACK if currentGameState == gameState.VOTING else PRIMARY_COLOR, CENTER[mapData.POSITION], 2, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     
     # Create Title
-    createInWorldText(getAllPlayers(), STR_TITLE_MESSAGE, CENTER[mapData.POSITION] + (Vector.UP * 4), 5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, PRIMARY_COLOR, SpecVisibility.DEFAULT)
+    createInWorldText(getAllPlayers(), STR_TITLE_MESSAGE, CENTER[mapData.POSITION] + (Vector.UP * 4), 5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
     hud_gameMessages.append(getLastCreatedText())
-    createInWorldText(getAllPlayers(), STR_WAITING_FOR_PLAYERS, CENTER[mapData.POSITION] + (Vector.UP * 3), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, PRIMARY_COLOR, SpecVisibility.DEFAULT)
+    createInWorldText(getAllPlayers(), STR_WAITING_FOR_PLAYERS, CENTER[mapData.POSITION] + (Vector.UP * 3), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
     hud_gameMessages.append(getLastCreatedText())
 
 rule "Disable Inspector / Update Match Time":
