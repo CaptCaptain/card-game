@@ -31,6 +31,12 @@ let availableMapData = {
     },
     PARIS: {
         CENTER: '[vect(-95.152, 12, -82.360), 7]'
+    },
+    OASIS_UNIVERSITY: {
+        CENTER: '[vect(-188.021, 14.912, -0.099), 7]'
+    },
+    CHATEAU_GUILLARD: {
+        CENTER: '[vect(206.236, 7.993, 56.962), 7]'
     }
 }
 
@@ -39,6 +45,7 @@ availableMapData.WORKSHOP_ISLAND_NIGHT = availableMapData.WORKSHOP_ISLAND
 availableMapData.BLIZZ_WORLD_WINTER = availableMapData.BLIZZ_WORLD
 availableMapData.BLACK_FOREST_WINTER = availableMapData.BLACK_FOREST
 availableMapData.LIJIANG_NIGHT_MARKET_LNY = availableMapData.LIJIANG_NIGHT_MARKET
+availableMapData.CHATEAU_GUILLARD_HALLOWEEN = availableMapData.CHATEAU_GUILLARD
 
 let maps = ''
 let center = ''

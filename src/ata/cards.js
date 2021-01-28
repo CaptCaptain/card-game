@@ -2344,14 +2344,14 @@ result += '\n'
 result += 'rule "Set Card Pack":\n'
 shuffleArray(cards)
 for (var card of cards) {
-    if (cards.indexOf(card) > 300) {
+    if (cards.indexOf(card) > 310) {
         break
     }
     result += '    cards.append('+'"'+card+'"'+')\n'
 }
 shuffleArray(sentences)
 for (var sentence of sentences) {
-    if (sentences.indexOf(sentence) > 300) {
+    if (sentences.indexOf(sentence) > 310) {
         break
     }
     result += '    sentences.append('+'"'+sentence+'"'+')\n'
