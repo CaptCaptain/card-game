@@ -37,6 +37,12 @@ let availableMapData = {
     },
     CHATEAU_GUILLARD: {
         CENTER: '[vect(206.236, 7.993, 56.962), 7]'
+    },
+    HANAMURA: {
+        CENTER: '[vect(-11.438, -0.861, -85.328), 7]'
+    },
+    HOLLYWOOD: {
+        CENTER: '[vect(-12.459, -0.108, 56.391), 7]'
     }
 }
 
@@ -45,6 +51,8 @@ availableMapData.WORKSHOP_ISLAND_NIGHT = availableMapData.WORKSHOP_ISLAND
 availableMapData.BLIZZ_WORLD_WINTER = availableMapData.BLIZZ_WORLD
 availableMapData.BLACK_FOREST_WINTER = availableMapData.BLACK_FOREST
 availableMapData.LIJIANG_NIGHT_MARKET_LNY = availableMapData.LIJIANG_NIGHT_MARKET
+availableMapData.HANAMURA_WINTER = availableMapData.HANAMURA
+availableMapData.HOLLYWOOD_HALLOWEEN = availableMapData.HOLLYWOOD
 availableMapData.CHATEAU_GUILLARD_HALLOWEEN = availableMapData.CHATEAU_GUILLARD
 
 let maps = ''
