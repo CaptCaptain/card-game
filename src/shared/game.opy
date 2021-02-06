@@ -21,6 +21,8 @@ var = []
 
 #!define getJudgeCards sorted([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0], lambda player: player.getSlot())
 
+#!define playersInMatch(team) [player for player in getLivingPlayers(team) if player.hasSpawned()]
+
 enum mapData:
     POSITION = 0,
     RADIUS = 1
@@ -104,7 +106,7 @@ rule "Round":
     cardSentence = random.choice(sentences.exclude(cardSentence))
 
     # Create center text
-    createInWorldText(getAllPlayers(), STR_WAIT_FOR_CARDS, CENTER[mapData.POSITION] + (Vector.UP * 2), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+    createInWorldText(getAllPlayers(), STR_WAIT_FOR_CARDS, CENTER[mapData.POSITION] + (Vector.UP * 3), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
     hud_gameMessages.append(getLastCreatedText())
 
     createInWorldText(getAllPlayers(), round(roundTime), CENTER[mapData.POSITION] + (Vector.UP * 0.5), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
@@ -114,7 +116,7 @@ rule "Round":
     playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, SUB_COLOR, CENTER[mapData.POSITION] + (Vector.UP * 3.5), 100)
 
     # Wait for everyone to get their cards
-    waitUntil(all([len(player.cards) > 0 for player in getLivingPlayers(Team.ALL).exclude(cardJudge)]), 9999)
+    waitUntil(all([len(player.cards) > 0 for player in playersInMatch(Team.ALL).exclude(cardJudge)]), 9999)
 
     chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
 
@@ -126,7 +128,7 @@ rule "Round":
     wait(0.1)
     
     # Wait until everyone plays their cards or the time runs out
-    waitUntil(roundTime == 0 or all([player.playedCard == true for player in getLivingPlayers(Team.ALL).exclude(cardJudge)]), 9999)
+    waitUntil(roundTime == 0 or all([player.playedCard == true for player in playersInMatch(Team.ALL).exclude(cardJudge)]), 9999)
 
     stopChasingVariable(roundTime)
     
@@ -144,7 +146,7 @@ rule "Voting":
     
     roundTime = WS_SET_VOTING_TIME
 
-    createInWorldText(getAllPlayers(), STR_WAIT_FOR_JUDGE, CENTER[mapData.POSITION] + (Vector.UP * 2), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+    createInWorldText(getAllPlayers(), STR_WAIT_FOR_JUDGE, CENTER[mapData.POSITION] + (Vector.UP * 3), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
     hud_gameMessages.append(getLastCreatedText())
 
     createInWorldText(getAllPlayers(), round(roundTime), CENTER[mapData.POSITION] + (Vector.UP * 0.5), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
@@ -176,7 +178,7 @@ rule "Voting":
 
     destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
 
-    createInWorldText(getAllPlayers(), STR_JUDGE_VOTED, CENTER[mapData.POSITION] + (Vector.UP * 2), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+    createInWorldText(getAllPlayers(), STR_JUDGE_VOTED, CENTER[mapData.POSITION] + (Vector.UP * 3), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
     hud_gameMessages.append(getLastCreatedText())
 
     # Play effect
@@ -199,6 +201,8 @@ rule "Voting":
 rule "Player Reached Score":
     @Event global
     @Condition any([player.getScore() >= WS_SET_SCORE_NEEDED for player in getAllPlayers()])
+
+    wait(1)
 
     declarePlayerVictory(sorted(getAllPlayers(), lambda player: player.getScore()).last())
     enableMusic()

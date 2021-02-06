@@ -144,9 +144,11 @@ rule "Label Card Judge":
 
     eventPlayer.startForcingOutlineFor(getAllPlayers(), true, SUB_COLOR, OutlineVisibility.DEFAULT)
 
-    createInWorldText(getAllPlayers(), STR_CARD_JUDGE, eventPlayer, 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
+    # Judge title
+    createInWorldText(getAllPlayers(), STR_CARD_JUDGE, eventPlayer, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
     eventPlayer.hud_cardJudge.append(getLastCreatedText())
 
+    # Judge light shaft
     createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, SUB_COLOR, getSpot, 1.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
     eventPlayer.hud_cardJudge.append(getLastCreatedEntity())
 
@@ -164,10 +166,12 @@ rule "Label Card Judge":
     createEffect(getAllPlayers().exclude(cardJudge if not entityExists(eventPlayer.cardVoted) else null) if currentGameState == gameState.VOTING else null, Effect.LIGHT_SHAFT, VOTE_COLOR if entityExists(cardJudge.cardVoted) else SUB_COLOR, getJudgeCards[eventPlayer.selectedCardJudge].getPosition(), 0.5, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     eventPlayer.hud_cardJudge.append(getLastCreatedEntity())
 
+    # The effect that will be shown on the player the judge is currently selecting
     createEffect(getAllPlayers().exclude(cardJudge if not entityExists(eventPlayer.cardVoted) else null) if currentGameState == gameState.VOTING else null, Effect.GOOD_AURA, VOTE_COLOR if entityExists(cardJudge.cardVoted) else SUB_COLOR, getJudgeCards[eventPlayer.selectedCardJudge], 1, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     eventPlayer.hud_cardJudge.append(getLastCreatedEntity())
 
-    createInWorldText(getAllPlayers().exclude(cardJudge if not entityExists(eventPlayer.cardVoted) else null) if currentGameState == gameState.VOTING else null, getJudgeCards[eventPlayer.selectedCardJudge].cards[getJudgeCards[eventPlayer.selectedCardJudge].selectedCard], getJudgeCards[eventPlayer.selectedCardJudge], 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+    # The text that will be shown on the player the judge is currently selecting
+    createInWorldText(getAllPlayers().exclude(cardJudge if not entityExists(eventPlayer.cardVoted) else null) if currentGameState == gameState.VOTING else null, getJudgeCards[eventPlayer.selectedCardJudge].cards[getJudgeCards[eventPlayer.selectedCardJudge].selectedCard], getJudgeCards[eventPlayer.selectedCardJudge], 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
     eventPlayer.hud_cardJudge.append(getLastCreatedText())
 
     waitUntil(cardJudge != eventPlayer, 9999)
