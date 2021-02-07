@@ -156,6 +156,8 @@ rule "Forfeit":
 rule "Clean up":
     @Event playerLeft
 
+    eventPlayer.cards = []
+    eventPlayer.playedCard = false
     stopRenderingCards()
 
 rule "Outline Card Judge":
