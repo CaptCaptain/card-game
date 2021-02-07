@@ -85,7 +85,7 @@ rule "Waiting For Players":
     waitUntil(isGameInProgress(), 9999)
     disableMusic()
     pauseMatchTime()
-    waitUntil(getNumberOfLivingPlayers(Team.ALL) >= 3, 9999)
+    waitUntil(len(playersInMatch(Team.ALL)) >= 3, 9999)
 
     destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
     wait(1)
