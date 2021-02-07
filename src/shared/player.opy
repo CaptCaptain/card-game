@@ -105,6 +105,7 @@ rule "Get Cards":
     for eventPlayer.playerHudIndex in range(len(eventPlayer.cards), 5, 1):
         eventPlayer.cards.append(random.choice(cards.exclude(eventPlayer.cards).exclude(ignoreCardFilter)))
         ignoreCardFilter.append(eventPlayer.cards.last())
+        wait()
     waitUntil(entityExists(cardJudge), 9999)
     if eventPlayer == cardJudge: return
     renderCards()
