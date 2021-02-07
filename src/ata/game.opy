@@ -33,8 +33,6 @@ settings {
     }
 }
 
-#!optimizeForSize
-
 #!define GetStrings() __script__("string.js")
 GetStrings()
 
