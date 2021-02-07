@@ -39,14 +39,14 @@ const translations = {
         "en-US": "Select the Card that best fits the word"
     },
     JUDGE_VOTE_INSTRUCTION: {
-        "en-US": "{}/{}\n[{}]: Confirm\n[{} / {}]: Select",
-        format: "eventPlayer.selectedCardJudge, len(getJudgeCards) - 1, buttonString(Button.PRIMARY_FIRE), buttonString(Button.ULTIMATE), buttonString(Button.ABILITY_2)"
+        "en-US": "Card #{}/{}\n{} - Confirm\n{} (Left) / {} (Right) - Select",
+        format: "cardJudge.selectedCardJudge, len(getJudgeCards) - 1, buttonString(Button.PRIMARY_FIRE), buttonString(Button.ULTIMATE), buttonString(Button.ABILITY_2)"
     },
     YOUR_CARDS: {
         "en-US": "Your Cards"
     },
     CARD_CONTROLS: {
-        "en-US": " \n[{}]: Play Card\n[{}]: Get New Cards (Forfeit your turn)\n[{} / {}]: Select Card",
+        "en-US": " \n{} - Play Card\n{} - Get New Cards (Forfeit your turn)\n{} (Up) / {} (Down) - Select Card",
         format: "buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), buttonString(Button.RELOAD), buttonString(Button.INTERACT)"
     },
     JUDGE_VOTED:{

@@ -105,6 +105,10 @@ rule "Round":
     cardJudge = getPlayersInSlot(slot, Team.ALL)
     cardSentence = random.choice(sentences.exclude(cardSentence))
 
+    # Make dummy bot wave if they are judge
+    if cardJudge.isDummy():
+        cardJudge.communicate(Comms.HELLO)
+
     # Create center text
     createInWorldText(getAllPlayers(), STR_WAIT_FOR_CARDS, CENTER[mapData.POSITION] + (Vector.UP * 3), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
     hud_gameMessages.append(getLastCreatedText())
