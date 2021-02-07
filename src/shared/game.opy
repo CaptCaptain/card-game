@@ -69,6 +69,23 @@ def dummyJudgeVote():
         if cardJudge.cardVoted.isDummy():
             cardJudge.cardVoted.communicate(Comms.THANKS)
 
+globalvar antiCrashActivated
+
+rule "Anti Crash":
+    @Condition antiCrashActivated == false
+    @Condition getServerLoad() > 200
+    
+    wait(1, Wait.ABORT_WHEN_FALSE)
+    setSlowMotion(10)
+    antiCrashActivated = true
+
+rule "Disable Anti Crash":
+    @Condition antiCrashActivated == true
+    @Condition getServerLoad() < 175
+    
+    setSlowMotion(100)
+    antiCrashActivated = false
+
 rule "Create Effects":
     # Create Center Effect
     createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.BLACK if currentGameState == gameState.VOTING else PRIMARY_COLOR, CENTER[mapData.POSITION], 2, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)

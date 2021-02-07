@@ -33,23 +33,6 @@ settings {
     }
 }
 
-globalvar antiCrashActivated
-
-rule "Anti Crash":
-    @Condition antiCrashActivated == false
-    @Condition getServerLoad() > 200
-    
-    wait(1, Wait.ABORT_WHEN_FALSE)
-    setSlowMotion(10)
-    antiCrashActivated = true
-
-rule "Disable Anti Crash":
-    @Condition antiCrashActivated == true
-    @Condition getServerLoad() < 175
-    
-    setSlowMotion(100)
-    antiCrashActivated = false
-
 #!define GetStrings() __script__("string.js")
 GetStrings()
 
