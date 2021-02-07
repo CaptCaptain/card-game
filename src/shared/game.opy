@@ -135,7 +135,7 @@ rule "Round":
         async(dummyVote, AsyncBehavior.NOOP)
     
     # Wait until everyone plays their cards or the time runs out
-    waitUntil(roundTime == 0 or all([player.playedCard == true for player in playersInMatch(Team.ALL).exclude(cardJudge)]), 9999)
+    waitUntil(roundTime == 0 or all([player.playedCard == true for player in playersInMatch(Team.ALL).exclude(cardJudge)]), WS_SET_PICK_TIME)
 
     stopChasingVariable(roundTime)
     
@@ -173,7 +173,7 @@ rule "Voting":
             cardJudge.cardVoted.communicate(Comms.THANKS)
 
     # Wait until time runs out or judge has voted
-    waitUntil(roundTime == 0 or entityExists(cardJudge.cardVoted) or not entityExists(cardJudge), 9999)
+    waitUntil(roundTime == 0 or entityExists(cardJudge.cardVoted) or not entityExists(cardJudge), WS_SET_VOTING_TIME)
 
     stopChasingVariable(roundTime)
 
@@ -187,9 +187,9 @@ rule "Voting":
     hud_gameMessages.append(getLastCreatedText())
 
     # Play effect
-    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, VOTE_COLOR, cardJudge.cardVoted.getPosition(), 5)
-    playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, VOTE_COLOR, cardJudge.cardVoted.getPosition(), 10)
-    playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, cardJudge.cardVoted.getPosition(), 100)
+    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, VOTE_COLOR, cardJudge.cardVoted.getPosition() + Vector.UP, 5)
+    playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, VOTE_COLOR, cardJudge.cardVoted.getPosition() + Vector.UP, 10)
+    playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, cardJudge.cardVoted.getPosition() + Vector.UP, 100)
     cardJudge.cardVoted.addToScore(1)
 
     wait(3)
@@ -210,6 +210,12 @@ rule "Player Reached Score":
 
     declarePlayerVictory(sorted(getAllPlayers(), lambda player: player.getScore()).last())
     enableMusic()
+
+rule "Player Is Close Score":
+    @Event global
+    @Condition any([player.getScore() >= WS_SET_SCORE_NEEDED - 1 for player in getAllPlayers()])
+
+    smallMessage(getAllPlayers(), "{} is one point away from winning!".format(sorted(getLivingPlayers(Team.ALL), lambda player: player.getScore()).last()))
 
 rule "Debug: Spawn Bots":
     if not WS_SET_ENABLE_BOTS: return
