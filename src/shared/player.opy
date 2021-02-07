@@ -30,6 +30,7 @@ def renderCards():
     for eventPlayer.playerHudIndex in range(0, 5, 1):
         hudHeader(eventPlayer if eventPlayer != cardJudge else null, "{} {}".format("" if eventPlayer.selectedCard != evalOnce(eventPlayer.playerHudIndex) else ">", eventPlayer.cards[evalOnce(eventPlayer.playerHudIndex)]) if len(eventPlayer.cards) > 0 else "", HudPosition.TOP, evalOnce(eventPlayer.playerHudIndex) + 5, Color.LIME_GREEN if eventPlayer.selectedCard == evalOnce(eventPlayer.playerHudIndex) and eventPlayer.playedCard == true else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
         eventPlayer.hud_cards.append(getLastCreatedText())
+        wait()
 
 rule "Global Huds":
 
