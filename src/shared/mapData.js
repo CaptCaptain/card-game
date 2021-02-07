@@ -43,6 +43,12 @@ let availableMapData = {
     },
     HOLLYWOOD: {
         CENTER: '[vect(-12.459, -0.108, 56.391), 7]'
+    },
+    EICHENWALDE: {
+        CENTER: '[vect(119.594, 8.726, -43.914), 6]'
+    },
+    KINGS_ROW: {
+        CENTER: '[vect(-149.030, -2.932, 24.228), 6]'
     }
 }
 
@@ -54,6 +60,8 @@ availableMapData.LIJIANG_NIGHT_MARKET_LNY = availableMapData.LIJIANG_NIGHT_MARKE
 availableMapData.HANAMURA_WINTER = availableMapData.HANAMURA
 availableMapData.HOLLYWOOD_HALLOWEEN = availableMapData.HOLLYWOOD
 availableMapData.CHATEAU_GUILLARD_HALLOWEEN = availableMapData.CHATEAU_GUILLARD
+availableMapData.EICHENWALDE_HALLOWEEN = availableMapData.EICHENWALDE
+availableMapData.KINGS_ROW_WINTER = availableMapData.KINGS_ROW
 
 let maps = ''
 let center = ''

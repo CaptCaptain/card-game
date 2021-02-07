@@ -21,13 +21,11 @@ playervar selectedCard = 0
 
 subroutine stopRenderingCards
 def stopRenderingCards():
-    if eventPlayer.isDummy(): return
     destroyHudTextLoop(eventPlayer.playerHudIndex, eventPlayer.hud_cards)
 
 subroutine renderCards
 def renderCards():
     if len(eventPlayer.hud_cards) > 0: return
-    if eventPlayer.isDummy(): return
     stopRenderingCards()
 
     # Create hud text for each card, and show the selected card
@@ -38,10 +36,10 @@ def renderCards():
 rule "Global Huds":
 
     # Your cards hud text
-    hudSubtext([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0], STR_YOUR_CARDS, HudPosition.LEFT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0], STR_YOUR_CARDS, HudPosition.LEFT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Control hud text
-    hudSubtext([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0], STR_CARD_CONTROLS, HudPosition.LEFT, 6, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0], STR_CARD_CONTROLS, HudPosition.LEFT, 6, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Credit huds
     hudSubheader(getAllPlayers(), STR_VERSION, HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
@@ -70,7 +68,7 @@ rule "Global Huds":
     createEffect(getAllPlayers().exclude(cardJudge if not entityExists(cardJudge.cardVoted) else null) if entityExists(cardJudge) and currentGameState == gameState.VOTING else null, Effect.GOOD_AURA, VOTE_COLOR if entityExists(cardJudge.cardVoted) else SUB_COLOR, getJudgeCards[cardJudge.selectedCardJudge], 1, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
 
     # The text that will be shown on the player the judge is currently selecting
-    createInWorldText(getAllPlayers().exclude(cardJudge if not entityExists(cardJudge.cardVoted) else null) if entityExists(cardJudge) and currentGameState == gameState.VOTING else null, getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard], getJudgeCards[cardJudge.selectedCardJudge], 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+    createInWorldText(getAllPlayers().exclude(cardJudge if not entityExists(cardJudge.cardVoted) else null) if entityExists(cardJudge) and currentGameState == gameState.VOTING else null, getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard], getJudgeCards[cardJudge.selectedCardJudge], 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.ALWAYS)
 
     # Judge title
     createInWorldText(getAllPlayers() if entityExists(cardJudge) else null, STR_CARD_JUDGE, cardJudge, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
@@ -102,11 +100,13 @@ rule "Get Cards":
     @Event eachPlayer
     @Condition currentGameState == gameState.ROUND
     
+    ignoreCardFilter.remove(eventPlayer.cards[eventPlayer.selectedCard])
     eventPlayer.cards.remove(eventPlayer.cards[eventPlayer.selectedCard])
     eventPlayer.playedCard = false
 
     for eventPlayer.playerHudIndex in range(len(eventPlayer.cards), 5, 1):
-        eventPlayer.cards.append(random.choice(cards.exclude(eventPlayer.cards)))
+        eventPlayer.cards.append(random.choice(cards.exclude(eventPlayer.cards).exclude(ignoreCardFilter)))
+        ignoreCardFilter.append(eventPlayer.cards.last())
     waitUntil(entityExists(cardJudge), 9999)
     if eventPlayer == cardJudge: return
     renderCards()

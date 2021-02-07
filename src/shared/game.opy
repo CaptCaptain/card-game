@@ -34,6 +34,7 @@ enum gameState:
     END
 
 globalvar globalHudIndex
+globalvar globalIndex
 
 globalvar cardJudge
 globalvar slot = -1
@@ -42,6 +43,7 @@ globalvar currentGameState = gameState.WAITING
 globalvar roundTime = 0
 globalvar hud_gameMessages = []
 
+globalvar ignoreCardFilter = []
 playervar cards = []
 playervar cardVoted = false
 globalvar cardVotedName = []
@@ -53,10 +55,20 @@ globalvar cards = []
 globalvar lastDummy
 
 subroutine dummyVote
+subroutine dummyJudgeVote
 
 def dummyVote():
     wait(2)
     [player for player in getAllPlayers() if player.isDummy()].playedCard = true
+
+def dummyJudgeVote():
+    if cardJudge.isDummy():
+        for globalIndex in range(0, len(playersInMatch(Team.ALL))):
+            cardJudge.selectedCardJudge = random.randint(0, len(getJudgeCards) - 1)
+            wait(1)
+        cardJudge.cardVoted = getJudgeCards[cardJudge.selectedCardJudge]
+        if cardJudge.cardVoted.isDummy():
+            cardJudge.cardVoted.communicate(Comms.THANKS)
 
 rule "Create Effects":
     # Create Center Effect
@@ -165,12 +177,7 @@ rule "Voting":
     chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
 
     # Dummy bots automatically vote
-    if cardJudge.isDummy():
-        cardJudge.selectedCardJudge = random.randint(0, len(getJudgeCards) - 1)
-        wait(2)
-        cardJudge.cardVoted = getJudgeCards[cardJudge.selectedCardJudge]
-        if cardJudge.cardVoted.isDummy():
-            cardJudge.cardVoted.communicate(Comms.THANKS)
+    async(dummyJudgeVote, AsyncBehavior.NOOP)
 
     # Wait until time runs out or judge has voted
     waitUntil(roundTime == 0 or entityExists(cardJudge.cardVoted) or not entityExists(cardJudge), WS_SET_VOTING_TIME)
