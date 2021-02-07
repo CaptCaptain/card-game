@@ -2370,6 +2370,6 @@ for (var sentence of sentences) {
     }
     result += '    sentences.append('+'"'+sentence+'"'+')\n'
 }
-result += '    sentences.remove([sentence for sentence in sentences if strContains(sentence, "**")])\n'
+result += '    sentences.remove([sentence for sentence in sentences if strContains(sentence, "*")])\n'
 
 result

@@ -52,6 +52,12 @@ globalvar sentences = []
 globalvar cards = []
 globalvar lastDummy
 
+subroutine dummyVote
+
+def dummyVote():
+    wait(2)
+    [player for player in getAllPlayers() if player.isDummy()].playedCard = true
+
 rule "Create Effects":
     # Create Center Effect
     createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.BLACK if currentGameState == gameState.VOTING else PRIMARY_COLOR, CENTER[mapData.POSITION], 2, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
@@ -126,10 +132,7 @@ rule "Round":
 
     # Dummy bots automatically play cards
     if any([player.isDummy() for player in getAllPlayers()]):
-        wait(2)
-        [player for player in getAllPlayers() if player.isDummy()].playedCard = true
-
-    wait(0.1)
+        async(dummyVote, AsyncBehavior.NOOP)
     
     # Wait until everyone plays their cards or the time runs out
     waitUntil(roundTime == 0 or all([player.playedCard == true for player in playersInMatch(Team.ALL).exclude(cardJudge)]), 9999)
@@ -169,8 +172,6 @@ rule "Voting":
         if cardJudge.cardVoted.isDummy():
             cardJudge.cardVoted.communicate(Comms.THANKS)
 
-    wait(0.1)
-
     # Wait until time runs out or judge has voted
     waitUntil(roundTime == 0 or entityExists(cardJudge.cardVoted) or not entityExists(cardJudge), 9999)
 
@@ -186,8 +187,7 @@ rule "Voting":
     hud_gameMessages.append(getLastCreatedText())
 
     # Play effect
-    wait(0.1)
-    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, VOTE_COLOR, cardJudge.cardVoted.getPosition(), 2)
+    playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, VOTE_COLOR, cardJudge.cardVoted.getPosition(), 5)
     playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, VOTE_COLOR, cardJudge.cardVoted.getPosition(), 10)
     playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, cardJudge.cardVoted.getPosition(), 100)
     cardJudge.cardVoted.addToScore(1)
