@@ -2357,7 +2357,7 @@ for (var card of cards) {
     }
     result += '    cards.append('+'"'+card+'"'+')\n'
 }
-result += '    cards.remove([card for card in cards if strContains(card, "**")])\n'
+result += '    cards.remove([card for card in cards if strContains(card, "*")])\n'
 
 shuffleArray(sentences)
 remaining = 0
