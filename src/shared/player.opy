@@ -28,16 +28,16 @@ def renderCards():
 
     # Create hud text for each card, and show the selected card
     for eventPlayer.playerHudIndex in range(0, 5, 1):
-        hudHeader(eventPlayer if eventPlayer != cardJudge else null, "{} {}".format("" if eventPlayer.selectedCard != evalOnce(eventPlayer.playerHudIndex) else ">", eventPlayer.cards[evalOnce(eventPlayer.playerHudIndex)]) if len(eventPlayer.cards) > 0 else "", HudPosition.LEFT, evalOnce(eventPlayer.playerHudIndex), Color.LIME_GREEN if eventPlayer.selectedCard == evalOnce(eventPlayer.playerHudIndex) and eventPlayer.playedCard == true else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+        hudHeader(eventPlayer if eventPlayer != cardJudge else null, "{} {}".format("" if eventPlayer.selectedCard != evalOnce(eventPlayer.playerHudIndex) else ">", eventPlayer.cards[evalOnce(eventPlayer.playerHudIndex)]) if len(eventPlayer.cards) > 0 else "", HudPosition.TOP, evalOnce(eventPlayer.playerHudIndex) + 5, Color.LIME_GREEN if eventPlayer.selectedCard == evalOnce(eventPlayer.playerHudIndex) and eventPlayer.playedCard == true else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
         eventPlayer.hud_cards.append(getLastCreatedText())
 
 rule "Global Huds":
 
     # Your cards hud text
-    hudSubtext([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0], STR_YOUR_CARDS, HudPosition.LEFT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudSubtext([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0], STR_YOUR_CARDS, HudPosition.TOP, 4, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Control hud text
-    hudSubtext([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0], STR_CARD_CONTROLS, HudPosition.LEFT, 6, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudSubtext([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0], STR_CARD_CONTROLS, HudPosition.TOP, 11, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Credit huds
     hudSubheader(getAllPlayers(), STR_VERSION, HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
@@ -88,6 +88,7 @@ rule "Player Setup":
     eventPlayer.disallowButton(Button.ABILITY_1)
     eventPlayer.disallowButton(Button.ABILITY_2)
     eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 9999)
+    eventPlayer.disableHeroHUD()
 
     createEffect(getAllPlayers(), Effect.RING, SUB_COLOR if cardJudge == eventPlayer else VOTE_COLOR if eventPlayer.playedCard else PRIMARY_COLOR, getSpot(eventPlayer), 1.5, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     
