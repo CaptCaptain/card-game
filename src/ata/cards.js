@@ -2382,7 +2382,7 @@ result +=  'rule "Load Card Pack":\n'
 
 for (let index = 0; index < subNumber; index++) {
     result += '    setCardPack_' + index + '()\n'
-    result += '    waitUntil(getServerLoad() < 200, 9999)\n'
+    result += '    wait()\n'
 }
 
 result

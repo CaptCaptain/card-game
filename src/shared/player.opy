@@ -78,6 +78,8 @@ rule "Global Huds":
 rule "Player Setup":
     @Event eachPlayer
 
+    renderCards()
+
     waitUntil(eventPlayer.hasSpawned(), 9999)
     eventPlayer.setPrimaryFireEnabled(false)
     eventPlayer.setSecondaryFireEnabled(false)
@@ -108,8 +110,6 @@ rule "Get Cards":
         ignoreCardFilter.append(eventPlayer.cards.last())
         wait()
     waitUntil(entityExists(cardJudge), 9999)
-    if eventPlayer == cardJudge: return
-    renderCards()
 
 rule "Change Card (Left)":
     @Event eachPlayer
