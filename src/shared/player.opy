@@ -14,9 +14,7 @@ elif eventPlayer.selectedCardJudge < 0:\
     eventPlayer.selectedCardJudge = 0\
 
 playervar playerHudIndex
-playervar hud_cardJudge = []
 playervar hud_cards = []
-playervar hud_selectedCard = []
 playervar selectedCard = 0
 
 subroutine stopRenderingCards
@@ -102,7 +100,6 @@ rule "Get Cards":
     
     ignoreCardFilter.remove(eventPlayer.cards[eventPlayer.selectedCard])
     eventPlayer.cards.remove(eventPlayer.cards[eventPlayer.selectedCard])
-    eventPlayer.playedCard = false
 
     for eventPlayer.playerHudIndex in range(len(eventPlayer.cards), 5, 1):
         eventPlayer.cards.append(random.choice(cards.exclude(eventPlayer.cards).exclude(ignoreCardFilter)))
@@ -197,7 +194,6 @@ rule "Judge Vote":
     @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE)
 
     eventPlayer.cardVoted = getJudgeCards[eventPlayer.selectedCardJudge]
-    cardVotedName = getJudgeCards[eventPlayer.selectedCardJudge]
 
 rule "Keep in Circle":
     @Event eachPlayer

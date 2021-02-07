@@ -29,6 +29,9 @@ const translations = {
         "en-US": "{0} You are the Judge {0}",
         format: 'abilityIconString(cardJudge.getCurrentHero(), Button.ULTIMATE)'
     },
+    NO_CARDS: {
+        "en-US": "No one played a card, moving to the next round"
+    },
     WAIT_FOR_CARDS: {
         "en-US": "Waiting for everyone to select their cards"
     },

@@ -46,7 +46,6 @@ globalvar hud_gameMessages = []
 globalvar ignoreCardFilter = []
 playervar cards = []
 playervar cardVoted = false
-globalvar cardVotedName = []
 playervar playedCard = false
 playervar selectedCardJudge = 0
 
@@ -140,11 +139,11 @@ rule "Round":
     # Wait for everyone to get their cards
     waitUntil(all([len(player.cards) > 0 for player in playersInMatch(Team.ALL).exclude(cardJudge)]), 9999)
 
-    chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
-
     # Dummy bots automatically play cards
     if any([player.isDummy() for player in getAllPlayers()]):
         async(dummyVote, AsyncBehavior.NOOP)
+
+    chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
     
     # Wait until everyone plays their cards or the time runs out
     waitUntil(roundTime == 0 or all([player.playedCard == true for player in playersInMatch(Team.ALL).exclude(cardJudge)]), WS_SET_PICK_TIME)
@@ -161,6 +160,16 @@ rule "Round":
 rule "Voting":
     @Condition currentGameState == gameState.VOTING
 
+    # If everyone forfeits, move to the next round
+    if all([player.cards == [] for player in getAllPlayers().exclude(cardJudge)]):
+        createInWorldText(getAllPlayers(), STR_NO_CARDS, CENTER[mapData.POSITION] + (Vector.UP * 3), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+        hud_gameMessages.append(getLastCreatedText())
+
+        wait(2.5)
+        destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
+        currentGameState = gameState.ROUND
+        return
+
     setObjectiveDescription(getAllPlayers(), STR_VOTING, HudReeval.VISIBILITY)
     
     roundTime = WS_SET_VOTING_TIME
@@ -174,10 +183,10 @@ rule "Voting":
     playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, SUB_COLOR, CENTER[mapData.POSITION] + (Vector.UP * 3.5), 10)
     playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, SUB_COLOR, CENTER[mapData.POSITION] + (Vector.UP * 3.5), 100)
 
-    chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
-
     # Dummy bots automatically vote
     async(dummyJudgeVote, AsyncBehavior.NOOP)
+
+    chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
 
     # Wait until time runs out or judge has voted
     waitUntil(roundTime == 0 or entityExists(cardJudge.cardVoted) or not entityExists(cardJudge), WS_SET_VOTING_TIME)
@@ -200,7 +209,8 @@ rule "Voting":
     cardJudge.cardVoted.addToScore(1)
 
     wait(3)
-
+    
+    getAllPlayers().playedCard = false
     cardJudge.selectedCardJudge = 0
     cardJudge.cardVoted = null
     cardJudge = null
