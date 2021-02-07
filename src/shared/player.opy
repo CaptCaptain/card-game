@@ -205,6 +205,16 @@ rule "Keep in Circle":
     wait()
     if RULE_CONDITION: goto RULE_START
 
+rule "Close to Score Fire":
+    @Event eachPlayer
+    @Condition eventPlayer.getScore() >= WS_SET_SCORE_NEEDED - 1
+
+    eventPlayer.setStatusEffect(null, Status.BURNING, 9999)
+
+    waitUntil(eventPlayer.getScore() < WS_SET_SCORE_NEEDED - 1, 9999)
+
+    eventPlayer.clearStatusEffect(Status.BURNING)
+
 rule "Disable Jump / Crouch":
     @Event eachPlayer
     @Condition eventPlayer.isInAir()
