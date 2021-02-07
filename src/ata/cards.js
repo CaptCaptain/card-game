@@ -1678,7 +1678,7 @@ const cards = [
     `North & South Dakota`,
     `North Pole`,
     `Nosebleeds`,
-    `*NSYNC`,
+    `NSYNC`,
     `Nuclear Power Plants`,
     `Nuts & Bolts`,
     `NYPD`,
