@@ -2357,7 +2357,7 @@ for (var card of cards) {
     }
     result += '    cards.append('+'"'+card+'"'+')\n'
 }
-result += '    cards.remove([card for card in cards if strContains(card, "*")])\n'
+result += '    cards.remove([card for card in cards if strContains(card, "**")])\n'
 
 shuffleArray(sentences)
 remaining = 0
@@ -2375,7 +2375,7 @@ for (var sentence of sentences) {
     }
     result += '    sentences.append('+'"'+sentence+'"'+')\n'
 }
-result += '    sentences.remove([sentence for sentence in sentences if strContains(sentence, "*")])\n'
+result += '    sentences.remove([sentence for sentence in sentences if strContains(sentence, "**")])\n'
 
 // Load cards
 result +=  'rule "Load Card Pack":\n'
