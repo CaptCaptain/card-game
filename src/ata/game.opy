@@ -48,7 +48,7 @@ GetStrings({
             "en-US": "Version: 1.5.0"
         },
         PLAY_CARDS: {
-            "en-US": "Play your cards"
+            "en-US": "Pick your cards"
         },
         VOTING: {
             "en-US": "The Judge is Voting"
@@ -92,6 +92,22 @@ GetStrings({
         JUDGE_VOTED:{
             "en-US": "The Judge has voted for {}",
             format: 'cardJudge.cardVoted'
+        },
+        LOBBY_RULESET:{
+            "en-US": "{0} Host Settings:",
+            format: 'abilityIconString(Hero.TORBJORN, Button.ABILITY_2)'
+        },
+        RULESET_SCORE_TO_WIN:{
+            "en-US": "Score to Win: {}",
+            format: 'WS_SET_SCORE_NEEDED'
+        },
+        RULESET_PLAY_CARD_TIME:{
+            "en-US": "Pick Card Time: {}",
+            format: 'WS_SET_PICK_TIME'
+        },
+        RULESET_JUDGE_VOTE_TIME:{
+            "en-US": "Judge Voting Time: {}",
+            format: 'WS_SET_VOTING_TIME'
         }
     }
 })

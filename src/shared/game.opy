@@ -244,13 +244,20 @@ rule "Game Loop":
 
             destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
 
-rule "Player Is Close Score":
-    @Event global
-    @Condition any([player.getScore() >= WS_SET_SCORE_NEEDED - 1 for player in getAllPlayers()])
+rule "Restart Match":
+    @Condition isMatchComplete()
 
-    smallMessage(getAllPlayers(), "{} is one point away from winning!".format(sorted(getLivingPlayers(Team.ALL), lambda player: player.getScore()).last()))
+    wait(WS_SET_END)
 
-rule "Debug: Spawn Bots":
+    restartMatch()
+
+rule "Skip Assembling Heroes":
+    @Condition isAssemblingHeroes()
+
+    if WS_SET_SKIP:
+        setMatchTime(0)
+
+rule "Spawn Bots":
     if not WS_SET_ENABLE_BOTS: return
     while getNumberOfPlayers(Team.ALL) < 12:
         createDummy(random.choice(getAllHeroes()), Team.ALL, -1, nearestWalkablePosition(getSpawnPoints(Team.1)), null)

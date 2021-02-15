@@ -40,6 +40,11 @@ rule "Global Huds":
 
     hudSubtext(localPlayer, STR_GAME_NAME, HudPosition.RIGHT, -3, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
+    # Lobby Ruleset
+    hudSubtext(localPlayer, "———————————\n{}".format(STR_LOBBY_RULESET), HudPosition.RIGHT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+
+    hudSubheader(localPlayer, "{}\n{}\n{}".format(STR_RULESET_SCORE_TO_WIN, STR_RULESET_PLAY_CARD_TIME, STR_RULESET_JUDGE_VOTE_TIME), HudPosition.RIGHT, 1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+
     # Select the card that best fits the word hud
     hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING) or (localPlayer == cardJudge and currentGameState != gameState.ROUND) else null, "{}:".format(STR_CARD_INSTRUCTION), HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
@@ -143,7 +148,7 @@ rule "Redraw Cards":
 
 rule "Forfeit":
     @Event playerJoined
-    @Condition currentGameState == gameState.ROUND
+    @Condition currentGameState == gameState.VOTING
 
     waitUntil(eventPlayer.hasSpawned(), 9999)
     eventPlayer.playedCard = true
@@ -193,9 +198,9 @@ rule "Judge Vote":
 
 rule "Keep in Circle":
     @Event eachPlayer
-    @Condition distance(eventPlayer.getPosition(), getSpot(eventPlayer)) > 1.5
+    @Condition distance(eventPlayer.getPosition(), getSpot(eventPlayer)) >= 1.5
 
-    eventPlayer.teleport(getSpot(eventPlayer))
+    eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), getSpot(eventPlayer)), 5, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
     wait()
     if RULE_CONDITION: goto RULE_START
 
@@ -204,6 +209,8 @@ rule "Close to Score Fire":
     @Condition eventPlayer.getScore() >= WS_SET_SCORE_NEEDED - 1
 
     eventPlayer.setStatusEffect(null, Status.BURNING, 9999)
+
+    smallMessage(getAllPlayers(), "{} is one point away from winning!".format(eventPlayer))
 
     waitUntil(eventPlayer.getScore() < WS_SET_SCORE_NEEDED - 1, 9999)
 
