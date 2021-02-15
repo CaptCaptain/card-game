@@ -151,7 +151,7 @@ rule "Redraw Cards":
 
 rule "Forfeit":
     @Event playerJoined
-    @Condition currentGameState == gameState.ROUND
+    @Condition currentGameState == gameState.VOTING
 
     waitUntil(eventPlayer.hasSpawned(), 9999)
     eventPlayer.playedCard = true
