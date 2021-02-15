@@ -147,10 +147,10 @@ rule "Game Loop":
                 cardJudge.communicate(Comms.HELLO)
 
             # Create center text
-            createInWorldText(getAllPlayers(), STR_WAIT_FOR_CARDS, CENTER[mapData.POSITION] + (Vector.UP * 2.9), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+            createInWorldText(getAllPlayers(), STR_WAIT_FOR_CARDS, CENTER[mapData.POSITION] + (Vector.UP * 0.5), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
             hud_gameMessages.append(getLastCreatedText())
 
-            createInWorldText(getAllPlayers(), floor(roundTime), CENTER[mapData.POSITION] + (Vector.UP * 2), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
+            createInWorldText(getAllPlayers(), floor(roundTime), CENTER[mapData.POSITION] + (Vector.UP * 0), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
             hud_gameMessages.append(getLastCreatedText())
 
             playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, SUB_COLOR, CENTER[mapData.POSITION] + (Vector.UP * 3.5), 10)
@@ -180,7 +180,7 @@ rule "Game Loop":
 
             # If everyone forfeits, move to the next round
             if all([player.cards == [] for player in getAllPlayers().exclude(cardJudge)]):
-                createInWorldText(getAllPlayers(), STR_NO_CARDS, CENTER[mapData.POSITION] + (Vector.UP * 2.9), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+                createInWorldText(getAllPlayers(), STR_NO_CARDS, CENTER[mapData.POSITION] + (Vector.UP * 0), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
                 hud_gameMessages.append(getLastCreatedText())
 
                 wait(2.5)
@@ -191,10 +191,10 @@ rule "Game Loop":
             
             roundTime = WS_SET_VOTING_TIME
 
-            createInWorldText(getAllPlayers(), STR_WAIT_FOR_JUDGE, CENTER[mapData.POSITION] + (Vector.UP * 2.9), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+            createInWorldText(getAllPlayers(), STR_WAIT_FOR_JUDGE, CENTER[mapData.POSITION] + (Vector.UP * 0.5), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
             hud_gameMessages.append(getLastCreatedText())
 
-            createInWorldText(getAllPlayers(), floor(roundTime), CENTER[mapData.POSITION] + (Vector.UP * 2), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
+            createInWorldText(getAllPlayers(), floor(roundTime), CENTER[mapData.POSITION] + (Vector.UP * 0), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
             hud_gameMessages.append(getLastCreatedText())
 
             playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, SUB_COLOR, CENTER[mapData.POSITION] + (Vector.UP * 3.5), 10)
@@ -220,7 +220,7 @@ rule "Game Loop":
 
             destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
 
-            createInWorldText(getAllPlayers(), STR_JUDGE_VOTED, CENTER[mapData.POSITION] + (Vector.UP * 2.9), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+            createInWorldText(getAllPlayers(), STR_JUDGE_VOTED, CENTER[mapData.POSITION] + (Vector.UP * 0.5), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
             hud_gameMessages.append(getLastCreatedText())
 
             # Play effect
