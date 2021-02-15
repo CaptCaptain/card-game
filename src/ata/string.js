@@ -8,7 +8,7 @@ const translations = {
         "en-US": "https://workshop.codes/apples-to-apples"
     },
     VERSION: {
-        "en-US": "Version: 1.4.1"
+        "en-US": "Version: 1.4.2"
     },
     PLAY_CARDS: {
         "en-US": "Play your cards"
@@ -46,10 +46,10 @@ const translations = {
         format: "cardJudge.selectedCardJudge, len(getJudgeCards) - 1, buttonString(Button.PRIMARY_FIRE), buttonString(Button.ABILITY_1), buttonString(Button.ABILITY_2)"
     },
     YOUR_CARDS: {
-        "en-US": " \n\n\n\n\n\n\n\n\n\n\n\n\n\nYour Cards"
+        "en-US": "Your Cards"
     },
     CARD_CONTROLS: {
-        "en-US": " \n{} - Play Card\n{} - Get New Cards (Forfeit your turn)\n{} (Up) / {} (Down) - Select Card",
+        "en-US": "{} - Play Card\n{} - Get New Cards (Forfeit your turn)\n{} (Up) / {} (Down) - Select Card",
         format: "buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), buttonString(Button.ABILITY_2), buttonString(Button.ABILITY_1)"
     },
     JUDGE_VOTED:{
