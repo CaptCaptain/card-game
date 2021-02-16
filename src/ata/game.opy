@@ -33,6 +33,10 @@ settings {
     }
 }
 
+#!define sentenceSelection ['{} & {}'.format(random.choice(sentences.exclude(cardSentence)), random.choice(sentences.exclude(cardSentence)))] if WS_SET_RULES == gameStyle.TWOONE else cards.exclude(cardSentence) if WS_SET_RULES == gameStyle.TURNOVER else sentences.exclude(cardSentence)
+
+#!define cardSelection sentences.exclude(eventPlayer.cards) if WS_SET_RULES == gameStyle.TURNOVER else cards.exclude(eventPlayer.cards)
+
 #!define GetStrings(obj) __script__('../../../overpy-modules/src/translation.js')
 GetStrings({
     availableLanguages: ["en-US"],
@@ -48,7 +52,7 @@ GetStrings({
             "en-US": "Version: 1.5.0"
         },
         PLAY_CARDS: {
-            "en-US": "Pick your cards"
+            "en-US": "Play your cards"
         },
         VOTING: {
             "en-US": "The Judge is Voting"
@@ -75,18 +79,47 @@ GetStrings({
         WAIT_FOR_JUDGE: {
             "en-US": "Waiting for Judge"
         },
+        RULESET_GAME_STYLE:{
+            "en-US": "Game Style: {}",
+            format: "[STR_GAME_STYLE_DEFAULT, STR_GAME_STYLE_CRAB, STR_GAME_STYLE_TURNOVER, STR_GAME_STYLE_TWOONE][WS_SET_RULES_RAW]"
+        },
+        GAME_STYLE_DEFAULT:{
+            "en-US": "Default"
+        },
+        GAME_STYLE_CRAB:{
+            "en-US": "Crab Apples"
+        },
+        GAME_STYLE_TURNOVER:{
+            "en-US": "Apple Turnover"
+        },
+        GAME_STYLE_TWOONE:{
+            "en-US": "2 for 1 Apples"
+        },
         CARD_INSTRUCTION: {
+            "en-US": "{}",
+            format: "[STR_CARD_INSTRUCTION_DEFAULT, STR_CARD_INSTRUCTION_CRAB, STR_CARD_INSTRUCTION_TURNOVER, STR_CARD_INSTRUCTION_TWOONE][WS_SET_RULES_RAW]"
+        },
+        CARD_INSTRUCTION_DEFAULT: {
             "en-US": "Select the Card that best fits the word"
         },
+        CARD_INSTRUCTION_CRAB: {
+            "en-US": "Select the Card that least fits the word"
+        },
+        CARD_INSTRUCTION_TURNOVER: {
+            "en-US": "Select the Card that best describes"
+        },
+        CARD_INSTRUCTION_TWOONE: {
+            "en-US": "Select the Card that best fits the words"
+        },
         JUDGE_VOTE_INSTRUCTION: {
-            "en-US": "Card #{}/{}\n{} - Confirm\n{} (Left) / {} (Right) - Select",
+            "en-US": "Card #{}/{}\n{} — Choose Card\n{} (Left) / {} (Right) — Select Card",
             format: "cardJudge.selectedCardJudge, len(getJudgeCards) - 1, buttonString(Button.PRIMARY_FIRE), buttonString(Button.ABILITY_1), buttonString(Button.ABILITY_2)"
         },
         YOUR_CARDS: {
             "en-US": "Your Cards"
         },
         CARD_CONTROLS: {
-            "en-US": "{} - Play Card\n{} - Get New Cards (Forfeit your turn)\n{} (Up) / {} (Down) - Select Card",
+            "en-US": "{} — Play Selected Card\n{} — Get New Cards (Forfeit your turn)\n{} (Up) / {} (Down) — Select Card",
             format: "buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), buttonString(Button.ABILITY_2), buttonString(Button.ABILITY_1)"
         },
         JUDGE_VOTED:{

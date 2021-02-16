@@ -43,7 +43,7 @@ rule "Global Huds":
     # Lobby Ruleset
     hudSubtext(localPlayer, "———————————\n{}".format(STR_LOBBY_RULESET), HudPosition.RIGHT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
-    hudSubheader(localPlayer, "{}\n{}\n{}".format(STR_RULESET_SCORE_TO_WIN, STR_RULESET_PLAY_CARD_TIME, STR_RULESET_JUDGE_VOTE_TIME), HudPosition.RIGHT, 1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+    hudSubheader(localPlayer, "{}\n{}\n{}\n{}".format(STR_RULESET_GAME_STYLE, STR_RULESET_SCORE_TO_WIN, STR_RULESET_PLAY_CARD_TIME, STR_RULESET_JUDGE_VOTE_TIME), HudPosition.RIGHT, 1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
     # Select the card that best fits the word hud
     hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING) or (localPlayer == cardJudge and currentGameState != gameState.ROUND) else null, "{}:".format(STR_CARD_INSTRUCTION), HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
@@ -104,7 +104,7 @@ rule "Get Cards":
     eventPlayer.cards.remove(eventPlayer.cards[eventPlayer.selectedCard])
 
     for eventPlayer.playerHudIndex in range(len(eventPlayer.cards), WS_SET_CARDS, 1):
-        eventPlayer.cards.append(random.choice(cards.exclude(eventPlayer.cards).exclude(ignoreCardFilter)))
+        eventPlayer.cards.append(random.choice(cardSelection.exclude(ignoreCardFilter)))
         ignoreCardFilter.append(eventPlayer.cards.last())
         wait()
     waitUntil(entityExists(cardJudge), 9999)
@@ -200,7 +200,10 @@ rule "Keep in Circle":
     @Event eachPlayer
     @Condition distance(eventPlayer.getPosition(), getSpot(eventPlayer)) >= 1.5
 
-    eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), getSpot(eventPlayer)), 5, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
+    if distance(eventPlayer.getPosition(), getSpot(eventPlayer)) >= 2:
+        eventPlayer.teleport(getSpot(eventPlayer))
+    else:
+        eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), getSpot(eventPlayer)), 1, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
     wait()
     if RULE_CONDITION: goto RULE_START
 

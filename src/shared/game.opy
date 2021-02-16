@@ -140,7 +140,7 @@ rule "Game Loop":
 
             # Select judge and sentence
             cardJudge = getPlayersInSlot(slot, Team.ALL)
-            cardSentence = random.choice(sentences.exclude(cardSentence))
+            cardSentence = random.choice(sentenceSelection)
 
             # Make dummy bot wave if they are judge
             if cardJudge.isDummy():
