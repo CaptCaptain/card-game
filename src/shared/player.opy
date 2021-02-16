@@ -1,4 +1,4 @@
-#!define getSpot(player) CENTER[mapData.POSITION] + angleToDirection(player.getSlot() * (360 / getNumberOfPlayers(Team.ALL)), 0) * CENTER[mapData.RADIUS]
+#!define getSpot(player) MAP_CENTER[mapData.POSITION] + angleToDirection(player.getSlot() * (360 / getNumberOfPlayers(Team.ALL)), 0) * MAP_CENTER[mapData.RADIUS]
 
 #!define changeCard(value) eventPlayer.selectedCard += value\
 if eventPlayer.selectedCard >= len(eventPlayer.cards) - 1:\
@@ -94,7 +94,7 @@ rule "Player Setup":
     createEffect(getAllPlayers(), Effect.RING, SUB_COLOR if cardJudge == eventPlayer else VOTE_COLOR if eventPlayer.playedCard else PRIMARY_COLOR, getSpot(eventPlayer), 1.5, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     
     eventPlayer.teleport(getSpot(eventPlayer))
-    eventPlayer.setFacing(directionTowards(eventPlayer.getEyePosition(), CENTER[mapData.POSITION] + Vector.UP), Relativity.TO_WORLD)
+    eventPlayer.setFacing(directionTowards(eventPlayer.getEyePosition(), MAP_CENTER[mapData.POSITION] + Vector.UP), Relativity.TO_WORLD)
 
 rule "Get Cards":
     @Event eachPlayer
