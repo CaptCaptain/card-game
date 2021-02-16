@@ -80,12 +80,6 @@ GetMapData({
         KINGS_ROW_WINTER: {
             CENTER: '[vect(-149.030, -2.932, 24.228), 6]'
         },
-        ECOPOINT_ANTARCTICA: {
-            CENTER: '[vect(26.030, 3.022, -0.008), 6]'
-        },
-        ECOPOINT_ANTARCTICA_WINTER: {
-            CENTER: '[vect(26.030, 3.022, -0.008), 6]'
-        }
     }
 })
 
@@ -125,6 +119,7 @@ enum gameState:
 
 globalvar globalHudIndex
 globalvar globalIndex
+globalvar dummyBotIndex
 
 globalvar cardJudge
 globalvar slot = -1
@@ -142,6 +137,8 @@ playervar selectedCardJudge = 0
 globalvar sentences = []
 globalvar cards = []
 globalvar lastDummy
+globalvar dummyNames = getDummyNames()
+globalvar selectedDummyName
 
 subroutine dummyVote
 subroutine dummyJudgeVote
@@ -348,9 +345,21 @@ rule "Skip Assembling Heroes":
         setMatchTime(0)
 
 rule "Spawn Bots":
-    if not WS_SET_ENABLE_BOTS: return
-    while getNumberOfPlayers(Team.ALL) < 12:
+    @Condition WS_SET_ENABLE_BOTS
+    @Condition getNumberOfPlayers(Team.ALL) < 12
+
+    wait(0.25)
+    for dummyBotIndex in range(getNumberOfPlayers(Team.ALL), 12):
         createDummy(random.choice(getAllHeroes()), Team.ALL, -1, nearestWalkablePosition(getSpawnPoints(Team.1)), null)
         lastDummy = getLastCreatedEntity()
+
+        if dummyNames == []:
+            dummyNames = getDummyNames()
+
+        selectedDummyName = random.choice(dummyNames)
+        dummyNames.remove(selectedDummyName)
+
+        lastDummy.startForcingName(selectedDummyName)
+        lastDummy.startFacing(directionTowards(evalOnce(lastDummy).getEyePosition(), MAP_CENTER[mapData.POSITION] + Vector.UP), 100, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
         wait(0.25)
-    wait(9999)
+    if RULE_CONDITION: goto RULE_START
