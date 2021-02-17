@@ -1,3 +1,5 @@
+#!define getDummyNames() ["フラスマ", "AmNot", "AimBot", "SomeDude", "Someone Else", "DeadHead", "Statescript", "Soulless", "EventPlayer", "ThatGuy", "Target Practice", "Deltinteger", "Workshop", "aimkid", "BeepBeepBoop", "DancingBacon", "EloHell", "OneTrick", "Jeff Kaplan", "Shiny", "Splat", "Magzie", "MelodySheep", "Dream", "AlreadyTracer", "Lemonade", "WildBites", "Probotxin", "rock", "Zach Metcalf", "Blizzard", "Chef You Wack", "Kurzgesagt", "桜井政博", "DeadMeat", "Abroad in Japan", "NiceStick", "THEM", "Me", "NotMe", "RageQuit", "HeroTalents", "BattleNet", "PatchNotes", "BalanceTeam", "NerfBrig", "Nanoblade", "NerfThis", "NeedHealing"]
+
 #!define GetMapData(obj) __script__('../../../overpy-modules/src/map.js')
 GetMapData({
     availableMapData: ['CENTER'],
@@ -83,7 +85,14 @@ GetMapData({
     }
 })
 
-
+#!define createCenterText(title, subtitle) createInWorldText(getAllPlayers(), title, MAP_CENTER[mapData.POSITION] + (Vector.UP * 0.5), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)\
+hud_gameMessages.append(getLastCreatedText())\
+\
+createInWorldText(getAllPlayers(), subtitle, MAP_CENTER[mapData.POSITION] + (Vector.UP * 0), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)\
+hud_gameMessages.append(getLastCreatedText())\
+\
+playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, SUB_COLOR, MAP_CENTER[mapData.POSITION] + (Vector.UP * 1), 10)\
+playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, SUB_COLOR, MAP_CENTER[mapData.POSITION] + (Vector.UP * 1), 100)
 
 #!define destroyInWorldTextLoop(i, var) for i in range(0, len(var), 1):\
     destroyInWorldText(var[i])\
@@ -234,14 +243,7 @@ rule "Game Loop":
                 cardJudge.communicate(Comms.HELLO)
 
             # Create center text
-            createInWorldText(getAllPlayers(), STR_WAIT_FOR_CARDS, MAP_CENTER[mapData.POSITION] + (Vector.UP * 0.5), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
-            hud_gameMessages.append(getLastCreatedText())
-
-            createInWorldText(getAllPlayers(), floor(roundTime), MAP_CENTER[mapData.POSITION] + (Vector.UP * 0), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
-            hud_gameMessages.append(getLastCreatedText())
-
-            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, SUB_COLOR, MAP_CENTER[mapData.POSITION] + (Vector.UP * 1), 10)
-            playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, SUB_COLOR, MAP_CENTER[mapData.POSITION] + (Vector.UP * 1), 100)
+            createCenterText(STR_WAIT_FOR_CARDS, floor(roundTime))
 
             # Wait for everyone to get their cards
             waitUntil(all([len(player.cards) > 0 for player in playersInMatch(Team.ALL).exclude(cardJudge)]), 9999)
@@ -278,14 +280,7 @@ rule "Game Loop":
             
             roundTime = WS_SET_VOTING_TIME
 
-            createInWorldText(getAllPlayers(), STR_WAIT_FOR_JUDGE, MAP_CENTER[mapData.POSITION] + (Vector.UP * 0.5), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
-            hud_gameMessages.append(getLastCreatedText())
-
-            createInWorldText(getAllPlayers(), floor(roundTime), MAP_CENTER[mapData.POSITION] + (Vector.UP * 0), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
-            hud_gameMessages.append(getLastCreatedText())
-
-            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, SUB_COLOR, MAP_CENTER[mapData.POSITION] + (Vector.UP * 3.5), 10)
-            playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, SUB_COLOR, MAP_CENTER[mapData.POSITION] + (Vector.UP * 3.5), 100)
+            createCenterText(STR_WAIT_FOR_JUDGE, floor(roundTime))
 
             # Dummy bots automatically vote
             async(dummyJudgeVote, AsyncBehavior.NOOP)
