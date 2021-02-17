@@ -37,7 +37,7 @@ settings {
 
 #!define cardSelection sentences.exclude(eventPlayer.cards) if WS_SET_RULES == gameStyle.TURNOVER else cards.exclude(eventPlayer.cards)
 
-#!define getDummyNames() ["フラスマ", "AmNot", "AimBot", "SomeDude", "Someone Else", "DeadHead", "Statescript", "Soulless", "EventPlayer", "ThatGuy", "Target Practice", "Deltinteger", "Workshop", "aimkid", "BeepBeepBoop", "DancingBacon", "EloHell", "OneTrick", "Jeff Kaplan", "Shiny", "Splat", "Magzie", "MelodySheep", "Dream", "AlreadyTracer", "Lemonade", "WildBites", "Probotxin", "rock", "Zach Metcalf", "Blizzard", "Chef You Wack", "PinkMercy", "StormRising", "Kurzgesagt", "In a Nutshell", "桜井政博", "DeadMeat", "Abroad in Japan", "NiceStick", "THEM", "Me", "MindlessElectrons", "Nobody", "NotMe", "RageQuit", "HeroTalents", "BattleNet", "PatchNotes", "BalanceTeam", "NerfBrig", "OverwatchLeague", "Nanoblade", "NerfThis", "NeedHealing", "FascinatingHorror"]
+#!define getDummyNames() ["フラスマ", "AmNot", "AimBot", "SomeDude", "Someone Else", "DeadHead", "Statescript", "Soulless", "EventPlayer", "ThatGuy", "Target Practice", "Deltinteger", "Workshop", "aimkid", "BeepBeepBoop", "DancingBacon", "EloHell", "OneTrick", "Jeff Kaplan", "Shiny", "Splat", "Magzie", "MelodySheep", "Dream", "AlreadyTracer", "Lemonade", "WildBites", "Probotxin", "rock", "Zach Metcalf", "Blizzard", "Chef You Wack", "Kurzgesagt", "桜井政博", "DeadMeat", "Abroad in Japan", "NiceStick", "THEM", "Me", "NotMe", "RageQuit", "HeroTalents", "BattleNet", "PatchNotes", "BalanceTeam", "NerfBrig", "Nanoblade", "NerfThis", "NeedHealing"]
 
 #!define GetStrings(obj) __script__('../../../overpy-modules/src/translation.js')
 GetStrings({
