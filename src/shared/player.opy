@@ -1,4 +1,4 @@
-#!define getSpot(player) MAP_CENTER[mapData.POSITION] + angleToDirection(player.getSlot() * (360 / getNumberOfPlayers(Team.ALL)), 0) * MAP_CENTER[mapData.RADIUS]
+#!define getSpot(player) MAP_CENTER[mapData.POSITION] + angleToDirection(player.getSlot() * (360 / len(playersInMatch(Team.ALL))), 0) * MAP_CENTER[mapData.RADIUS]
 
 #!define changeCard(value) eventPlayer.selectedCard += value\
 if eventPlayer.selectedCard >= len(eventPlayer.cards) - 1:\
@@ -67,7 +67,7 @@ rule "Global Huds":
     createEffect(localPlayer if (localPlayer == cardJudge and entityExists(localPlayer.cardVoted)) or (localPlayer != cardJudge and currentGameState == gameState.VOTING) else null, Effect.GOOD_AURA, VOTE_COLOR if entityExists(cardJudge.cardVoted) else SUB_COLOR, getJudgeCards[cardJudge.selectedCardJudge], 1, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
 
     # The text that will be shown on the player the judge is currently selecting
-    createInWorldText(localPlayer if (localPlayer == cardJudge and entityExists(localPlayer.cardVoted)) or (localPlayer != cardJudge and currentGameState == gameState.VOTING) else null, getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard], getJudgeCards[cardJudge.selectedCardJudge], 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.ALWAYS)
+    createInWorldText(localPlayer if (localPlayer == cardJudge and entityExists(localPlayer.cardVoted)) or (localPlayer != cardJudge and currentGameState == gameState.VOTING) else null, getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard], getJudgeCards[cardJudge.selectedCardJudge], 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
 
     # Judge title
     createInWorldText(localPlayer if entityExists(cardJudge) else null, STR_CARD_JUDGE, cardJudge, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
@@ -156,6 +156,7 @@ rule "Forfeit":
 rule "Clean up":
     @Event playerLeft
 
+    ignoreCardFilter.remove(eventPlayer.cards)
     eventPlayer.cards = []
     eventPlayer.playedCard = false
 

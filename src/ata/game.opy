@@ -109,16 +109,16 @@ GetStrings({
             format: "[STR_CARD_INSTRUCTION_DEFAULT, STR_CARD_INSTRUCTION_CRAB, STR_CARD_INSTRUCTION_TURNOVER, STR_CARD_INSTRUCTION_TWOONE][WS_SET_RULES_RAW]"
         },
         CARD_INSTRUCTION_DEFAULT: {
-            "en-US": "Select the Card that best fits the word"
+            "en-US": "Select the Card that best fits"
         },
         CARD_INSTRUCTION_CRAB: {
-            "en-US": "Select the Card that least fits the word"
+            "en-US": "Select the Card that least fits"
         },
         CARD_INSTRUCTION_TURNOVER: {
             "en-US": "Select the Card that best describes"
         },
         CARD_INSTRUCTION_TWOONE: {
-            "en-US": "Select the Card that best fits the words"
+            "en-US": "Select the Card that best fits"
         },
         JUDGE_VOTE_INSTRUCTION: {
             "en-US": "Card #{}/{}\n{} — Choose Card\n{} (Left) / {} (Right) — Select Card",

@@ -269,8 +269,7 @@ rule "Game Loop":
 
             # If everyone forfeits, move to the next round
             if all([player.cards == [] for player in getAllPlayers().exclude(cardJudge)]):
-                createInWorldText(getAllPlayers(), STR_NO_CARDS, MAP_CENTER[mapData.POSITION] + (Vector.UP * 0.5), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
-                hud_gameMessages.append(getLastCreatedText())
+                createCenterText(STR_NO_CARDS, '')
 
                 wait(2.5)
                 destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
@@ -301,9 +300,8 @@ rule "Game Loop":
                 cardJudge.cardVoted = getJudgeCards[cardJudge.selectedCardJudge]
 
             destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
-
-            createInWorldText(getAllPlayers(), STR_JUDGE_VOTED, MAP_CENTER[mapData.POSITION] + (Vector.UP * 0.5), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
-            hud_gameMessages.append(getLastCreatedText())
+            
+            createCenterText(STR_JUDGE_VOTED, '')
 
             # Play effect
             playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, VOTE_COLOR, cardJudge.cardVoted.getPosition() + Vector.UP, 5)
