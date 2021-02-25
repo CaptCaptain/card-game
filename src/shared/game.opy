@@ -85,7 +85,7 @@ GetMapData({
     }
 })
 
-#!define createCenterText(title, subtitle) createInWorldText(getAllPlayers(), title, MAP_CENTER[mapData.POSITION] + (Vector.UP * 0.5), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)\
+#!define createCenterText(title, subtitle) createInWorldText(getAllPlayers(), title, MAP_CENTER[mapData.POSITION] + (Vector.UP * 0.6), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)\
 hud_gameMessages.append(getLastCreatedText())\
 \
 createInWorldText(getAllPlayers(), subtitle, MAP_CENTER[mapData.POSITION] + (Vector.UP * 0), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)\
