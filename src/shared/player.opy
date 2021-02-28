@@ -1,4 +1,4 @@
-#!define getSpot(player) MAP_CENTER[mapData.POSITION] + angleToDirection(player.getSlot() * (360 / len(playersInMatch(Team.ALL))), 0) * MAP_CENTER[mapData.RADIUS]
+#!define getSpot(player) MAP_CENTER[mapData.POSITION] + angleToDirection((player.getSlot() + 1) * (360 / len(playersInMatch(Team.ALL))), 0) * MAP_CENTER[mapData.RADIUS]
 
 #!define changeCard(value) eventPlayer.selectedCard += value\
 if eventPlayer.selectedCard >= len(eventPlayer.cards) - 1:\
