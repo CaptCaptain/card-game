@@ -33,8 +33,126 @@ settings {
     }
 }
 
-#!define GetStrings() __script__("string.js")
-GetStrings()
+enum gameStyle:
+    DEFAULT,
+    CRAB,
+    TURNOVER,
+    TWOONE
+
+globalvar WS_SET_RULES_RAW = createWorkshopSetting(enum["Default Apples", "Crab Apples", "Apple Turnover", "2 for 1 Apples"], "Ruleset", "Game Style", 0, 0)
+globalvar WS_SET_RULES = [gameStyle.DEFAULT, gameStyle.CRAB, gameStyle.TURNOVER, gameStyle.TWOONE][WS_SET_RULES_RAW]
+
+#!define sentenceSelection ['{} + {}'.format(random.choice(sentences.exclude(cardSentence)), random.choice(sentences.exclude(cardSentence)))] if WS_SET_RULES == gameStyle.TWOONE else cards.exclude(cardSentence) if WS_SET_RULES == gameStyle.TURNOVER else sentences.exclude(cardSentence)
+
+#!define cardSelection sentences.exclude(eventPlayer.cards) if WS_SET_RULES == gameStyle.TURNOVER else cards.exclude(eventPlayer.cards)
+
+#!define GetStrings(obj) __script__('../../../overpy-modules/src/translation.js')
+GetStrings({
+    availableLanguages: ["en-US"],
+    practiceRangeTranslations: ['"Practice Range"'],
+    translations: {
+        GAME_NAME: {
+            "en-US": "Apples to Apples by CaptCaptain#11421"
+        },
+        WEBLINK: {
+            "en-US": "https://workshop.codes/apples-to-apples"
+        },
+        VERSION: {
+            "en-US": "Version: 2.0.0"
+        },
+        PLAY_CARDS: {
+            "en-US": "Play your cards"
+        },
+        VOTING: {
+            "en-US": "The Judge is Voting"
+        },
+        TITLE_MESSAGE: {
+            "en-US": "Apples to Apples"
+        },
+        WAITING_FOR_PLAYERS: {
+            "en-US": "Waiting For Players"
+        },
+        CARD_JUDGE: {
+            "en-US": "Judge"
+        },
+        IS_JUDGE: {
+            "en-US": "{0} You are the Judge {0}",
+            format: 'abilityIconString(cardJudge.getCurrentHero(), Button.ULTIMATE)'
+        },
+        NO_CARDS: {
+            "en-US": "No one played a card, moving to the next round"
+        },
+        WAIT_FOR_CARDS: {
+            "en-US": "Waiting for everyone to select their cards"
+        },
+        WAIT_FOR_JUDGE: {
+            "en-US": "Waiting for Judge"
+        },
+        RULESET_GAME_STYLE:{
+            "en-US": "Game Style: {}",
+            format: "[STR_GAME_STYLE_DEFAULT, STR_GAME_STYLE_CRAB, STR_GAME_STYLE_TURNOVER, STR_GAME_STYLE_TWOONE][WS_SET_RULES_RAW]"
+        },
+        GAME_STYLE_DEFAULT:{
+            "en-US": "Default"
+        },
+        GAME_STYLE_CRAB:{
+            "en-US": "Crab Apples"
+        },
+        GAME_STYLE_TURNOVER:{
+            "en-US": "Apple Turnover"
+        },
+        GAME_STYLE_TWOONE:{
+            "en-US": "2 for 1 Apples"
+        },
+        CARD_INSTRUCTION: {
+            "en-US": "{}",
+            format: "[STR_CARD_INSTRUCTION_DEFAULT, STR_CARD_INSTRUCTION_CRAB, STR_CARD_INSTRUCTION_TURNOVER, STR_CARD_INSTRUCTION_TWOONE][WS_SET_RULES_RAW]"
+        },
+        CARD_INSTRUCTION_DEFAULT: {
+            "en-US": "Select the Card that best fits"
+        },
+        CARD_INSTRUCTION_CRAB: {
+            "en-US": "Select the Card that least fits"
+        },
+        CARD_INSTRUCTION_TURNOVER: {
+            "en-US": "Select the Card that best describes"
+        },
+        CARD_INSTRUCTION_TWOONE: {
+            "en-US": "Select the Card that best fits"
+        },
+        JUDGE_VOTE_INSTRUCTION: {
+            "en-US": "Card #{}/{}\n{} — Choose Card\n{} (Left) / {} (Right) — Select Card",
+            format: "cardJudge.selectedCardJudge, len(getJudgeCards) - 1, buttonString(Button.PRIMARY_FIRE), buttonString(Button.ABILITY_1), buttonString(Button.ABILITY_2)"
+        },
+        YOUR_CARDS: {
+            "en-US": "Your Cards"
+        },
+        CARD_CONTROLS: {
+            "en-US": "{} — Play Selected Card\n{} — Get New Cards (Forfeit your turn)\n{} (Up) / {} (Down) — Select Card",
+            format: "buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), buttonString(Button.ABILITY_2), buttonString(Button.ABILITY_1)"
+        },
+        JUDGE_VOTED:{
+            "en-US": "The Judge has voted for {}",
+            format: 'cardJudge.cardVoted'
+        },
+        LOBBY_RULESET:{
+            "en-US": "{0} Host Settings:",
+            format: 'abilityIconString(Hero.TORBJORN, Button.ABILITY_2)'
+        },
+        RULESET_SCORE_TO_WIN:{
+            "en-US": "Score to Win: {}",
+            format: 'WS_SET_SCORE_NEEDED'
+        },
+        RULESET_PLAY_CARD_TIME:{
+            "en-US": "Pick Card Time: {}",
+            format: 'WS_SET_PICK_TIME'
+        },
+        RULESET_JUDGE_VOTE_TIME:{
+            "en-US": "Judge Voting Time: {}",
+            format: 'WS_SET_VOTING_TIME'
+        },
+    }
+})
 
 #!define PRIMARY_COLOR Color.WHITE
 #!define SUB_COLOR Color.ROSE

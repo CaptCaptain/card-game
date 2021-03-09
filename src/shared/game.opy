@@ -1,5 +1,98 @@
-#!define GetMapData() __script__("../shared/mapData.js")
-GetMapData()
+#!define getDummyNames() ["フラスマ", "AmNot", "AimBot", "SomeDude", "Someone Else", "DeadHead", "Statescript", "Soulless", "EventPlayer", "ThatGuy", "Target Practice", "Deltinteger", "Workshop", "aimkid", "BeepBeepBoop", "DancingBacon", "EloHell", "OneTrick", "Jeff Kaplan", "Shiny", "Splat", "Magzie", "MelodySheep", "Dream", "AlreadyTracer", "Lemonade", "WildBites", "Probotxin", "rock", "Zach Metcalf", "Blizzard", "Chef You Wack", "Kurzgesagt", "桜井政博", "DeadMeat", "Abroad in Japan", "NiceStick", "THEM", "Me", "NotMe", "RageQuit", "HeroTalents", "BattleNet", "PatchNotes", "BalanceTeam", "NerfBrig", "Nanoblade", "NerfThis", "NeedHealing"]
+
+#!define GetMapData(obj) __script__('../../../overpy-modules/src/map.js')
+GetMapData({
+    availableMapData: ['CENTER'],
+    availableMaps: {
+        PETRA: {
+            CENTER: '[vect(1.964, -10, 8.875), 7]'
+        },
+        HAVANA: {
+            CENTER: '[vect(135.35, 6, -46.49), 7]'
+        },
+        WORKSHOP_ISLAND: {
+            CENTER: '[vect(0, 0, 0), 7]'
+        },
+        WORKSHOP_ISLAND_NIGHT: {
+            CENTER: '[vect(0, 0, 0), 7]'
+        },
+        ILIOS_RUINS: {
+            CENTER: '[vect(28.414, 57.353, -157.183), 6]'
+        },
+        VOLSKAYA: {
+            CENTER: '[vect(-13.680, -3.713, 90.259), 7]'
+        },
+        BLIZZ_WORLD: {
+            CENTER: '[vect(-122.206, -0.156, 110.472), 7]'
+        },
+        BLIZZ_WORLD_WINTER: {
+            CENTER: '[vect(-122.206, -0.156, 110.472), 7]'
+        },
+        DORADO: {
+            CENTER: '[vect(131.219, 11.030, 26.117), 7]'
+        },
+        LIJIANG_NIGHT_MARKET: {
+            CENTER: '[vect(1.193, -0.996, -60.635), 7]'
+        },
+        LIJIANG_NIGHT_MARKET_LNY: {
+            CENTER: '[vect(1.193, -0.996, -60.635), 7]'
+        },
+        NEPAL_VILLAGE: {
+            CENTER: '[vect(-195.075, -93.874, -0.174), 6]'
+        },
+        BLACK_FOREST: {
+            CENTER: '[vect(-20.055, 12.057, 4.054), 6]'
+        },
+        BLACK_FOREST_WINTER: {
+            CENTER: '[vect(-20.055, 12.057, 4.054), 6]'
+        },
+        PARIS: {
+            CENTER: '[vect(-95.152, 12, -82.360), 7]'
+        },
+        OASIS_UNIVERSITY: {
+            CENTER: '[vect(-188.021, 14.912, -0.099), 7]'
+        },
+        CHATEAU_GUILLARD: {
+            CENTER: '[vect(206.236, 7.993, 56.962), 7]'
+        },
+        CHATEAU_GUILLARD_HALLOWEEN: {
+            CENTER: '[vect(206.236, 7.993, 56.962), 7]'
+        },
+        HANAMURA: {
+            CENTER: '[vect(-11.438, -0.861, -85.328), 7]'
+        },
+        HANAMURA_WINTER: {
+            CENTER: '[vect(-11.438, -0.861, -85.328), 7]'
+        },
+        HOLLYWOOD: {
+            CENTER: '[vect(-12.459, -0.108, 56.391), 7]'
+        },
+        HOLLYWOOD_HALLOWEEN: {
+            CENTER: '[vect(-12.459, -0.108, 56.391), 7]'
+        },
+        EICHENWALDE: {
+            CENTER: '[vect(119.594, 8.726, -43.914), 6]'
+        },
+        EICHENWALDE_HALLOWEEN: {
+            CENTER: '[vect(119.594, 8.726, -43.914), 6]'
+        },
+        KINGS_ROW: {
+            CENTER: '[vect(-149.030, -2.932, 24.228), 6]'
+        },
+        KINGS_ROW_WINTER: {
+            CENTER: '[vect(-149.030, -2.932, 24.228), 6]'
+        },
+    }
+})
+
+#!define createCenterText(title, subtitle) createInWorldText(getAllPlayers(), title, MAP_CENTER[mapData.POSITION] + (Vector.UP * 0.6), 1.2, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)\
+hud_gameMessages.append(getLastCreatedText())\
+\
+createInWorldText(getAllPlayers(), subtitle, MAP_CENTER[mapData.POSITION] + (Vector.UP * 0), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)\
+hud_gameMessages.append(getLastCreatedText())\
+\
+playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, SUB_COLOR, MAP_CENTER[mapData.POSITION] + (Vector.UP * 1), 10)\
+playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, SUB_COLOR, MAP_CENTER[mapData.POSITION] + (Vector.UP * 1), 100)
 
 #!define destroyInWorldTextLoop(i, var) for i in range(0, len(var), 1):\
     destroyInWorldText(var[i])\
@@ -35,6 +128,7 @@ enum gameState:
 
 globalvar globalHudIndex
 globalvar globalIndex
+globalvar dummyBotIndex
 
 globalvar cardJudge
 globalvar slot = -1
@@ -52,6 +146,8 @@ playervar selectedCardJudge = 0
 globalvar sentences = []
 globalvar cards = []
 globalvar lastDummy
+globalvar dummyNames = getDummyNames()
+globalvar selectedDummyName
 
 subroutine dummyVote
 subroutine dummyJudgeVote
@@ -88,12 +184,12 @@ rule "Disable Anti Crash":
 
 rule "Create Effects":
     # Create Center Effect
-    createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.BLACK if currentGameState == gameState.VOTING else PRIMARY_COLOR, CENTER[mapData.POSITION], 2, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
+    createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.BLACK if currentGameState == gameState.VOTING else PRIMARY_COLOR, MAP_CENTER[mapData.POSITION], 2, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     
     # Create Title
-    createInWorldText(getAllPlayers(), STR_TITLE_MESSAGE, CENTER[mapData.POSITION] + (Vector.UP * 4), 5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+    createInWorldText(getAllPlayers(), STR_TITLE_MESSAGE, MAP_CENTER[mapData.POSITION] + (Vector.UP * 2), 5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
     hud_gameMessages.append(getLastCreatedText())
-    createInWorldText(getAllPlayers(), STR_WAITING_FOR_PLAYERS, CENTER[mapData.POSITION] + (Vector.UP * 3), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+    createInWorldText(getAllPlayers(), STR_WAITING_FOR_PLAYERS, MAP_CENTER[mapData.POSITION] + (Vector.UP * 1), 1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
     hud_gameMessages.append(getLastCreatedText())
 
 rule "Disable Inspector / Update Match Time":
@@ -140,21 +236,14 @@ rule "Game Loop":
 
             # Select judge and sentence
             cardJudge = getPlayersInSlot(slot, Team.ALL)
-            cardSentence = random.choice(sentences.exclude(cardSentence))
+            cardSentence = random.choice(sentenceSelection)
 
             # Make dummy bot wave if they are judge
             if cardJudge.isDummy():
                 cardJudge.communicate(Comms.HELLO)
 
             # Create center text
-            createInWorldText(getAllPlayers(), STR_WAIT_FOR_CARDS, CENTER[mapData.POSITION] + (Vector.UP * 0.5), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
-            hud_gameMessages.append(getLastCreatedText())
-
-            createInWorldText(getAllPlayers(), floor(roundTime), CENTER[mapData.POSITION] + (Vector.UP * 0), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
-            hud_gameMessages.append(getLastCreatedText())
-
-            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, SUB_COLOR, CENTER[mapData.POSITION] + (Vector.UP * 3.5), 10)
-            playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, SUB_COLOR, CENTER[mapData.POSITION] + (Vector.UP * 3.5), 100)
+            createCenterText(STR_WAIT_FOR_CARDS, floor(roundTime))
 
             # Wait for everyone to get their cards
             waitUntil(all([len(player.cards) > 0 for player in playersInMatch(Team.ALL).exclude(cardJudge)]), 9999)
@@ -180,8 +269,7 @@ rule "Game Loop":
 
             # If everyone forfeits, move to the next round
             if all([player.cards == [] for player in getAllPlayers().exclude(cardJudge)]):
-                createInWorldText(getAllPlayers(), STR_NO_CARDS, CENTER[mapData.POSITION] + (Vector.UP * 0), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
-                hud_gameMessages.append(getLastCreatedText())
+                createCenterText(STR_NO_CARDS, '')
 
                 wait(2.5)
                 destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
@@ -191,14 +279,7 @@ rule "Game Loop":
             
             roundTime = WS_SET_VOTING_TIME
 
-            createInWorldText(getAllPlayers(), STR_WAIT_FOR_JUDGE, CENTER[mapData.POSITION] + (Vector.UP * 0.5), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
-            hud_gameMessages.append(getLastCreatedText())
-
-            createInWorldText(getAllPlayers(), floor(roundTime), CENTER[mapData.POSITION] + (Vector.UP * 0), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
-            hud_gameMessages.append(getLastCreatedText())
-
-            playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, SUB_COLOR, CENTER[mapData.POSITION] + (Vector.UP * 3.5), 10)
-            playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, SUB_COLOR, CENTER[mapData.POSITION] + (Vector.UP * 3.5), 100)
+            createCenterText(STR_WAIT_FOR_JUDGE, floor(roundTime))
 
             # Dummy bots automatically vote
             async(dummyJudgeVote, AsyncBehavior.NOOP)
@@ -219,9 +300,8 @@ rule "Game Loop":
                 cardJudge.cardVoted = getJudgeCards[cardJudge.selectedCardJudge]
 
             destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
-
-            createInWorldText(getAllPlayers(), STR_JUDGE_VOTED, CENTER[mapData.POSITION] + (Vector.UP * 0.5), 1.1, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
-            hud_gameMessages.append(getLastCreatedText())
+            
+            createCenterText(STR_JUDGE_VOTED, '')
 
             # Play effect
             playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, VOTE_COLOR, cardJudge.cardVoted.getPosition() + Vector.UP, 5)
@@ -244,16 +324,35 @@ rule "Game Loop":
 
             destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
 
-rule "Player Is Close Score":
-    @Event global
-    @Condition any([player.getScore() >= WS_SET_SCORE_NEEDED - 1 for player in getAllPlayers()])
+rule "Restart Match":
+    @Condition isMatchComplete()
 
-    smallMessage(getAllPlayers(), "{} is one point away from winning!".format(sorted(getLivingPlayers(Team.ALL), lambda player: player.getScore()).last()))
+    wait(WS_SET_END)
 
-rule "Debug: Spawn Bots":
-    if not WS_SET_ENABLE_BOTS: return
-    while getNumberOfPlayers(Team.ALL) < 12:
+    restartMatch()
+
+rule "Skip Assembling Heroes":
+    @Condition isAssemblingHeroes()
+
+    if WS_SET_SKIP:
+        setMatchTime(0)
+
+rule "Spawn Bots":
+    @Condition WS_SET_ENABLE_BOTS
+    @Condition getNumberOfPlayers(Team.ALL) < 12
+
+    wait(0.25)
+    for dummyBotIndex in range(getNumberOfPlayers(Team.ALL), 12):
         createDummy(random.choice(getAllHeroes()), Team.ALL, -1, nearestWalkablePosition(getSpawnPoints(Team.1)), null)
         lastDummy = getLastCreatedEntity()
+
+        if dummyNames == []:
+            dummyNames = getDummyNames()
+
+        selectedDummyName = random.choice(dummyNames)
+        dummyNames.remove(selectedDummyName)
+
+        lastDummy.startForcingName(selectedDummyName)
+        lastDummy.startFacing(directionTowards(evalOnce(lastDummy).getEyePosition(), MAP_CENTER[mapData.POSITION] + Vector.UP), 100, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
         wait(0.25)
-    wait(9999)
+    if RULE_CONDITION: goto RULE_START

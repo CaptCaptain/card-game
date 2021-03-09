@@ -1,11 +1,10 @@
-#!define getSpot(player) CENTER[mapData.POSITION] + angleToDirection(player.getSlot() * (360 / getNumberOfPlayers(Team.ALL)), 0) * CENTER[mapData.RADIUS]
+#!define getSpot(player) MAP_CENTER[mapData.POSITION] + angleToDirection((player.getSlot() + 1) * (360 / len(playersInMatch(Team.ALL))), 0) * MAP_CENTER[mapData.RADIUS]
 
 #!define changeCard(value) eventPlayer.selectedCard += value\
 if eventPlayer.selectedCard >= len(eventPlayer.cards) - 1:\
     eventPlayer.selectedCard = len(eventPlayer.cards) - 1\
 elif eventPlayer.selectedCard < 0:\
     eventPlayer.selectedCard = 0\
-renderCards()\
 
 #!define changeJudgeCard(value) eventPlayer.selectedCardJudge += value\
 if eventPlayer.selectedCardJudge >= len(getJudgeCards) - 1:\
@@ -17,68 +16,67 @@ playervar playerHudIndex
 playervar hud_cards = []
 playervar selectedCard = 0
 
-subroutine stopRenderingCards
-def stopRenderingCards():
-    destroyHudTextLoop(eventPlayer.playerHudIndex, eventPlayer.hud_cards)
-
 subroutine renderCards
 def renderCards():
-    if len(eventPlayer.hud_cards) > 0: return
-    stopRenderingCards()
-
     # Create hud text for each card, and show the selected card
-    for eventPlayer.playerHudIndex in range(0, 5, 1):
-        hudHeader(eventPlayer if eventPlayer != cardJudge else null, "{} {}".format("" if eventPlayer.selectedCard != evalOnce(eventPlayer.playerHudIndex) else ">", eventPlayer.cards[evalOnce(eventPlayer.playerHudIndex)]) if len(eventPlayer.cards) > 0 else "", HudPosition.LEFT, evalOnce(eventPlayer.playerHudIndex) + 5, Color.LIME_GREEN if eventPlayer.selectedCard == evalOnce(eventPlayer.playerHudIndex) and eventPlayer.playedCard == true else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
-        eventPlayer.hud_cards.append(getLastCreatedText())
+    for globalHudIndex in range(0, WS_SET_CARDS, 1):
+        hudHeader(localPlayer if localPlayer != cardJudge else null, "{} {}".format("" if localPlayer.selectedCard != evalOnce(globalHudIndex) else "—>", localPlayer.cards[evalOnce(globalHudIndex)]) if len(localPlayer.cards) > 0 else "", HudPosition.LEFT, evalOnce(globalHudIndex) + 5, Color.LIME_GREEN if localPlayer.selectedCard == evalOnce(globalHudIndex) and localPlayer.playedCard == true else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
         wait()
 
 rule "Global Huds":
 
+    renderCards()
+
     # Your cards hud text
-    hudSubtext([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0], STR_YOUR_CARDS, HudPosition.LEFT, 4, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudSubtext(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge else null, STR_YOUR_CARDS, HudPosition.LEFT, 4, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Control hud text
-    hudSubtext([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0], STR_CARD_CONTROLS, HudPosition.LEFT, 11, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudSubtext(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge else null, STR_CARD_CONTROLS, HudPosition.LEFT, WS_SET_CARDS + 6, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Credit huds
-    hudSubheader(getAllPlayers(), STR_VERSION, HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+    hudSubheader(localPlayer, STR_VERSION, HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
-    hudSubheader(getAllPlayers(), STR_WEBLINK, HudPosition.RIGHT, -2, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+    hudSubheader(localPlayer, STR_WEBLINK, HudPosition.RIGHT, -2, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
-    hudSubtext(getAllPlayers(), STR_GAME_NAME, HudPosition.RIGHT, -3, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+    hudSubtext(localPlayer, STR_GAME_NAME, HudPosition.RIGHT, -3, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+
+    # Lobby Ruleset
+    hudSubtext(localPlayer, "———————————\n{}".format(STR_LOBBY_RULESET), HudPosition.RIGHT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+
+    hudSubheader(localPlayer, "{}\n{}\n{}\n{}".format(STR_RULESET_GAME_STYLE, STR_RULESET_SCORE_TO_WIN, STR_RULESET_PLAY_CARD_TIME, STR_RULESET_JUDGE_VOTE_TIME), HudPosition.RIGHT, 1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
     # Select the card that best fits the word hud
-    hudSubtext(getAllPlayers().exclude(cardJudge if currentGameState == gameState.ROUND else null) if currentGameState != gameState.WAITING else null, "{}:".format(STR_CARD_INSTRUCTION), HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING) or (localPlayer == cardJudge and currentGameState != gameState.ROUND) else null, "{}:".format(STR_CARD_INSTRUCTION), HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
     # Current word
-    hudHeader(getAllPlayers() if currentGameState != gameState.WAITING else null, cardSentence, HudPosition.TOP, 3, SUB_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudHeader(localPlayer if currentGameState != gameState.WAITING else null, cardSentence, HudPosition.TOP, 3, SUB_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
     #Judge hud
-    hudHeader(cardJudge if entityExists(cardJudge) else null, STR_IS_JUDGE, HudPosition.TOP, 1, SUB_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudHeader(localPlayer if localPlayer == cardJudge else null, STR_IS_JUDGE, HudPosition.TOP, 1, SUB_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
-    hudSubtext(cardJudge if entityExists(cardJudge) and currentGameState == gameState.ROUND else null, STR_WAIT_FOR_CARDS, HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext(localPlayer if localPlayer == cardJudge and currentGameState == gameState.ROUND else null, STR_WAIT_FOR_CARDS, HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
-    hudText(cardJudge if entityExists(cardJudge) and currentGameState == gameState.VOTING else null, getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard], "", STR_JUDGE_VOTE_INSTRUCTION,HudPosition.TOP, 5, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    #hudSubtext(localPlayer, " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.TOP, 1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+
+    hudText(localPlayer if localPlayer == cardJudge and currentGameState == gameState.VOTING else null, getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard], "", STR_JUDGE_VOTE_INSTRUCTION,HudPosition.TOP, 5, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
     # The effect that will be shown on the player the judge is currently selecting
-    createEffect(getAllPlayers().exclude(cardJudge if not entityExists(cardJudge.cardVoted) else null) if entityExists(cardJudge) and currentGameState == gameState.VOTING else null, Effect.LIGHT_SHAFT, VOTE_COLOR if entityExists(cardJudge.cardVoted) else SUB_COLOR, getJudgeCards[cardJudge.selectedCardJudge].getPosition(), 0.5, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
+    createEffect(localPlayer if (localPlayer == cardJudge and entityExists(localPlayer.cardVoted)) or (localPlayer != cardJudge and currentGameState == gameState.VOTING) else null, Effect.LIGHT_SHAFT, VOTE_COLOR if entityExists(cardJudge.cardVoted) else SUB_COLOR, getJudgeCards[cardJudge.selectedCardJudge].getPosition(), 0.5, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
 
     # The effect that will be shown on the player the judge is currently selecting
-    createEffect(getAllPlayers().exclude(cardJudge if not entityExists(cardJudge.cardVoted) else null) if entityExists(cardJudge) and currentGameState == gameState.VOTING else null, Effect.GOOD_AURA, VOTE_COLOR if entityExists(cardJudge.cardVoted) else SUB_COLOR, getJudgeCards[cardJudge.selectedCardJudge], 1, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
+    createEffect(localPlayer if (localPlayer == cardJudge and entityExists(localPlayer.cardVoted)) or (localPlayer != cardJudge and currentGameState == gameState.VOTING) else null, Effect.GOOD_AURA, VOTE_COLOR if entityExists(cardJudge.cardVoted) else SUB_COLOR, getJudgeCards[cardJudge.selectedCardJudge], 1, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
 
     # The text that will be shown on the player the judge is currently selecting
-    createInWorldText(getAllPlayers().exclude(cardJudge if not entityExists(cardJudge.cardVoted) else null) if entityExists(cardJudge) and currentGameState == gameState.VOTING else null, getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard], getJudgeCards[cardJudge.selectedCardJudge], 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.ALWAYS)
+    createInWorldText(localPlayer if (localPlayer == cardJudge and entityExists(localPlayer.cardVoted)) or (localPlayer != cardJudge and currentGameState == gameState.VOTING) else null, getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard], getJudgeCards[cardJudge.selectedCardJudge], 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
 
     # Judge title
-    createInWorldText(getAllPlayers() if entityExists(cardJudge) else null, STR_CARD_JUDGE, cardJudge, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
+    createInWorldText(localPlayer if entityExists(cardJudge) else null, STR_CARD_JUDGE, cardJudge, 1.5, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)
 
     # Judge light shaft
-    createEffect(getAllPlayers() if entityExists(cardJudge) else null, Effect.LIGHT_SHAFT, SUB_COLOR, getSpot(cardJudge), 1.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+    createEffect(localPlayer if entityExists(cardJudge) else null, Effect.LIGHT_SHAFT, SUB_COLOR, getSpot(cardJudge), 1.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
 rule "Player Setup":
     @Event eachPlayer
-
-    renderCards()
 
     waitUntil(eventPlayer.hasSpawned(), 9999)
     eventPlayer.setPrimaryFireEnabled(false)
@@ -96,7 +94,7 @@ rule "Player Setup":
     createEffect(getAllPlayers(), Effect.RING, SUB_COLOR if cardJudge == eventPlayer else VOTE_COLOR if eventPlayer.playedCard else PRIMARY_COLOR, getSpot(eventPlayer), 1.5, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     
     eventPlayer.teleport(getSpot(eventPlayer))
-    eventPlayer.setFacing(directionTowards(eventPlayer.getEyePosition(), CENTER[mapData.POSITION] + Vector.UP), Relativity.TO_WORLD)
+    eventPlayer.setFacing(directionTowards(eventPlayer.getEyePosition(), MAP_CENTER[mapData.POSITION] + Vector.UP), Relativity.TO_WORLD)
 
 rule "Get Cards":
     @Event eachPlayer
@@ -105,8 +103,8 @@ rule "Get Cards":
     ignoreCardFilter.remove(eventPlayer.cards[eventPlayer.selectedCard])
     eventPlayer.cards.remove(eventPlayer.cards[eventPlayer.selectedCard])
 
-    for eventPlayer.playerHudIndex in range(len(eventPlayer.cards), 5, 1):
-        eventPlayer.cards.append(random.choice(cards.exclude(eventPlayer.cards).exclude(ignoreCardFilter)))
+    for eventPlayer.playerHudIndex in range(len(eventPlayer.cards), WS_SET_CARDS, 1):
+        eventPlayer.cards.append(random.choice(cardSelection.exclude(ignoreCardFilter)))
         ignoreCardFilter.append(eventPlayer.cards.last())
         wait()
     waitUntil(entityExists(cardJudge), 9999)
@@ -137,7 +135,6 @@ rule "Play Card":
     @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE)
 
     eventPlayer.playedCard = true
-    renderCards()
 
 rule "Redraw Cards":
     @Event eachPlayer
@@ -159,9 +156,9 @@ rule "Forfeit":
 rule "Clean up":
     @Event playerLeft
 
+    ignoreCardFilter.remove(eventPlayer.cards)
     eventPlayer.cards = []
     eventPlayer.playedCard = false
-    stopRenderingCards()
 
 rule "Outline Card Judge":
     @Event eachPlayer
@@ -202,9 +199,12 @@ rule "Judge Vote":
 
 rule "Keep in Circle":
     @Event eachPlayer
-    @Condition distance(eventPlayer.getPosition(), getSpot(eventPlayer)) > 1.5
+    @Condition distance(eventPlayer.getPosition(), getSpot(eventPlayer)) >= 1.5
 
-    eventPlayer.teleport(getSpot(eventPlayer))
+    if distance(eventPlayer.getPosition(), getSpot(eventPlayer)) >= 2:
+        eventPlayer.teleport(getSpot(eventPlayer))
+    else:
+        eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), getSpot(eventPlayer)), 1, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
     wait()
     if RULE_CONDITION: goto RULE_START
 
@@ -213,6 +213,8 @@ rule "Close to Score Fire":
     @Condition eventPlayer.getScore() >= WS_SET_SCORE_NEEDED - 1
 
     eventPlayer.setStatusEffect(null, Status.BURNING, 9999)
+
+    smallMessage(getAllPlayers(), "{} is one point away from winning!".format(eventPlayer))
 
     waitUntil(eventPlayer.getScore() < WS_SET_SCORE_NEEDED - 1, 9999)
 
