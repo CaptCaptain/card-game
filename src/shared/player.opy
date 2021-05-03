@@ -15,6 +15,7 @@ elif eventPlayer.selectedCardJudge < 0:\
 playervar playerHudIndex
 playervar hud_cards = []
 playervar selectedCard = 0
+playervar chatEnabled = false
 
 subroutine renderCards
 def renderCards():
@@ -86,10 +87,12 @@ rule "Player Setup":
     eventPlayer.setReloadEnabled(false)
     eventPlayer.disallowButton(Button.PRIMARY_FIRE)
     eventPlayer.disallowButton(Button.SECONDARY_FIRE)
-    eventPlayer.disallowButton(Button.ABILITY_1)
+    eventPlayer.disallowButton(Button.INTERACT)
     eventPlayer.disallowButton(Button.ABILITY_2)
+    eventPlayer.disallowButton(Button.ULTIMATE)
     eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 9999)
     eventPlayer.disableHeroHUD()
+    eventPlayer.disableTextChat()
 
     createEffect(getAllPlayers(), Effect.RING, SUB_COLOR if cardJudge == eventPlayer else VOTE_COLOR if eventPlayer.playedCard else PRIMARY_COLOR, getSpot(eventPlayer), 1.5, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     
@@ -114,7 +117,7 @@ rule "Change Card (Left)":
     @Condition cardJudge != eventPlayer
     @Condition eventPlayer.playedCard == false
     @Condition currentGameState == gameState.ROUND
-    @Condition eventPlayer.isHoldingButton(Button.ABILITY_2)
+    @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE)
 
     changeCard(-1)
 
@@ -123,7 +126,7 @@ rule "Change Card (Right)":
     @Condition cardJudge != eventPlayer
     @Condition eventPlayer.playedCard == false
     @Condition currentGameState == gameState.ROUND
-    @Condition eventPlayer.isHoldingButton(Button.ABILITY_1)
+    @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE)
 
     changeCard(1)
 
@@ -132,13 +135,13 @@ rule "Play Card":
     @Condition cardJudge != eventPlayer
     @Condition eventPlayer.playedCard == false
     @Condition currentGameState == gameState.ROUND
-    @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE)
+    @Condition eventPlayer.isHoldingButton(Button.INTERACT)
 
     eventPlayer.playedCard = true
 
 rule "Redraw Cards":
     @Event eachPlayer
-    @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE)
+    @Condition eventPlayer.isHoldingButton(Button.ABILITY_2)
     @Condition cardJudge != eventPlayer
     @Condition currentGameState == gameState.ROUND
     @Condition eventPlayer.playedCard == false
@@ -175,7 +178,7 @@ rule "Change Judge Card (Left)":
     @Condition cardJudge == eventPlayer
     @Condition not entityExists(eventPlayer.cardVoted)
     @Condition currentGameState == gameState.VOTING
-    @Condition eventPlayer.isHoldingButton(Button.ABILITY_1)
+    @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE)
 
     changeJudgeCard(-1)
 
@@ -184,7 +187,7 @@ rule "Change Judge Card (Right)":
     @Condition cardJudge == eventPlayer
     @Condition not entityExists(eventPlayer.cardVoted)
     @Condition currentGameState == gameState.VOTING
-    @Condition eventPlayer.isHoldingButton(Button.ABILITY_2)
+    @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE)
 
     changeJudgeCard(1)
 
@@ -193,7 +196,7 @@ rule "Judge Vote":
     @Condition cardJudge == eventPlayer
     @Condition not entityExists(eventPlayer.cardVoted)
     @Condition currentGameState == gameState.VOTING
-    @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE)
+    @Condition eventPlayer.isHoldingButton(Button.INTERACT)
 
     eventPlayer.cardVoted = getJudgeCards[eventPlayer.selectedCardJudge]
 
@@ -229,3 +232,14 @@ rule "Disable Jump / Crouch":
     waitUntil(eventPlayer.isOnGround(), 9999)
     eventPlayer.allowButton(Button.JUMP)
     eventPlayer.allowButton(Button.CROUCH)
+
+rule "Toggle Chat":
+    @Event eachPlayer
+    @Condition eventPlayer.isHoldingButton(Button.ULTIMATE)
+
+    eventPlayer.chatEnabled = not eventPlayer.chatEnabled
+
+    if eventPlayer.chatEnabled:
+        eventPlayer.enableTextChat()
+    else:
+        eventPlayer.disableTextChat()

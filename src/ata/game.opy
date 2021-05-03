@@ -1,6 +1,6 @@
 settings {
     "main": {
-        "description": 'The Game of Hilarious Comparisons! Based on the Apples to Apples card game by Mattel Games. [Gamemode created by CaptCaptain#11421]'
+        "description": 'The Game of Crazy Comparisons! Based on the Apples to Apples card game by Mattel Games. [Gamemode created by CaptCaptain#11421]'
     },
     "lobby": {
         "mapRotation": "afterGame",
@@ -58,7 +58,7 @@ GetStrings({
             "en-US": "https://workshop.codes/apples-to-apples"
         },
         VERSION: {
-            "en-US": "Version: 2.0.0"
+            "en-US": "Version: 2.1.0"
         },
         PLAY_CARDS: {
             "en-US": "Play your cards"
@@ -77,7 +77,7 @@ GetStrings({
         },
         IS_JUDGE: {
             "en-US": "{0} You are the Judge {0}",
-            format: 'abilityIconString(cardJudge.getCurrentHero(), Button.ULTIMATE)'
+            format: 'abilityIconString(cardJudge.getCurrentHero(), Button.ABILITY_2)'
         },
         NO_CARDS: {
             "en-US": "No one played a card, moving to the next round"
@@ -122,14 +122,14 @@ GetStrings({
         },
         JUDGE_VOTE_INSTRUCTION: {
             "en-US": "Card #{}/{}\n{} — Choose Card\n{} (Left) / {} (Right) — Select Card",
-            format: "cardJudge.selectedCardJudge, len(getJudgeCards) - 1, buttonString(Button.PRIMARY_FIRE), buttonString(Button.ABILITY_1), buttonString(Button.ABILITY_2)"
+            format: "cardJudge.selectedCardJudge, len(getJudgeCards) - 1, buttonString(Button.INTERACT), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE)"
         },
         YOUR_CARDS: {
             "en-US": "Your Cards"
         },
         CARD_CONTROLS: {
-            "en-US": "{} — Play Selected Card\n{} — Get New Cards (Forfeit your turn)\n{} (Up) / {} (Down) — Select Card",
-            format: "buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), buttonString(Button.ABILITY_2), buttonString(Button.ABILITY_1)"
+            "en-US": "{} — Play Selected Card\n{} — Get New Cards (Forfeit your turn)\n{} (Up) / {} (Down) — Select Card\n{} — Toggle Chat ({})",
+            format: "buttonString(Button.INTERACT), buttonString(Button.ABILITY_2), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), buttonString(Button.ULTIMATE), localPlayer.chatEnabled"
         },
         JUDGE_VOTED:{
             "en-US": "The Judge has voted for {}",
