@@ -82,6 +82,9 @@ GetMapData({
         KINGS_ROW_WINTER: {
             CENTER: '[vect(-149.030, -2.932, 24.228), 6]'
         },
+        TEMPLE_OF_ANUBIS: {
+            CENTER: '[vect(-45.472, 1.635, 43.378), 6]'
+        }
     }
 })
 

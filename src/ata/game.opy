@@ -13,7 +13,7 @@ settings {
     "gamemodes": {
         "ffa": {
             "enabledMaps": [
-                "petra", "havana", "workshopIsland", "workshopIslandNight", "iliosRuins", "volskaya", "blizzWorld", "blizzWorldWinter", "dorado", "lijiangNightMarket", "lijiangNightMarketLny", "nepalVillage", "blackForest", "blackForestWinter", "paris", "oasisUniversity", "chateauGuillard", "chateauGuillardHalloween", "hanamura", "hanamuraWinter", "hollywood", "hollywoodHalloween", "eichenwalde", "eichenwaldeHalloween", "kingsRow", "kingsRowWinter"
+                "petra", "havana", "workshopIsland", "workshopIslandNight", "iliosRuins", "volskaya", "blizzWorld", "blizzWorldWinter", "dorado", "lijiangNightMarket", "lijiangNightMarketLny", "nepalVillage", "blackForest", "blackForestWinter", "paris", "oasisUniversity", "chateauGuillard", "chateauGuillardHalloween", "hanamura", "hanamuraWinter", "hollywood", "hollywoodHalloween", "eichenwalde", "eichenwaldeHalloween", "kingsRow", "kingsRowWinter", "templeOfAnubis"
             ]
         },
         "general": {
