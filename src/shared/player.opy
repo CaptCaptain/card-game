@@ -141,7 +141,7 @@ rule "Play Card":
 
 rule "Redraw Cards":
     @Event eachPlayer
-    @Condition eventPlayer.isHoldingButton(Button.ABILITY_2)
+    @Condition eventPlayer.isHoldingButton(Button.ULTIMATE)
     @Condition cardJudge != eventPlayer
     @Condition currentGameState == gameState.ROUND
     @Condition eventPlayer.playedCard == false
@@ -211,6 +211,14 @@ rule "Keep in Circle":
     wait()
     if RULE_CONDITION: goto RULE_START
 
+rule "Update Circle":
+    @Event playerJoined
+
+    waitUntil(eventPlayer.hasSpawned(), 9999)
+    for globalIndex in range(0, len(playersInMatch(Team.ALL)) - 1, 1):
+        getPlayersInSlot(globalIndex, Team.ALL).teleport(getSpot(getPlayersInSlot(globalIndex, Team.ALL)))
+    wait(0.016)
+
 rule "Close to Score Fire":
     @Event eachPlayer
     @Condition eventPlayer.getScore() >= WS_SET_SCORE_NEEDED - 1
@@ -235,7 +243,7 @@ rule "Disable Jump / Crouch":
 
 rule "Toggle Chat":
     @Event eachPlayer
-    @Condition eventPlayer.isHoldingButton(Button.ULTIMATE)
+    @Condition eventPlayer.isHoldingButton(Button.ABILITY_2)
 
     eventPlayer.chatEnabled = not eventPlayer.chatEnabled
 
