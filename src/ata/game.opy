@@ -33,6 +33,8 @@ settings {
     }
 }
 
+#!optimizeForSize
+
 enum gameStyle:
     DEFAULT,
     CRAB,
@@ -122,14 +124,14 @@ GetStrings({
         },
         JUDGE_VOTE_INSTRUCTION: {
             "en-US": "Card #{}/{}\n{} — Choose Card\n{} (Left) / {} (Right) — Select Card",
-            format: "cardJudge.selectedCardJudge, len(getJudgeCards) - 1, buttonString(Button.INTERACT), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE)"
+            format: "cardJudge.selectedCardJudge, len(getJudgeCards), buttonString(Button.INTERACT), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE)"
         },
         YOUR_CARDS: {
             "en-US": "Your Cards"
         },
         CARD_CONTROLS: {
             "en-US": "{} — Play Selected Card\n{} — Get New Cards (Forfeit your turn)\n{} (Up) / {} (Down) — Select Card\n{} — Toggle Chat ({})",
-            format: "buttonString(Button.INTERACT), buttonString(Button.ABILITY_2), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), buttonString(Button.ULTIMATE), localPlayer.chatEnabled"
+            format: "buttonString(Button.INTERACT), buttonString(Button.ULTIMATE), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), buttonString(Button.ABILITY_2), localPlayer.chatEnabled"
         },
         JUDGE_VOTED:{
             "en-US": "The Judge has voted for {}",
