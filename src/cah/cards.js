@@ -880,9 +880,7 @@ result += 'rule "Set Card Pack (Cards)":\n';
 shuffleArray(cards);
 remaining = 0;
 for (var card of cards) {
-	if (card.length >= 22) {
-		card = wrap(card, "22");
-	}
+	card = wrap(card, 22);
 	if (remaining >= 300) {
 		remaining = 0;
 		result +=
@@ -900,9 +898,6 @@ shuffleArray(sentences);
 result += 'rule "Set Card Pack (Words)":\n';
 remaining = 0;
 for (var sentence of sentences) {
-	if (sentence.length >= 80) {
-		sentence = wrap(sentence, "80");
-	}
 	if (remaining >= 300) {
 		remaining = 0;
 		result +=
@@ -915,10 +910,11 @@ for (var sentence of sentences) {
 		result +=
 			"    sentences.append(" +
 			'"' +
-			sentence.replace("{Insert Name}", "{}") +
+			wrap(sentence.replace("{Insert Name}", "{}"), 80) +
 			'".format(random.choice(getAllHeroes()))' +
 			")\n";
 	} else {
+		sentence = wrap(sentence, 80);
 		result += "    sentences.append(" + '"' + sentence + '"' + ")\n";
 	}
 }
