@@ -139,6 +139,8 @@ rule "Play Card":
 
     eventPlayer.playedCard = true
 
+    smallMessage(eventPlayer, '{} Played "{}"'.format(iconString(Icon.CHECKMARK), eventPlayer.cards[evalOnce(eventPlayer.selectedCard)]))
+
 rule "Redraw Cards":
     @Event eachPlayer
     @Condition eventPlayer.isHoldingButton(Button.ULTIMATE)
@@ -148,6 +150,8 @@ rule "Redraw Cards":
 
     eventPlayer.playedCard = true
     eventPlayer.cards = []
+
+    smallMessage(eventPlayer, "{} Turn forfeited, new cards given on next turn".format(iconString(Icon.EXCLAMATION_MARK)))
 
 rule "Forfeit":
     @Event playerJoined
@@ -249,5 +253,7 @@ rule "Toggle Chat":
 
     if eventPlayer.chatEnabled:
         eventPlayer.enableTextChat()
+        smallMessage(eventPlayer, "{} Chat visible".format(iconString(Icon.CHECKMARK)))
     else:
         eventPlayer.disableTextChat()
+        smallMessage(eventPlayer, "{} Chat hidden".format(iconString(Icon.NO)))
