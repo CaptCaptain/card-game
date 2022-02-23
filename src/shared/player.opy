@@ -139,7 +139,7 @@ rule "Play Card":
 
     eventPlayer.playedCard = true
 
-    smallMessage(eventPlayer, '{} Played "{}"'.format(iconString(Icon.CHECKMARK), eventPlayer.cards[evalOnce(eventPlayer.selectedCard)]))
+    smallMessage(eventPlayer, '{} Played "{}"'.format(iconString(Icon.CHECKMARK), eventPlayer.cards[evalOnce(eventPlayer.selectedCard)].replace("\n", " ")))
 
 rule "Redraw Cards":
     @Event eachPlayer
