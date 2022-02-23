@@ -263,7 +263,7 @@ rule "Game Loop":
             chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
             
             # Wait until everyone plays their cards or the time runs out
-            waitUntil(roundTime == 0 or all([player.playedCard == true for player in playersInMatch(Team.ALL).exclude(cardJudge)]), WS_SET_PICK_TIME)
+            waitUntil(roundTime == 0 or all([player.playedCard == true for player in getAllPlayers().exclude(cardJudge)]), WS_SET_PICK_TIME)
 
             stopChasingVariable(roundTime)
             
