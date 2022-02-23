@@ -52,13 +52,13 @@ GetStrings({
     practiceRangeTranslations: ['"Practice Range"'],
     translations: {
         GAME_NAME: {
-            "en-US": ""
+            "en-US": "Cards Against Humanity by CaptCaptain#11421"
         },
         WEBLINK: {
             "en-US": ""
         },
         VERSION: {
-            "en-US": ""
+            "en-US": "Version: 1.0.0"
         },
         PLAY_CARDS: {
             "en-US": "Play your cards"
