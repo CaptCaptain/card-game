@@ -251,7 +251,7 @@ rule "Game Loop":
                 cardJudge.communicate(Comms.HELLO)
 
             # Create center text
-            createCenterText(STR_WAIT_FOR_CARDS if localPlayer.playedCard else STR_CARD_INSTRUCTION, floor(roundTime))
+            createCenterText(STR_WAIT_FOR_CARDS if localPlayer.playedCard or localPlayer == cardJudge else STR_CARD_INSTRUCTION, floor(roundTime))
 
             # Wait for everyone to get their cards
             waitUntil(all([len(player.cards) > 0 for player in playersInMatch(Team.ALL).exclude(cardJudge)]), 9999)
@@ -287,7 +287,7 @@ rule "Game Loop":
             
             roundTime = WS_SET_VOTING_TIME
 
-            createCenterText(STR_IS_JUDGE if localPlayer == cardJudge else STR_WAIT_FOR_JUDGE, floor(roundTime))
+            createCenterText(STR_CARD_INSTRUCTION if localPlayer == cardJudge else STR_WAIT_FOR_JUDGE, floor(roundTime))
 
             # Dummy bots automatically vote
             async(dummyJudgeVote, AsyncBehavior.NOOP)
