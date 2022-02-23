@@ -155,6 +155,8 @@ globalvar lastDummy
 globalvar dummyNames = getDummyNames()
 globalvar selectedDummyName
 
+globalvar scoringEnabled = true
+
 subroutine dummyVote
 subroutine dummyJudgeVote
 
@@ -313,7 +315,7 @@ rule "Game Loop":
             playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, VOTE_COLOR, cardJudge.cardVoted.getPosition() + Vector.UP, 5)
             playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, VOTE_COLOR, cardJudge.cardVoted.getPosition() + Vector.UP, 10)
             playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, cardJudge.cardVoted.getPosition() + Vector.UP, 100)
-            cardJudge.cardVoted.addToScore(1)
+            cardJudge.cardVoted.addToScore(1 if scoringEnabled else 0)
 
             wait(3)
             
@@ -344,7 +346,7 @@ rule "Skip Assembling Heroes":
         setMatchTime(0)
 
 rule "Spawn Bots":
-    @Condition WS_SET_ENABLE_BOTS
+    @Condition WS_SET_ENABLE_BOTS == 1
     @Condition getNumberOfPlayers(Team.ALL) < 12
 
     wait(0.25)
@@ -361,4 +363,36 @@ rule "Spawn Bots":
         lastDummy.startForcingName(selectedDummyName)
         lastDummy.startFacing(directionTowards(evalOnce(lastDummy).getEyePosition(), MAP_CENTER[mapData.POSITION] + Vector.UP), 100, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
         wait(0.25)
+    if RULE_CONDITION: goto RULE_START
+
+rule "Spawn Bots While You Wait":
+    @Condition WS_SET_ENABLE_BOTS == 2
+    @Condition len([player for player in getAllPlayers() if not player.isDummy()]) < 3
+
+    scoringEnabled = false
+
+    wait(0.25)
+    for dummyBotIndex in range(getNumberOfPlayers(Team.ALL), 12):
+        createDummy(random.choice(getAllHeroes()), Team.ALL, -1, nearestWalkablePosition(getSpawnPoints(Team.1)), null)
+        lastDummy = getLastCreatedEntity()
+
+        if dummyNames == []:
+            dummyNames = getDummyNames()
+
+        selectedDummyName = random.choice(dummyNames)
+        dummyNames.remove(selectedDummyName)
+
+        lastDummy.startForcingName(selectedDummyName)
+        lastDummy.startFacing(directionTowards(evalOnce(lastDummy).getEyePosition(), MAP_CENTER[mapData.POSITION] + Vector.UP), 100, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+        wait(0.25)
+
+    smallMessage(getAllPlayers(), "{} Not enough players for match, enabling while you wait".format(iconString(Icon.EXCLAMATION_MARK)))
+
+    waitUntil(len([player for player in getAllPlayers() if not player.isDummy()]) >= 3, 9999)
+
+    smallMessage(getAllPlayers(), "{} Enough players for match, disabling while you wait".format(iconString(Icon.EXCLAMATION_MARK)))
+
+    destroyAllDummies()
+    scoringEnabled = true
+
     if RULE_CONDITION: goto RULE_START
