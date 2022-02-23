@@ -908,11 +908,11 @@ for (var sentence of sentences) {
 		result +=
 			"    sentences.append(" +
 			'"' +
-			wrap(sentence.replace("{Insert Name}", "{}"), 80) +
+			wrap(sentence.replace("{Insert Name}", "{}"), 70) +
 			'".format(random.choice(getAllHeroes()))' +
 			")\n";
 	} else {
-		sentence = wrap(sentence, 80);
+		sentence = wrap(sentence, 70);
 		result += "    sentences.append(" + '"' + sentence + '"' + ")\n";
 	}
 }
