@@ -1,6 +1,6 @@
 settings {
     "main": {
-        "description": 'The Game of Crazy Comparisons! Based on the Apples to Apples card game by Mattel Games. [Gamemode created by CaptCaptain#11421]'
+        "description": 'The Game of Crazy Comparisons!\nEach round, one topic card is provided, and everyone else answers with a card that best matches the topic card.\nBased on the Apples to Apples card game by Mattel Games. [Workshop Mode created by CaptCaptain#11421]'
     },
     "lobby": {
         "mapRotation": "afterGame",
