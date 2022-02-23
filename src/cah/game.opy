@@ -70,7 +70,7 @@ GetStrings({
             "en-US": "Cards Against Humanity"
         },
         WAITING_FOR_PLAYERS: {
-            "en-US": "Waiting For Players"
+            "en-US": "Waiting For 3 Players"
         },
         CARD_JUDGE: {
             "en-US": "Card Czar"

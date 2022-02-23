@@ -72,7 +72,7 @@ GetStrings({
             "en-US": "Apples to Apples"
         },
         WAITING_FOR_PLAYERS: {
-            "en-US": "Waiting For Players"
+            "en-US": "Waiting For 3 Players"
         },
         CARD_JUDGE: {
             "en-US": "Judge"
