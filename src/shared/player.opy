@@ -31,9 +31,6 @@ rule "Global Huds":
     # Your cards hud text
     hudSubtext(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge else null, STR_YOUR_CARDS, HudPosition.LEFT, 4, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
-    # Control hud text
-    hudSubtext(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge else null, STR_CARD_CONTROLS, HudPosition.LEFT, WS_SET_CARDS + 6, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
-
     # Credit huds
     hudSubheader(localPlayer, STR_VERSION, HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
@@ -42,9 +39,14 @@ rule "Global Huds":
     hudSubtext(localPlayer, STR_GAME_NAME, HudPosition.RIGHT, -3, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
     # Lobby Ruleset
-    hudSubtext(localPlayer, "———————————\n{}".format(STR_LOBBY_RULESET), HudPosition.RIGHT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+    hudHeader(localPlayer, STR_LOBBY_RULESET, HudPosition.RIGHT, 0, SUB_COLOR, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
-    hudSubheader(localPlayer, "{}\n{}\n{}\n{}".format(STR_RULESET_GAME_STYLE, STR_RULESET_SCORE_TO_WIN, STR_RULESET_PLAY_CARD_TIME, STR_RULESET_JUDGE_VOTE_TIME), HudPosition.RIGHT, 1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+    hudSubtext(localPlayer, "{}\n{}\n{}\n{}".format(STR_RULESET_GAME_STYLE, STR_RULESET_SCORE_TO_WIN, STR_RULESET_PLAY_CARD_TIME, STR_RULESET_JUDGE_VOTE_TIME), HudPosition.RIGHT, 1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+    
+    # Control hud text
+    hudHeader(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge else null, STR_CARD_CONTROLS_TITLE, HudPosition.RIGHT, WS_SET_CARDS + 6, SUB_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+
+    hudSubtext(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge else null, STR_CARD_CONTROLS, HudPosition.RIGHT, WS_SET_CARDS + 7, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Select the card that best fits the word hud
     hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING) or (localPlayer == cardJudge and currentGameState != gameState.ROUND) else null, "{}:".format(STR_CARD_INSTRUCTION), HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)

@@ -130,9 +130,13 @@ GetStrings({
         YOUR_CARDS: {
             "en-US": "Your Cards"
         },
+        CARD_CONTROLS_TITLE: {
+            "en-US": "{} Controls:",
+            format: "iconString(Icon.EXCLAMATION_MARK)"
+        },
         CARD_CONTROLS: {
-            "en-US": "{} Controls\n{} — Play Selected Card\n{} — Get New Cards (Forfeit your turn)\n{} (Up) / {} (Down) — Select Card\n{} — Toggle Chat ({})",
-            format: "iconString(Icon.QUESTION_MARK), buttonString(Button.INTERACT), buttonString(Button.ULTIMATE), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), buttonString(Button.ABILITY_2), localPlayer.chatEnabled"
+            "en-US": "{} — Play Selected Card\n{} — Get New Cards (Forfeit your turn)\n{} (Up) / {} (Down) — Select Card\n{} — Toggle Chat ({})",
+            format: "buttonString(Button.INTERACT), buttonString(Button.ULTIMATE), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), buttonString(Button.ABILITY_2), localPlayer.chatEnabled"
         },
         JUDGE_VOTED:{
             "en-US": "The Judge has voted for {}",
