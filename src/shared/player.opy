@@ -1,4 +1,4 @@
-#!define getSpot(player) MAP_CENTER[mapData.POSITION] + angleToDirection((player.getSlot()) * (360 / (len(playersInMatch(Team.ALL)))), 0) * MAP_CENTER[mapData.RADIUS]
+#!define getSpot(player) MAP_CENTER[mapData.POSITION] + (angleToDirection((360 / getNumberOfPlayers(Team.ALL)) * player.getSlot(), 0) * MAP_CENTER[mapData.RADIUS])
 
 #!define changeCard(value) eventPlayer.selectedCard += value\
 if eventPlayer.selectedCard >= len(eventPlayer.cards) - 1:\
@@ -222,10 +222,17 @@ rule "Keep in Circle":
     wait()
     if RULE_CONDITION: goto RULE_START
 
-rule "Update Circle":
+rule "Update Circle on Spawn":
     @Event eachPlayer
 
     waitUntil(eventPlayer.hasSpawned(), 9999)
+    for globalIndex in range(0, len(playersInMatch(Team.ALL)), 1):
+        getPlayersInSlot(globalIndex, Team.ALL).teleport(getSpot(getPlayersInSlot(globalIndex, Team.ALL)))
+    wait(0.016)
+
+rule "Update Circle on Leave":
+    @Event playerLeft
+
     for globalIndex in range(0, len(playersInMatch(Team.ALL)), 1):
         getPlayersInSlot(globalIndex, Team.ALL).teleport(getSpot(getPlayersInSlot(globalIndex, Team.ALL)))
     wait(0.016)
