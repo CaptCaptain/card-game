@@ -123,7 +123,7 @@ GetStrings({
         },
         JUDGE_VOTE_INSTRUCTION: {
             "en-US": "Card #{}/{}\n{} — Choose Card\n{} (Left) / {} (Right) — Select Card",
-            format: "cardJudge.selectedCardJudge + 1, len(getJudgeCards), buttonString(Button.PRIMARY_FIRE), buttonString(Button.ABILITY_1), buttonString(Button.ABILITY_2)"
+            format: "cardJudge.selectedCardJudge + 1, len(getJudgeCards), buttonString(Button.INTERACT), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE)"
         },
         YOUR_CARDS: {
             "en-US": "Your Cards"
