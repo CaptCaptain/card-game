@@ -99,6 +99,11 @@ rule "Player Setup":
     eventPlayer.teleport(getSpot(eventPlayer))
     eventPlayer.setFacing(directionTowards(eventPlayer.getEyePosition(), MAP_CENTER[mapData.POSITION] + Vector.UP), Relativity.TO_WORLD)
 
+    waitUntil(eventPlayer.isAlive(), 9999)
+    wait(1)
+    if not scoringEnabled:
+        smallMessage(eventPlayer, "{} While You Wait is enabled, waiting for 3 players".format(iconString(Icon.EXCLAMATION_MARK)))
+
 rule "Get Cards":
     @Event eachPlayer
     @Condition currentGameState == gameState.ROUND
@@ -219,7 +224,7 @@ rule "Update Circle":
     @Event playerJoined
 
     waitUntil(eventPlayer.hasSpawned(), 9999)
-    for globalIndex in range(0, len(playersInMatch(Team.ALL)) - 1, 1):
+    for globalIndex in range(0, len(playersInMatch(Team.ALL)), 1):
         getPlayersInSlot(globalIndex, Team.ALL).teleport(getSpot(getPlayersInSlot(globalIndex, Team.ALL)))
     wait(0.016)
 
