@@ -1,5 +1,6 @@
 settings {
     "main": {
+        "modeName": "Cards Against Humanity",
         "description": "A fill-in-the-blank party game that turns your awkward personality and lackluster social skills into hours of fun!\nEach round, one topic card is provided, and everyone else answers with their funniest card.\n\nBased on the card game by Cards Against Humanity LLC\n[Note: This workshop mode contains content not suitable for all audiences] [Workshop Mode created by CaptCaptain#11421]",
     },
     "lobby": {
