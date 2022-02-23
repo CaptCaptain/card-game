@@ -84,6 +84,9 @@ GetMapData({
         },
         TEMPLE_OF_ANUBIS: {
             CENTER: '[vect(-45.472, 1.635, 43.378), 6]'
+        },
+        MALEVENTO: {
+            CENTER: '[vect(25.089, 3.116, 22.142), 6]'
         }
     }
 })
