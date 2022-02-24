@@ -128,6 +128,9 @@ GetStrings({
         YOUR_CARDS: {
             "en-US": "Your Cards"
         },
+        PLAYER_WON: {
+            "en-US": "won this round!"
+        },
         SELECTED_CARD: {
             "en-US": "Your selected card"
         },

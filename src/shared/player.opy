@@ -88,6 +88,8 @@ rule "Global Huds":
 
     hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING and not localPlayer.playedCard) or (localPlayer == cardJudge and currentGameState == gameState.VOTING) else null, STR_SELECTED_CARD_CONTROLS, HudPosition.TOP, 6, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
+    hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState == gameState.END) or (localPlayer == cardJudge and currentGameState == gameState.END) else null, "{} {}".format(getJudgeCards[cardJudge.selectedCardJudge], STR_PLAYER_WON), HudPosition.TOP, 6, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+
     hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING and not localPlayer.playedCard) or (localPlayer == cardJudge and currentGameState == gameState.VOTING) else null, "[{}]".format(buttonString(Button.INTERACT)), HudPosition.TOP, 7, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
     #Judge hud
