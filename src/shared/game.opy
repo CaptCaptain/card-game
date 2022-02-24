@@ -160,6 +160,13 @@ globalvar scoringEnabled = true
 subroutine dummyVote
 subroutine dummyJudgeVote
 
+playervar spot = -1
+subroutine updateCirclePos
+
+def updateCirclePos():
+    for globalIndex in range(0, getNumberOfPlayers(Team.ALL) - 1, 1):
+        getAllPlayers()[globalIndex].spot = globalIndex
+
 def dummyVote():
     wait(2)
     [player for player in getAllPlayers() if player.isDummy()].playedCard = true
@@ -225,6 +232,7 @@ rule "Game Loop":
     wait(1)
 
     while true:
+        updateCirclePos()
         while true:
             # Change game state to round
             currentGameState = gameState.ROUND
