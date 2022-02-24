@@ -1,5 +1,6 @@
 settings {
     "main": {
+        "modeName": "Apples to Apples",
         "description": 'The Game of Crazy Comparisons!\nEach round, one topic card is provided, and everyone else answers with a card that best matches the topic card.\nBased on the Apples to Apples card game by Mattel Games. [Workshop Mode created by CaptCaptain#11421]'
     },
     "lobby": {
@@ -60,7 +61,7 @@ GetStrings({
             "en-US": "https://workshop.codes/apples-to-apples"
         },
         VERSION: {
-            "en-US": "Version: 2.1.0"
+            "en-US": "Version: 2.2.0"
         },
         PLAY_CARDS: {
             "en-US": "Play your cards"
@@ -72,7 +73,7 @@ GetStrings({
             "en-US": "Apples to Apples"
         },
         WAITING_FOR_PLAYERS: {
-            "en-US": "Waiting For Players"
+            "en-US": "Waiting For 3 Players"
         },
         CARD_JUDGE: {
             "en-US": "Judge"
@@ -128,6 +129,10 @@ GetStrings({
         },
         YOUR_CARDS: {
             "en-US": "Your Cards"
+        },
+        CARD_CONTROLS_TITLE: {
+            "en-US": "{} Controls:",
+            format: "iconString(Icon.EXCLAMATION_MARK)"
         },
         CARD_CONTROLS: {
             "en-US": "{} — Play Selected Card\n{} — Get New Cards (Forfeit your turn)\n{} (Up) / {} (Down) — Select Card\n{} — Toggle Chat ({})",

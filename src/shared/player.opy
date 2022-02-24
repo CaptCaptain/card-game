@@ -1,4 +1,9 @@
-#!define getSpot(player) MAP_CENTER[mapData.POSITION] + angleToDirection((player.getSlot() + 1) * (360 / len(playersInMatch(Team.ALL))), 0) * MAP_CENTER[mapData.RADIUS]
+#!define theta(totalPoints) ((Math.PI*2) / totalPoints)
+#!define angle(currentPoint, totalPoints) (theta(totalPoints) * currentPoint)
+#!define getX(player, radius) radius * cos(angle(sortedPlayers().index(player), getNumberOfPlayers(Team.ALL)))
+#!define getZ(player, radius) radius * sin(angle(sortedPlayers().index(player), getNumberOfPlayers(Team.ALL)))
+
+#!define getSpot(player) MAP_CENTER[mapData.POSITION] + vect(getX(player, MAP_CENTER[mapData.RADIUS]), 0, getZ(player, MAP_CENTER[mapData.RADIUS]))
 
 #!define yAxis(zAxis) angleToDirection(horizontalAngleOfDirection(zAxis), verticalAngleOfDirection(zAxis) - 90)
 #!define xAxis(zAxis) crossProduct(zAxis, yAxis(zAxis))
@@ -38,9 +43,6 @@ rule "Global Huds":
     # Your cards hud text
     hudSubtext(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge else null, STR_YOUR_CARDS, HudPosition.LEFT, 4, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
-    # Control hud text
-    hudSubtext(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge else null, STR_CARD_CONTROLS, HudPosition.LEFT, WS_SET_CARDS + 6, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
-
     # Credit huds
     hudSubheader(localPlayer, STR_VERSION, HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
@@ -49,7 +51,7 @@ rule "Global Huds":
     hudSubtext(localPlayer, STR_GAME_NAME, HudPosition.RIGHT, -3, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
     # Lobby Ruleset
-    hudSubtext(localPlayer, "———————————\n{}".format(STR_LOBBY_RULESET), HudPosition.RIGHT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+    hudHeader(localPlayer, STR_LOBBY_RULESET, HudPosition.RIGHT, 0, SUB_COLOR, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
     hudSubtext(localPlayer, "{}\n{}\n{}\n{}".format(STR_RULESET_GAME_STYLE, STR_RULESET_SCORE_TO_WIN, STR_RULESET_PLAY_CARD_TIME, STR_RULESET_JUDGE_VOTE_TIME), HudPosition.RIGHT, 1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
     
@@ -115,6 +117,11 @@ rule "Player Setup":
     eventPlayer.teleport(getSpot(eventPlayer))
     eventPlayer.setFacing(directionTowards(eventPlayer.getEyePosition(), MAP_CENTER[mapData.POSITION] + Vector.UP), Relativity.TO_WORLD)
 
+    waitUntil(eventPlayer.isAlive(), 9999)
+    wait(1)
+    if not scoringEnabled:
+        smallMessage(eventPlayer, "{} While You Wait is enabled, waiting for 3 players".format(iconString(Icon.EXCLAMATION_MARK)))
+
 rule "Get Cards":
     @Event eachPlayer
     @Condition currentGameState == gameState.ROUND
@@ -178,7 +185,7 @@ rule "Forfeit":
 
 rule "Clean up":
     @Event playerLeft
-
+    
     ignoreCardFilter.remove(eventPlayer.cards)
     eventPlayer.cards = []
     eventPlayer.playedCard = false
@@ -230,14 +237,6 @@ rule "Keep in Circle":
         eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), getSpot(eventPlayer)), 1, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
     wait()
     if RULE_CONDITION: goto RULE_START
-
-rule "Update Circle":
-    @Event playerJoined
-
-    waitUntil(eventPlayer.hasSpawned(), 9999)
-    for globalIndex in range(0, len(playersInMatch(Team.ALL)) - 1, 1):
-        getPlayersInSlot(globalIndex, Team.ALL).teleport(getSpot(getPlayersInSlot(globalIndex, Team.ALL)))
-    wait(0.016)
 
 rule "Close to Score Fire":
     @Event eachPlayer

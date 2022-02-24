@@ -1,5 +1,6 @@
 settings {
     "main": {
+        "modeName": "Cards Against Humanity",
         "description": "A fill-in-the-blank party game that turns your awkward personality and lackluster social skills into hours of fun!\nEach round, one topic card is provided, and everyone else answers with their funniest card.\n\nBased on the card game by Cards Against Humanity LLC\n[Note: This workshop mode contains content not suitable for all audiences] [Workshop Mode created by CaptCaptain#11421]",
     },
     "lobby": {
@@ -52,13 +53,13 @@ GetStrings({
     practiceRangeTranslations: ['"Practice Range"'],
     translations: {
         GAME_NAME: {
-            "en-US": ""
+            "en-US": "Cards Against Humanity by CaptCaptain#11421"
         },
         WEBLINK: {
             "en-US": ""
         },
         VERSION: {
-            "en-US": ""
+            "en-US": "Version: 1.0.0"
         },
         PLAY_CARDS: {
             "en-US": "Play your cards"
@@ -70,7 +71,7 @@ GetStrings({
             "en-US": "Cards Against Humanity"
         },
         WAITING_FOR_PLAYERS: {
-            "en-US": "Waiting For Players"
+            "en-US": "Waiting For 3 Players"
         },
         CARD_JUDGE: {
             "en-US": "Card Czar"
@@ -122,10 +123,14 @@ GetStrings({
         },
         JUDGE_VOTE_INSTRUCTION: {
             "en-US": "Card #{}/{}\n{} — Choose Card\n{} (Left) / {} (Right) — Select Card",
-            format: "cardJudge.selectedCardJudge + 1, len(getJudgeCards), buttonString(Button.PRIMARY_FIRE), buttonString(Button.ABILITY_1), buttonString(Button.ABILITY_2)"
+            format: "cardJudge.selectedCardJudge + 1, len(getJudgeCards), buttonString(Button.INTERACT), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE)"
         },
         YOUR_CARDS: {
             "en-US": "Your Cards"
+        },
+        CARD_CONTROLS_TITLE: {
+            "en-US": "{} Controls:",
+            format: "iconString(Icon.EXCLAMATION_MARK)"
         },
         CARD_CONTROLS: {
             "en-US": "{} — Play Selected Card\n{} — Get New Cards (Forfeit your turn)\n{} (Up) / {} (Down) — Select Card\n{} — Toggle Chat ({})",

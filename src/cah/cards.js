@@ -116,12 +116,10 @@ const sentences = [
 	`I'm straight, but _____ could turn me gay.`,
 	`If there's something strange in your neighborhood, who you gonna call?`,
 	`In space, no one can hear _____.`,
-	`It rubs _____ on its skin or else it gets _____ again.`,
 	`It's dangerous to go alone!  Take _____.`,
 	`It's dangerous to go alone! Take this.`,
 	`Last night I dreamt of an alternate universe where everyone shit _____ and puked _____.`,
 	`Leonardo DiCaprio will finally win an Oscar for his role in _____.`,
-	`My perfect day would have to include _____ followed by _____.`,
 	`On the next episode of 'My Strange Addiction', Josh just can't get enough of _____.`,
 	`People have started eating _____ because it's organic and gluten-free.`,
 	`The area was evacuated and deemed uninhabitable due to _____.`,
@@ -880,9 +878,7 @@ result += 'rule "Set Card Pack (Cards)":\n';
 shuffleArray(cards);
 remaining = 0;
 for (var card of cards) {
-	if (card.length >= 22) {
-		card = wrap(card, "22");
-	}
+	card = wrap(card, 22);
 	if (remaining >= 300) {
 		remaining = 0;
 		result +=
@@ -900,9 +896,6 @@ shuffleArray(sentences);
 result += 'rule "Set Card Pack (Words)":\n';
 remaining = 0;
 for (var sentence of sentences) {
-	if (sentence.length >= 80) {
-		sentence = wrap(sentence, "80");
-	}
 	if (remaining >= 300) {
 		remaining = 0;
 		result +=
@@ -915,10 +908,11 @@ for (var sentence of sentences) {
 		result +=
 			"    sentences.append(" +
 			'"' +
-			sentence.replace("{Insert Name}", "{}") +
+			wrap(sentence.replace("{Insert Name}", "{}"), 60) +
 			'".format(random.choice(getAllHeroes()))' +
 			")\n";
 	} else {
+		sentence = wrap(sentence, 60);
 		result += "    sentences.append(" + '"' + sentence + '"' + ")\n";
 	}
 }

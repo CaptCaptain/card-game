@@ -122,6 +122,8 @@ var = []
 
 #!define playersInMatch(team) [player for player in getLivingPlayers(team) if player.hasSpawned()]
 
+#!define sortedPlayers() sorted(getAllPlayers(), lambda x: x.getSlot())
+
 enum mapData:
     POSITION = 0,
     RADIUS = 1
@@ -154,6 +156,8 @@ globalvar cards = []
 globalvar lastDummy
 globalvar dummyNames = getDummyNames()
 globalvar selectedDummyName
+
+globalvar scoringEnabled = true
 
 subroutine dummyVote
 subroutine dummyJudgeVote
@@ -231,8 +235,8 @@ rule "Game Loop":
 
             # Each player takes turns, the game skips any players that have not spawned in or do not exist.
             slot += 1
-            while not (entityExists(getPlayersInSlot(slot, Team.ALL)) and getPlayersInSlot(slot, Team.ALL).hasSpawned()):
-                if slot > 12:
+            while not (entityExists(sortedPlayers()[slot]) and sortedPlayers()[slot].hasSpawned()):
+                if slot > 11:
                     slot = 0
                     break
                 else:
@@ -241,7 +245,7 @@ rule "Game Loop":
             roundTime = WS_SET_PICK_TIME
 
             # Select judge and sentence
-            cardJudge = getPlayersInSlot(slot, Team.ALL)
+            cardJudge = sortedPlayers()[slot]
             cardSentence = random.choice(sentenceSelection)
 
             # Make dummy bot wave if they are judge
@@ -249,7 +253,7 @@ rule "Game Loop":
                 cardJudge.communicate(Comms.HELLO)
 
             # Create center text
-            createCenterText(STR_WAIT_FOR_CARDS, floor(roundTime))
+            createCenterText(STR_WAIT_FOR_CARDS if localPlayer.playedCard or localPlayer == cardJudge else STR_CARD_INSTRUCTION, floor(roundTime))
 
             # Wait for everyone to get their cards
             waitUntil(all([len(player.cards) > 0 for player in playersInMatch(Team.ALL).exclude(cardJudge)]), 9999)
@@ -261,7 +265,7 @@ rule "Game Loop":
             chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
             
             # Wait until everyone plays their cards or the time runs out
-            waitUntil(roundTime == 0 or all([player.playedCard == true for player in playersInMatch(Team.ALL).exclude(cardJudge)]), WS_SET_PICK_TIME)
+            waitUntil(roundTime == 0 or all([player.playedCard == true for player in getAllPlayers().exclude(cardJudge)]), WS_SET_PICK_TIME)
 
             stopChasingVariable(roundTime)
             
@@ -285,7 +289,7 @@ rule "Game Loop":
             
             roundTime = WS_SET_VOTING_TIME
 
-            createCenterText(STR_WAIT_FOR_JUDGE, floor(roundTime))
+            createCenterText(STR_CARD_INSTRUCTION if localPlayer == cardJudge else STR_WAIT_FOR_JUDGE, floor(roundTime))
 
             # Dummy bots automatically vote
             async(dummyJudgeVote, AsyncBehavior.NOOP)
@@ -313,7 +317,7 @@ rule "Game Loop":
             playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, VOTE_COLOR, cardJudge.cardVoted.getPosition() + Vector.UP, 5)
             playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, VOTE_COLOR, cardJudge.cardVoted.getPosition() + Vector.UP, 10)
             playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, cardJudge.cardVoted.getPosition() + Vector.UP, 100)
-            cardJudge.cardVoted.addToScore(1)
+            cardJudge.cardVoted.addToScore(1 if scoringEnabled else 0)
 
             wait(3)
             
@@ -344,7 +348,7 @@ rule "Skip Assembling Heroes":
         setMatchTime(0)
 
 rule "Spawn Bots":
-    @Condition WS_SET_ENABLE_BOTS
+    @Condition WS_SET_ENABLE_BOTS == 1
     @Condition getNumberOfPlayers(Team.ALL) < 12
 
     wait(0.25)
@@ -361,4 +365,36 @@ rule "Spawn Bots":
         lastDummy.startForcingName(selectedDummyName)
         lastDummy.startFacing(directionTowards(evalOnce(lastDummy).getEyePosition(), MAP_CENTER[mapData.POSITION] + Vector.UP), 100, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
         wait(0.25)
+    if RULE_CONDITION: goto RULE_START
+
+rule "Spawn Bots While You Wait":
+    @Condition WS_SET_ENABLE_BOTS == 2
+    @Condition len([player for player in getAllPlayers() if not player.isDummy()]) < 3
+
+    scoringEnabled = false
+
+    wait(0.25)
+    for dummyBotIndex in range(getNumberOfPlayers(Team.ALL), 12):
+        createDummy(random.choice(getAllHeroes()), Team.ALL, -1, nearestWalkablePosition(getSpawnPoints(Team.1)), null)
+        lastDummy = getLastCreatedEntity()
+
+        if dummyNames == []:
+            dummyNames = getDummyNames()
+
+        selectedDummyName = random.choice(dummyNames)
+        dummyNames.remove(selectedDummyName)
+
+        lastDummy.startForcingName(selectedDummyName)
+        lastDummy.startFacing(directionTowards(evalOnce(lastDummy).getEyePosition(), MAP_CENTER[mapData.POSITION] + Vector.UP), 100, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
+        wait(0.25)
+
+    smallMessage(getAllPlayers(), "{} Not enough players for match, enabling while you wait".format(iconString(Icon.EXCLAMATION_MARK)))
+
+    waitUntil(len([player for player in getAllPlayers() if not player.isDummy()]) >= 3, 9999)
+
+    smallMessage(getAllPlayers(), "{} Enough players for match, disabling while you wait".format(iconString(Icon.EXCLAMATION_MARK)))
+
+    destroyAllDummies()
+    scoringEnabled = true
+
     if RULE_CONDITION: goto RULE_START
