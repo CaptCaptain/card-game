@@ -17,6 +17,9 @@ if eventPlayer.selectedCardJudge >= len(getJudgeCards) - 1:\
 elif eventPlayer.selectedCardJudge < 0:\
     eventPlayer.selectedCardJudge = 0\
 
+#!define lerp(start, end, frac) start + frac * (end - start)
+#!define lerp_color(start, end, frac) rgba(lerp(start[0], end[0], frac), lerp(start[1], end[1], frac), lerp(start[2], end[2], frac), lerp(start[3], end[3], frac))
+
 playervar playerHudIndex
 playervar hud_cards = []
 playervar selectedCard = 0
@@ -26,7 +29,7 @@ subroutine renderCards
 def renderCards():
     # Create hud text for each card, and show the selected card
     for globalHudIndex in range(0, WS_SET_CARDS, 1):
-        hudHeader(localPlayer if localPlayer != cardJudge else null, "{} {}".format("" if localPlayer.selectedCard != evalOnce(globalHudIndex) else "—>", localPlayer.cards[evalOnce(globalHudIndex)]) if len(localPlayer.cards) > 0 else "", HudPosition.LEFT, evalOnce(globalHudIndex) + 5, Color.LIME_GREEN if localPlayer.selectedCard == evalOnce(globalHudIndex) and localPlayer.playedCard == true else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+        hudHeader(localPlayer if localPlayer != cardJudge else null, "{} {}".format("" if localPlayer.selectedCard != evalOnce(globalHudIndex) else "—>", localPlayer.cards[evalOnce(globalHudIndex)]) if len(localPlayer.cards) > 0 else "", HudPosition.LEFT, evalOnce(globalHudIndex) + 5, Color.LIME_GREEN if localPlayer.selectedCard == evalOnce(globalHudIndex) and localPlayer.playedCard == true else lerp_color([255, 255, 255, 255], [160, 232, 27, 255], sin(getTotalTimeElapsed() * 10)) if localPlayer.selectedCard == evalOnce(globalHudIndex) else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
         wait()
 
 rule "Global Huds":
