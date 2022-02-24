@@ -325,7 +325,7 @@ rule "Game Loop":
 
             currentGameState = gameState.END
 
-            wait(3)
+            wait(5)
             
             getAllPlayers().playedCard = false
             cardJudge.selectedCardJudge = 0
