@@ -122,6 +122,8 @@ var = []
 
 #!define playersInMatch(team) [player for player in getLivingPlayers(team) if player.hasSpawned()]
 
+#!define sortedPlayers() sorted(getAllPlayers(), lambda x: x.getSlot())
+
 enum mapData:
     POSITION = 0,
     RADIUS = 1
@@ -159,13 +161,6 @@ globalvar scoringEnabled = true
 
 subroutine dummyVote
 subroutine dummyJudgeVote
-
-playervar spot = -1
-subroutine updateCirclePos
-
-def updateCirclePos():
-    for globalIndex in range(0, getNumberOfPlayers(Team.ALL) - 1, 1):
-        getAllPlayers()[globalIndex].spot = globalIndex
 
 def dummyVote():
     wait(2)
@@ -232,7 +227,6 @@ rule "Game Loop":
     wait(1)
 
     while true:
-        updateCirclePos()
         while true:
             # Change game state to round
             currentGameState = gameState.ROUND
@@ -241,8 +235,8 @@ rule "Game Loop":
 
             # Each player takes turns, the game skips any players that have not spawned in or do not exist.
             slot += 1
-            while not (entityExists(getPlayersInSlot(slot, Team.ALL)) and getPlayersInSlot(slot, Team.ALL).hasSpawned()):
-                if slot > 12:
+            while not (entityExists(sortedPlayers()[slot]) and sortedPlayers()[slot].hasSpawned()):
+                if slot > 11:
                     slot = 0
                     break
                 else:
@@ -251,7 +245,7 @@ rule "Game Loop":
             roundTime = WS_SET_PICK_TIME
 
             # Select judge and sentence
-            cardJudge = getPlayersInSlot(slot, Team.ALL)
+            cardJudge = sortedPlayers()[slot]
             cardSentence = random.choice(sentenceSelection)
 
             # Make dummy bot wave if they are judge

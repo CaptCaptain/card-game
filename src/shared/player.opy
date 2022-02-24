@@ -1,4 +1,9 @@
-#!define getSpot(player) MAP_CENTER[mapData.POSITION] + (angleToDirection((360 / getNumberOfPlayers(Team.ALL)) * player.spot, 0) * MAP_CENTER[mapData.RADIUS])
+#!define theta(totalPoints) ((Math.PI*2) / totalPoints)
+#!define angle(currentPoint, totalPoints) (theta(totalPoints) * currentPoint)
+#!define getX(player, radius) radius * cos(angle(sortedPlayers().index(player), getNumberOfPlayers(Team.ALL)))
+#!define getZ(player, radius) radius * sin(angle(sortedPlayers().index(player), getNumberOfPlayers(Team.ALL)))
+
+#!define getSpot(player) MAP_CENTER[mapData.POSITION] + vect(getX(player, MAP_CENTER[mapData.RADIUS]), 0, getZ(player, MAP_CENTER[mapData.RADIUS]))
 
 #!define changeCard(value) eventPlayer.selectedCard += value\
 if eventPlayer.selectedCard >= len(eventPlayer.cards) - 1:\
@@ -170,12 +175,9 @@ rule "Forfeit":
 rule "Clean up":
     @Event playerLeft
     
-    eventPlayer.spot = -1
     ignoreCardFilter.remove(eventPlayer.cards)
     eventPlayer.cards = []
     eventPlayer.playedCard = false
-
-    updateCirclePos()
 
 rule "Outline Card Judge":
     @Event eachPlayer
@@ -224,11 +226,6 @@ rule "Keep in Circle":
         eventPlayer.applyImpulse(directionTowards(eventPlayer.getPosition(), getSpot(eventPlayer)), 1, Relativity.TO_WORLD, Impulse.CANCEL_CONTRARY_MOTION_XYZ)
     wait()
     if RULE_CONDITION: goto RULE_START
-
-rule "Update Circle Position":
-    @Event playerJoined
-
-    updateCirclePos()
 
 rule "Close to Score Fire":
     @Event eachPlayer
