@@ -231,6 +231,8 @@ rule "Game Loop":
             # Change game state to round
             currentGameState = gameState.ROUND
 
+            getAllPlayers().disableGamemodeHud()
+
             setObjectiveDescription(getAllPlayers(), STR_PLAY_CARDS, HudReeval.VISIBILITY)
 
             # Each player takes turns, the game skips any players that have not spawned in or do not exist.
@@ -313,11 +315,15 @@ rule "Game Loop":
             
             createCenterText(STR_JUDGE_VOTED, '')
 
+            getAllPlayers().enableGamemodeHud()
+
             # Play effect
             playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, VOTE_COLOR, cardJudge.cardVoted.getPosition() + Vector.UP, 5)
             playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, VOTE_COLOR, cardJudge.cardVoted.getPosition() + Vector.UP, 10)
             playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, cardJudge.cardVoted.getPosition() + Vector.UP, 100)
             cardJudge.cardVoted.addToScore(1 if scoringEnabled else 0)
+
+            currentGameState = gameState.END
 
             wait(3)
             

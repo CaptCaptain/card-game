@@ -124,11 +124,40 @@ GetStrings({
             "en-US": "Select the Card that best fits"
         },
         JUDGE_VOTE_INSTRUCTION: {
-            "en-US": "Card #{}/{}\n{} — Choose Card\n{} (Left) / {} (Right) — Select Card",
-            format: "cardJudge.selectedCardJudge + 1, len(getJudgeCards), buttonString(Button.INTERACT), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE)"
+            "en-US": "Card #{}/{}",
+            format: "cardJudge.selectedCardJudge + 1, len(getJudgeCards)"
         },
         YOUR_CARDS: {
             "en-US": "Your Cards"
+        },
+        SELECTED_CARD: {
+            "en-US": "Your selected card"
+        },
+        SELECTED_CARD_CONTROLS: {
+            "en-US": "{}{} Select {}{}",
+            format: "iconString(Icon.ARROW_LEFT), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), iconString(Icon.ARROW_RIGHT)"
+        },
+        PLAY_CARD_CONTROL_ICON: {
+            "en-US": "{}{}",
+            format: "abilityIconString(Hero.TRACER, Button.ABILITY_1), buttonString(Button.INTERACT)"
+        },
+        PLAY_CARD_CONTROL: {
+            "en-US": "Play Card"
+        },
+        FORFEIT_CARD_CONTROL_ICON: {
+            "en-US": "{}{}",
+            format: "abilityIconString(Hero.TRACER, Button.ABILITY_2), buttonString(Button.ULTIMATE)"
+        },
+        FORFEIT_CARD_CONTROL: {
+            "en-US": "Redraw Cards (Forfeit Turn)"
+        },
+        TOGGLE_CHAT_ICON: {
+            "en-US": "{}{}",
+            format: "iconString(Icon.CHECKMARK) if localPlayer.chatEnabled else iconString(Icon.NO), buttonString(Button.ABILITY_2)"
+        },
+        TOGGLE_CHAT: {
+            "en-US": "Toggle Chat ({})",
+            format: "localPlayer.chatEnabled"
         },
         CARD_CONTROLS_TITLE: {
             "en-US": "{} Controls:",
