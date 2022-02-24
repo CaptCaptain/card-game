@@ -195,6 +195,3 @@ GetStrings({
 #!include "../shared/setting.opy"
 #!include "../shared/game.opy"
 #!include "../shared/player.opy"
-
-#!define GetGameData() __script__("cards.js")
-GetGameData()
