@@ -1,5 +1,12 @@
 #!define getSpot(player) MAP_CENTER[mapData.POSITION] + angleToDirection((player.getSlot() + 1) * (360 / len(playersInMatch(Team.ALL))), 0) * MAP_CENTER[mapData.RADIUS]
 
+#!define yAxis(zAxis) angleToDirection(horizontalAngleOfDirection(zAxis), verticalAngleOfDirection(zAxis) - 90)
+#!define xAxis(zAxis) crossProduct(zAxis, yAxis(zAxis))
+
+#!define WorldRender(eyePos, facingDir, screenX, screenY) eyePos + 100 *(screenX*xAxis(facingDir) + (screenY-0.2)*yAxis(facingDir) + 3*facingDir)
+
+#!define PlayerRender(player, screenX, screenY) WorldRender(player.getEyePosition(), player.getFacingDirection(), screenX, screenY)
+
 #!define changeCard(value) eventPlayer.selectedCard += value\
 if eventPlayer.selectedCard >= len(eventPlayer.cards) - 1:\
     eventPlayer.selectedCard = len(eventPlayer.cards) - 1\
@@ -44,7 +51,12 @@ rule "Global Huds":
     # Lobby Ruleset
     hudSubtext(localPlayer, "———————————\n{}".format(STR_LOBBY_RULESET), HudPosition.RIGHT, 0, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
-    hudSubheader(localPlayer, "{}\n{}\n{}\n{}".format(STR_RULESET_GAME_STYLE, STR_RULESET_SCORE_TO_WIN, STR_RULESET_PLAY_CARD_TIME, STR_RULESET_JUDGE_VOTE_TIME), HudPosition.RIGHT, 1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+    hudSubtext(localPlayer, "{}\n{}\n{}\n{}".format(STR_RULESET_GAME_STYLE, STR_RULESET_SCORE_TO_WIN, STR_RULESET_PLAY_CARD_TIME, STR_RULESET_JUDGE_VOTE_TIME), HudPosition.RIGHT, 1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+    
+    # Control hud text
+    createInWorldText(localPlayer if cardJudge != localPlayer else null, "Play Card       Redraw Card       Select Card       Select Card       TOGGLE CHAT", updateEveryTick(PlayerRender(localPlayer, 0, -1.2)), 1.25, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+    
+    createInWorldText(localPlayer if cardJudge != localPlayer else null, "{}      {}      {}      {}      {}".format(buttonString(Button.INTERACT), buttonString(Button.ULTIMATE), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), buttonString(Button.ABILITY_2)), updateEveryTick(PlayerRender(localPlayer, 0, -1.5)), 10, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
 
     # Select the card that best fits the word hud
     hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING) or (localPlayer == cardJudge and currentGameState != gameState.ROUND) else null, "{}:".format(STR_CARD_INSTRUCTION), HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
@@ -58,6 +70,10 @@ rule "Global Huds":
     hudSubtext(localPlayer if localPlayer == cardJudge and currentGameState == gameState.ROUND else null, STR_WAIT_FOR_CARDS, HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
     #hudSubtext(localPlayer, " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.TOP, 1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
+
+    createInWorldText(localPlayer if cardJudge == localPlayer else null, "Vote Card         Select Card       Select Card       TOGGLE CHAT", updateEveryTick(PlayerRender(localPlayer, 0, -1.2)), 1.25, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
+    
+    createInWorldText(localPlayer if cardJudge == localPlayer else null, "{}      {}      {}      {}".format(buttonString(Button.INTERACT), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), buttonString(Button.ABILITY_2)), updateEveryTick(PlayerRender(localPlayer, 0, -1.5)), 10, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, Color.WHITE, SpecVisibility.DEFAULT)
 
     hudText(localPlayer if localPlayer == cardJudge and currentGameState == gameState.VOTING else null, getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard], "", STR_JUDGE_VOTE_INSTRUCTION,HudPosition.TOP, 5, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
