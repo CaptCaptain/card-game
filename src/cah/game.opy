@@ -59,7 +59,7 @@ GetStrings({
             "en-US": ""
         },
         VERSION: {
-            "en-US": "Version: 1.0.0"
+            "en-US": "Version: 1.0.1"
         },
         PLAY_CARDS: {
             "en-US": "Play your cards"
