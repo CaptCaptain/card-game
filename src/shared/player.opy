@@ -37,6 +37,7 @@ def getCards():
 
         eventPlayer.cards.append(random.choice(cardSelectionFilter(eventPlayer)))
         ignoreCardFilter.append(eventPlayer.cards.last())
+        wait()
 
 def renderCards():
     # Create hud text for each card, and show the selected card
