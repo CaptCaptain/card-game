@@ -56,7 +56,7 @@ GetStrings({
             "en-US": "Cards Against Humanity by CaptCaptain#11421"
         },
         WEBLINK: {
-            "en-US": ""
+            "en-US": "https://workshop.codes/AHJXV"
         },
         VERSION: {
             "en-US": "Version: 1.0.1"
