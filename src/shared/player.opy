@@ -152,7 +152,7 @@ rule "Get Cards":
     eventPlayer.cards.remove(eventPlayer.cards[eventPlayer.selectedCard])
 
     for eventPlayer.playerHudIndex in range(len(eventPlayer.cards), WS_SET_CARDS, 1):
-        eventPlayer.cards.append(random.choice(cardSelection.exclude(ignoreCardFilter)))
+        eventPlayer.cards.append(random.choice(cardSelection.exclude(eventPlayer.cards).exclude(ignoreCardFilter)))
         ignoreCardFilter.append(eventPlayer.cards.last())
         wait()
     waitUntil(entityExists(cardJudge), 9999)

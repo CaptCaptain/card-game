@@ -47,7 +47,7 @@ globalvar WS_SET_RULES = [gameStyle.DEFAULT, gameStyle.CRAB, gameStyle.TURNOVER,
 
 #!define sentenceSelection ['{} + {}'.format(random.choice(sentences.exclude(cardSentence)), random.choice(sentences.exclude(cardSentence)))] if WS_SET_RULES == gameStyle.TWOONE else cards.exclude(cardSentence) if WS_SET_RULES == gameStyle.TURNOVER else sentences.exclude(cardSentence)
 
-#!define cardSelection sentences.exclude(eventPlayer.cards) if WS_SET_RULES == gameStyle.TURNOVER else cards.exclude(eventPlayer.cards)
+#!define cardSelection sentences if WS_SET_RULES == gameStyle.TURNOVER else cards
 
 #!define GetStrings(obj) __script__('../../../overpy-modules/src/translation.js')
 GetStrings({
