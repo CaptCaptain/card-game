@@ -17,6 +17,8 @@ if eventPlayer.selectedCardJudge >= len(getJudgeCards) - 1:\
 elif eventPlayer.selectedCardJudge < 0:\
     eventPlayer.selectedCardJudge = 0\
 
+#!define cardSelectionFilter(player) cardSelection.exclude(player.cards).exclude(ignoreCardFilter)
+
 #!define lerp(start, end, frac) start + frac * (end - start)
 #!define lerp_color(start, end, frac) rgba(lerp(start[0], end[0], frac), lerp(start[1], end[1], frac), lerp(start[2], end[2], frac), lerp(start[3], end[3], frac))
 
@@ -25,7 +27,17 @@ playervar hud_cards = []
 playervar selectedCard = 0
 playervar chatEnabled = false
 
+subroutine getCards
 subroutine renderCards
+
+def getCards():
+    for eventPlayer.playerHudIndex in range(len(eventPlayer.cards), WS_SET_CARDS, 1):
+        if len(ignoreCardFilter) >= len(cardSelection) or len(cardSelectionFilter(eventPlayer)) == 0:
+            ignoreCardFilter = []
+
+        eventPlayer.cards.append(random.choice(cardSelectionFilter(eventPlayer)))
+        ignoreCardFilter.append(eventPlayer.cards.last())
+
 def renderCards():
     # Create hud text for each card, and show the selected card
     for globalHudIndex in range(0, WS_SET_CARDS, 1):
@@ -151,10 +163,7 @@ rule "Get Cards":
     ignoreCardFilter.remove(eventPlayer.cards[eventPlayer.selectedCard])
     eventPlayer.cards.remove(eventPlayer.cards[eventPlayer.selectedCard])
 
-    for eventPlayer.playerHudIndex in range(len(eventPlayer.cards), WS_SET_CARDS, 1):
-        eventPlayer.cards.append(random.choice(cardSelection.exclude(eventPlayer.cards).exclude(ignoreCardFilter)))
-        ignoreCardFilter.append(eventPlayer.cards.last())
-        wait()
+    async(getCards, AsyncBehavior.NOOP)
     waitUntil(entityExists(cardJudge), 9999)
 
 rule "Change Card (Left)":
@@ -203,6 +212,7 @@ rule "Forfeit":
     @Condition currentGameState == gameState.VOTING
 
     waitUntil(eventPlayer.hasSpawned(), 9999)
+    async(getCards, AsyncBehavior.NOOP)
     eventPlayer.playedCard = true
 
 rule "Clean up":
