@@ -144,6 +144,8 @@ rule "Player Setup":
     eventPlayer.disallowButton(Button.ABILITY_2)
     eventPlayer.disallowButton(Button.ULTIMATE)
     eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 9999)
+    eventPlayer.setDamageDealt(0)
+    eventPlayer.setDamageReceived(0)
     eventPlayer.disableHeroHUD()
     eventPlayer.disableTextChat()
 
