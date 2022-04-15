@@ -61,7 +61,7 @@ GetStrings({
             "en-US": "https://workshop.codes/apples-to-apples"
         },
         VERSION: {
-            "en-US": "Version: 2.3.1"
+            "en-US": "Version: 2.4.0"
         },
         PLAY_CARDS: {
             "en-US": "Play your cards"
