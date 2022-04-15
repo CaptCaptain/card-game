@@ -213,15 +213,15 @@ rule "Redraw Cards":
 rule "Inactivity Kick":
     @Event eachPlayer
     @Condition not eventPlayer.hasSpawned()
-
+    
     if not WS_SET_ENABLE_KICK:
         return
 
     # Remove players that have not spawned in for 60 seconds
     wait(60, Wait.ABORT_WHEN_FALSE)
     if eventPlayer == hostPlayer:
-        # If the player is the host player, move them out of the lobby
-        moveToTeam(eventPlayer, Team.1, -1)
+        # If the player is the host player, force them to spawn
+        eventPlayer.startForcingHero(random.choice(eventPlayer.getAllowedHeroes()))
     else:
         removeFromGame(eventPlayer)
 
