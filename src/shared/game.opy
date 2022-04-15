@@ -265,6 +265,9 @@ rule "Game Loop":
                 async(dummyVote, AsyncBehavior.NOOP)
 
             chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
+
+            # Automatically play cards of inactive players
+            [player for player in getAllPlayers() if not player.hasSpawned()].playedCard = true
             
             # Wait until everyone plays their cards or the time runs out
             waitUntil(roundTime == 0 or all([player.playedCard == true for player in getAllPlayers().exclude(cardJudge)]), WS_SET_PICK_TIME)
