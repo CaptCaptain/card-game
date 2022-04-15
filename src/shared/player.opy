@@ -221,7 +221,7 @@ rule "Inactivity Kick":
     wait(60, Wait.ABORT_WHEN_FALSE)
     if eventPlayer == hostPlayer:
         # If the player is the host player, move them out of the lobby
-        moveToTeam(eventPlayer, Team.1, [])
+        moveToTeam(eventPlayer, Team.1, -1)
     else:
         removeFromGame(eventPlayer)
 
