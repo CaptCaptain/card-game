@@ -5,3 +5,4 @@ globalvar WS_SET_CARDS = createWorkshopSetting(int[3:13], "Ruleset", "Max Cards 
 globalvar WS_SET_ENABLE_BOTS = createWorkshopSetting(enum["Off", "On", "While You Wait"], "Ruleset", "Enable Bots", 0, 5)
 globalvar WS_SET_SKIP = createWorkshopSetting(bool, "Ruleset", "Skip Assembling Heroes", true, 5)
 globalvar WS_SET_END = 2.5
+globalvar WS_SET_ENABLE_KICK = createWorkshopSetting(bool, "Ruleset", "Enable Inactivity Kick", true, 6)

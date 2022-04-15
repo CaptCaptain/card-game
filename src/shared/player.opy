@@ -210,6 +210,21 @@ rule "Redraw Cards":
 
     smallMessage(eventPlayer, "{} Turn forfeited, new cards given on next turn".format(iconString(Icon.EXCLAMATION_MARK)))
 
+rule "Inactivity Kick":
+    @Event eachPlayer
+    @Condition not eventPlayer.hasSpawned()
+
+    if not WS_SET_ENABLE_KICK:
+        return
+
+    # Remove players that have not spawned in for 60 seconds
+    wait(60, Wait.ABORT_WHEN_FALSE)
+    if eventPlayer == hostPlayer:
+        # If the player is the host player, move them out of the lobby
+        moveToTeam(eventPlayer, Team.1, [])
+    else:
+        removeFromGame(eventPlayer)
+
 rule "Forfeit":
     @Event playerJoined
     @Condition currentGameState == gameState.VOTING
