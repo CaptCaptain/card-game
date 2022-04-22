@@ -196,6 +196,9 @@ rule "Play Card":
 
     eventPlayer.playedCard = true
 
+    playEffect(eventPlayer, DynamicEffect.RING_EXPLOSION, VOTE_COLOR, getSpot(eventPlayer), 5)
+    playEffect(eventPlayer, DynamicEffect.RING_EXPLOSION_SOUND, PRIMARY_COLOR, getSpot(eventPlayer), 100)
+
     smallMessage(eventPlayer, '{} Played "{}"'.format(iconString(Icon.CHECKMARK), eventPlayer.cards[evalOnce(eventPlayer.selectedCard)].replace("\n", " ")))
 
 rule "Redraw Cards":
@@ -207,6 +210,9 @@ rule "Redraw Cards":
 
     eventPlayer.playedCard = true
     eventPlayer.cards = []
+
+    playEffect(eventPlayer, DynamicEffect.BAD_PICKUP_EFFECT, VOTE_COLOR, getSpot(eventPlayer), 5)
+    playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, PRIMARY_COLOR, getSpot(eventPlayer), 100)
 
     smallMessage(eventPlayer, "{} Turn forfeited, new cards given on next turn".format(iconString(Icon.EXCLAMATION_MARK)))
 
