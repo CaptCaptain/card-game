@@ -97,8 +97,8 @@ hud_gameMessages.append(getLastCreatedText())\
 createInWorldText(getAllPlayers(), subtitle, MAP_CENTER[mapData.POSITION] + (Vector.UP * 0), 3, Clip.NONE, WorldTextReeval.VISIBILITY_POSITION_AND_STRING, SUB_COLOR, SpecVisibility.DEFAULT)\
 hud_gameMessages.append(getLastCreatedText())\
 \
-playEffect(getAllPlayers(), DynamicEffect.BAD_EXPLOSION, SUB_COLOR, MAP_CENTER[mapData.POSITION] + (Vector.UP * 1), 10)\
-playEffect(getAllPlayers(), DynamicEffect.EXPLOSION_SOUND, SUB_COLOR, MAP_CENTER[mapData.POSITION] + (Vector.UP * 1), 100)
+playEffect(getAllPlayers(), DynamicEffect.GOOD_EXPLOSION, SUB_COLOR, MAP_CENTER[mapData.POSITION] + (Vector.UP * 1), 10)\
+playEffect(getAllPlayers(), DynamicEffect.BUFF_EXPLOSION_SOUND, SUB_COLOR, MAP_CENTER[mapData.POSITION] + (Vector.UP * 1), 100)
 
 #!define destroyInWorldTextLoop(i, var) for i in range(0, len(var), 1):\
     destroyInWorldText(var[i])\
