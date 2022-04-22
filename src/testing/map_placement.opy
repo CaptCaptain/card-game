@@ -19,6 +19,7 @@ globalvar map_center = vect(0, 0, 0)
 globalvar map_radius = 6
 globalvar chase_map_pos = false
 globalvar spot_index = 0
+globalvar no_clip = false
 
 #!define sortedPlayers() sorted(getAllPlayers(), lambda x: x.getSlot())
 
@@ -34,6 +35,8 @@ rule "Effects":
 
     hudHeader(getAllPlayers(), map_radius, HudPosition.TOP, 3, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
+    hudHeader(getAllPlayers(), no_clip, HudPosition.TOP, 4, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+
     createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.WHITE, updateEveryTick(map_center), 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
     for spot_index in range(0, 12, 1):
@@ -43,6 +46,21 @@ rule "Toggle Chase Map Position":
     @Condition hostPlayer.isHoldingButton(Button.INTERACT)
 
     chase_map_pos = not chase_map_pos
+
+    wait(0.025)
+
+rule "Toggle Noclip":
+    @Condition hostPlayer.isHoldingButton(Button.ULTIMATE)
+
+    no_clip = not no_clip
+
+    switch no_clip:
+        case true:
+            hostPlayer.disableEnvironmentCollision(false)
+            break
+        default:
+            hostPlayer.enableEnvironmentCollision()
+            break
 
     wait(0.025)
 
