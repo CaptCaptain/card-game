@@ -89,13 +89,13 @@ rule "Global Huds":
     hudSubtext(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard else null, STR_TOGGLE_CHAT, HudPosition.LEFT, WS_SET_CARDS + 14, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Select the card that best fits the word hud
-    hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING and not localPlayer.playedCard) or (localPlayer == cardJudge and currentGameState != gameState.ROUND) else null, "{}:".format(STR_CARD_INSTRUCTION), HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING and not localPlayer.playedCard) or (localPlayer == cardJudge and currentGameState == gameState.VOTING) else null, "{}:".format(STR_CARD_INSTRUCTION), HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
     # Current word
     hudHeader(localPlayer if currentGameState != gameState.WAITING else null, cardSentence, HudPosition.TOP, 3, SUB_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
     # Selected card
-    hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING and not localPlayer.playedCard) or (localPlayer == cardJudge and currentGameState != gameState.ROUND) else null, "{}:".format(STR_SELECTED_CARD), HudPosition.TOP, 4, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING and not localPlayer.playedCard) or (localPlayer == cardJudge and currentGameState == gameState.VOTING) else null, "{}:".format(STR_SELECTED_CARD), HudPosition.TOP, 4, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
     hudHeader(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING) or (localPlayer == cardJudge and currentGameState == gameState.END) else null, localPlayer.cards[localPlayer.selectedCard] if currentGameState != gameState.END else getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard], HudPosition.TOP, 5, VOTE_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
@@ -106,7 +106,7 @@ rule "Global Huds":
     hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING and not localPlayer.playedCard) or (localPlayer == cardJudge and currentGameState == gameState.VOTING) else null, "[{}]".format(buttonString(Button.INTERACT)), HudPosition.TOP, 7, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
     #Judge hud
-    hudHeader(localPlayer if localPlayer == cardJudge else null, STR_IS_JUDGE, HudPosition.TOP, 1, SUB_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudHeader(localPlayer if (localPlayer == cardJudge and currentGameState != gameState.END) else null, STR_IS_JUDGE, HudPosition.TOP, 1, SUB_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
     hudSubtext(localPlayer if localPlayer == cardJudge and currentGameState == gameState.ROUND else null, STR_WAIT_FOR_CARDS, HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
