@@ -197,7 +197,7 @@ rule "Play Card":
     eventPlayer.playedCard = true
 
     playEffect(eventPlayer, DynamicEffect.RING_EXPLOSION, VOTE_COLOR, getSpot(eventPlayer), 5)
-    playEffect(eventPlayer, DynamicEffect.RING_EXPLOSION_SOUND, PRIMARY_COLOR, getSpot(eventPlayer), 100)
+    playEffect(eventPlayer, DynamicEffect.BUFF_IMPACT_SOUND, PRIMARY_COLOR, getSpot(eventPlayer), 100)
 
     smallMessage(eventPlayer, '{} Played "{}"'.format(iconString(Icon.CHECKMARK), eventPlayer.cards[evalOnce(eventPlayer.selectedCard)].replace("\n", " ")))
 
