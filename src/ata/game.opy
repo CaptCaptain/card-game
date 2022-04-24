@@ -80,7 +80,7 @@ GetStrings({
         },
         IS_JUDGE: {
             "en-US": "{0} You are the Judge {0}",
-            format: 'abilityIconString(cardJudge.getCurrentHero(), Button.ABILITY_2)'
+            format: 'abilityIconString(cardJudge.getCurrentHero(), Button.ULTIMATE)'
         },
         NO_CARDS: {
             "en-US": "No one played a card, moving to the next round"
