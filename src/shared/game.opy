@@ -5,7 +5,7 @@ GetMapData({
     availableMapData: ['CENTER'],
     availableMaps: {
         PETRA: {
-            CENTER: '[vect(1.964, -10, 8.875), 7]'
+            CENTER: '[vect(7, -12.10, 55.94), 7]'
         },
         HAVANA: {
             CENTER: '[vect(135.35, 6, -46.49), 7]'
