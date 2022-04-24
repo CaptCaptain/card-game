@@ -39,6 +39,8 @@ rule "Effects":
 
     createEffect(getAllPlayers(), Effect.LIGHT_SHAFT, Color.WHITE, updateEveryTick(map_center), 2, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
+    createEffect(getAllPlayers(), Effect.SPHERE, Color.TURQUOISE, updateEveryTick(map_center), 0.1, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
+
     for spot_index in range(0, 12, 1):
         createEffect(getAllPlayers(), Effect.RING, Color.WHITE, updateEveryTick(getSpot(evalOnce(spot_index))), 1.5, EffectReeval.VISIBILITY_POSITION_AND_RADIUS)
 
