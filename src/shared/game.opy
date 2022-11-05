@@ -1,6 +1,8 @@
 #!define getDummyNames() ["フラスマ", "AmNot", "AimBot", "SomeDude", "Someone Else", "DeadHead", "Statescript", "Soulless", "EventPlayer", "ThatGuy", "Target Practice", "Deltinteger", "Workshop", "aimkid", "BeepBeepBoop", "DancingBacon", "EloHell", "OneTrick", "Jeff Kaplan", "Shiny", "Splat", "Magzie", "MelodySheep", "Dream", "AlreadyTracer", "Lemonade", "WildBites", "Probotxin", "rock", "Zach Metcalf", "Blizzard", "Chef You Wack", "Kurzgesagt", "桜井政博", "DeadMeat", "Abroad in Japan", "NiceStick", "THEM", "Me", "NotMe", "RageQuit", "HeroTalents", "BattleNet", "PatchNotes", "BalanceTeam", "NerfBrig", "Nanoblade", "NerfThis", "NeedHealing"]
 
-#!define GetMapData(obj) __script__('../../../overpy-modules/src/map.js')
+#!include "../../../overpy-modules/src/fixedSmallMessages.opy"
+
+#!define GetMapData(data) __script__('../../../overpy-modules/src/map.js')
 GetMapData({
     availableMapData: ['CENTER'],
     availableMaps: {
@@ -13,11 +15,14 @@ GetMapData({
         WORKSHOP_ISLAND: {
             CENTER: '[vect(0, 0, 0), 7]'
         },
-        WORKSHOP_ISLAND_NIGHT: {
+        WORKSHOP_EXPANSE: {
             CENTER: '[vect(0, 0, 0), 7]'
         },
-        ILIOS_RUINS: {
-            CENTER: '[vect(28.414, 57.353, -157.183), 6]'
+        WORKSHOP_CHAMBER: {
+            CENTER: '[vect(0, 0, 0), 7]'
+        },
+        WORKSHOP_ISLAND_NIGHT: {
+            CENTER: '[vect(0, 0, 0), 7]'
         },
         VOLSKAYA: {
             CENTER: '[vect(-13.680, -3.713, 90.259), 7]'
@@ -25,16 +30,10 @@ GetMapData({
         BLIZZ_WORLD: {
             CENTER: '[vect(-122.206, -0.156, 110.472), 7]'
         },
-        BLIZZ_WORLD_WINTER: {
-            CENTER: '[vect(-122.206, -0.156, 110.472), 7]'
-        },
         DORADO: {
-            CENTER: '[vect(131.219, 11.030, 26.117), 7]'
+            CENTER: '[vect(183.99, 13.80, 40.96), 7]'
         },
         LIJIANG_NIGHT_MARKET: {
-            CENTER: '[vect(1.193, -0.996, -60.635), 7]'
-        },
-        LIJIANG_NIGHT_MARKET_LNY: {
             CENTER: '[vect(1.193, -0.996, -60.635), 7]'
         },
         NEPAL_VILLAGE: {
@@ -47,46 +46,40 @@ GetMapData({
             CENTER: '[vect(-20.055, 12.057, 4.054), 6]'
         },
         PARIS: {
-            CENTER: '[vect(-95.152, 12, -82.360), 7]'
+            CENTER: '[vect(27.13, 12, -80.43), 6]'
         },
         OASIS_UNIVERSITY: {
             CENTER: '[vect(-188.021, 14.912, -0.099), 7]'
         },
+        OASIS_GARDENS: {
+            CENTER: '[vect(121.35, 5.50, -227.58), 7]'
+        },
         CHATEAU_GUILLARD: {
             CENTER: '[vect(206.236, 7.993, 56.962), 7]'
         },
-        CHATEAU_GUILLARD_HALLOWEEN: {
-            CENTER: '[vect(206.236, 7.993, 56.962), 7]'
-        },
-        HANAMURA: {
-            CENTER: '[vect(-11.438, -0.861, -85.328), 7]'
-        },
-        HANAMURA_WINTER: {
-            CENTER: '[vect(-11.438, -0.861, -85.328), 7]'
-        },
         HOLLYWOOD: {
-            CENTER: '[vect(-12.459, -0.108, 56.391), 7]'
-        },
-        HOLLYWOOD_HALLOWEEN: {
             CENTER: '[vect(-12.459, -0.108, 56.391), 7]'
         },
         EICHENWALDE: {
             CENTER: '[vect(119.594, 8.726, -43.914), 6]'
         },
-        EICHENWALDE_HALLOWEEN: {
-            CENTER: '[vect(119.594, 8.726, -43.914), 6]'
-        },
         KINGS_ROW: {
-            CENTER: '[vect(-149.030, -2.932, 24.228), 6]'
+            CENTER: '[vect(-149.26, -2.85, 24.29), 6]'
         },
         KINGS_ROW_WINTER: {
-            CENTER: '[vect(-149.030, -2.932, 24.228), 6]'
-        },
-        TEMPLE_OF_ANUBIS: {
-            CENTER: '[vect(-45.472, 1.635, 43.378), 6]'
+            CENTER: '[vect(-149.26, -2.85, 24.29), 6]'
         },
         MALEVENTO: {
-            CENTER: '[vect(25.089, 3.116, 22.142), 6]'
+            CENTER: '[vect(0.08, -1, -10.72), 6]'
+        },
+        HOLLYWOOD: {
+            CENTER: '[vect(-5.46, 1.52, -98.59), 7]'
+        },
+        NECROPOLIS: {
+            CENTER: '[vect(0, 1, 0), 9]'
+        },
+        TEMPLE_OF_ANUBIS:{
+            CENTER: '[vect(-6.07, 20.43, 129.45), 7]'
         }
     }
 })
@@ -118,7 +111,7 @@ var = []
     destroyEffect(var[i])\
 var = []
 
-#!define getJudgeCards sorted([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0], lambda player: player.getSlot())
+#!define getJudgeCards sorted([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0 or player.cards != null], lambda player: player.getSlot())
 
 #!define playersInMatch(team) [player for player in getLivingPlayers(team) if player.hasSpawned()]
 
@@ -158,6 +151,8 @@ globalvar dummyNames = getDummyNames()
 globalvar selectedDummyName
 
 globalvar scoringEnabled = true
+
+playervar selectedCard = 0
 
 subroutine dummyVote
 subroutine dummyJudgeVote
@@ -208,7 +203,7 @@ rule "Disable Inspector / Update Match Time":
     
     while true:
         setMatchTime(roundTime)
-        wait()
+        wait(0.016)
 
 rule "Game Loop":
     @Condition currentGameState == gameState.WAITING
@@ -231,10 +226,6 @@ rule "Game Loop":
             # Change game state to round
             currentGameState = gameState.ROUND
 
-            getAllPlayers().disableGamemodeHud()
-
-            setObjectiveDescription(getAllPlayers(), STR_PLAY_CARDS, HudReeval.VISIBILITY)
-
             # Each player takes turns, the game skips any players that have not spawned in or do not exist.
             slot += 1
             while not (entityExists(sortedPlayers()[slot]) and sortedPlayers()[slot].hasSpawned()):
@@ -243,7 +234,7 @@ rule "Game Loop":
                     break
                 else:
                     slot += 1
-                wait()
+                wait(0.016)
             roundTime = WS_SET_PICK_TIME
 
             # Select judge and sentence
@@ -255,7 +246,7 @@ rule "Game Loop":
                 cardJudge.communicate(Comms.HELLO)
 
             # Create center text
-            createCenterText(STR_WAIT_FOR_CARDS if localPlayer.playedCard or localPlayer == cardJudge else STR_CARD_INSTRUCTION, floor(roundTime))
+            createCenterText("", floor(roundTime))
 
             # Wait for everyone to get their cards
             waitUntil(all([len(player.cards) > 0 for player in playersInMatch(Team.ALL).exclude(cardJudge)]), 9999)
@@ -270,7 +261,7 @@ rule "Game Loop":
             [player for player in getAllPlayers() if not player.hasSpawned()].playedCard = true
             
             # Wait until everyone plays their cards or the time runs out
-            waitUntil(roundTime == 0 or all([player.playedCard == true for player in getAllPlayers().exclude(cardJudge)]), WS_SET_PICK_TIME)
+            waitUntil(roundTime == 0 or all([player.playedCard == true for player in getAllPlayers().exclude(cardJudge)]) or not entityExists(cardJudge), WS_SET_PICK_TIME)
 
             stopChasingVariable(roundTime)
             
@@ -282,6 +273,19 @@ rule "Game Loop":
             # Change game state to voting
             currentGameState = gameState.VOTING
 
+            # If judge does not exist, skip round
+            if not entityExists(cardJudge):
+                currentGameState = gameState.END
+                
+                getAllPlayers().playedCard = false
+                cardJudge.selectedCardJudge = 0
+                cardJudge.cardVoted = null
+                cardJudge = null
+
+                destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
+                wait(0.25)
+                break
+
             # If everyone forfeits, move to the next round
             if all([player.cards == [] for player in getAllPlayers().exclude(cardJudge)]):
                 createCenterText(STR_NO_CARDS, '')
@@ -289,12 +293,10 @@ rule "Game Loop":
                 wait(2.5)
                 destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
                 break
-
-            setObjectiveDescription(getAllPlayers(), STR_VOTING, HudReeval.VISIBILITY)
             
             roundTime = WS_SET_VOTING_TIME
 
-            createCenterText(STR_CARD_INSTRUCTION if localPlayer == cardJudge else STR_WAIT_FOR_JUDGE, floor(roundTime))
+            createCenterText(STR_CURRENT_JUDGE_CARD if not localPlayer == cardJudge else "", floor(roundTime))
 
             # Dummy bots automatically vote
             async(dummyJudgeVote, AsyncBehavior.NOOP)
@@ -306,8 +308,17 @@ rule "Game Loop":
 
             stopChasingVariable(roundTime)
 
-            # If the judge does not exist, skip to the next round
+            # If the judge does not exist, skip round
             if not entityExists(cardJudge):
+                currentGameState = gameState.END
+                
+                getAllPlayers().playedCard = false
+                cardJudge.selectedCardJudge = 0
+                cardJudge.cardVoted = null
+                cardJudge = null
+
+                destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
+                wait(0.25)
                 break
 
             # If the judge does not vote, force them to
@@ -315,16 +326,19 @@ rule "Game Loop":
                 cardJudge.cardVoted = getJudgeCards[cardJudge.selectedCardJudge]
 
             destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
-            
-            createCenterText(STR_JUDGE_VOTED, '')
 
-            getAllPlayers().enableGamemodeHud()
+            createCenterText(STR_JUDGE_VOTED, STR_CARD_FORMAT)
 
             # Play effect
             playEffect(getAllPlayers(), DynamicEffect.RING_EXPLOSION, VOTE_COLOR, cardJudge.cardVoted.getPosition() + Vector.UP, 5)
             playEffect(getAllPlayers(), DynamicEffect.GOOD_PICKUP_EFFECT, VOTE_COLOR, cardJudge.cardVoted.getPosition() + Vector.UP, 10)
             playEffect(getAllPlayers(), DynamicEffect.BUFF_IMPACT_SOUND, Color.WHITE, cardJudge.cardVoted.getPosition() + Vector.UP, 100)
-            cardJudge.cardVoted.addToScore(1 if scoringEnabled else 0)
+            cardJudge.cardVoted.addToScore(1)
+
+            if cardJudge.cardVoted.isDummy():
+                cardJudge.cardVoted.communicate(Comms.THANKS)
+            if cardJudge.isDummy():
+                cardJudge.cardVoted.communicate(Comms.YOURE_WELCOME)
 
             currentGameState = gameState.END
 
@@ -380,8 +394,6 @@ rule "Spawn Bots While You Wait":
     @Condition WS_SET_ENABLE_BOTS == 2
     @Condition len([player for player in getAllPlayers() if not player.isDummy()]) < 3
 
-    scoringEnabled = false
-
     wait(0.25)
     for dummyBotIndex in range(getNumberOfPlayers(Team.ALL), 12):
         createDummy(random.choice(getAllHeroes()), Team.ALL, -1, nearestWalkablePosition(getSpawnPoints(Team.1)), null)
@@ -397,13 +409,12 @@ rule "Spawn Bots While You Wait":
         lastDummy.startFacing(directionTowards(evalOnce(lastDummy).getEyePosition(), MAP_CENTER[mapData.POSITION] + Vector.UP), 100, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
         wait(0.25)
 
-    smallMessage(getAllPlayers(), "{} Not enough players for match, enabling while you wait".format(iconString(Icon.EXCLAMATION_MARK)))
+    fixedSmallMessage(getAllPlayers(), "{} Not enough players for match, enabling while you wait".format(iconString(Icon.EXCLAMATION_MARK)))
 
     waitUntil(len([player for player in getAllPlayers() if not player.isDummy()]) >= 3, 9999)
 
-    smallMessage(getAllPlayers(), "{} Enough players for match, disabling while you wait".format(iconString(Icon.EXCLAMATION_MARK)))
+    fixedSmallMessage(getAllPlayers(), "{} Enough players for match, disabling while you wait".format(iconString(Icon.EXCLAMATION_MARK)))
 
     destroyAllDummies()
-    scoringEnabled = true
 
     if RULE_CONDITION: goto RULE_START

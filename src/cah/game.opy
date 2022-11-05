@@ -14,7 +14,7 @@ settings {
     "gamemodes": {
         "ffa": {
             "enabledMaps": [
-                "petra", "havana", "workshopIsland", "workshopIslandNight", "iliosRuins", "volskaya", "blizzWorld", "blizzWorldWinter", "dorado", "lijiangNightMarket", "lijiangNightMarketLny", "nepalVillage", "blackForest", "blackForestWinter", "paris", "oasisUniversity", "chateauGuillard", "chateauGuillardHalloween", "hanamura", "hanamuraWinter", "hollywood", "hollywoodHalloween", "eichenwalde", "eichenwaldeHalloween", "kingsRow", "kingsRowWinter", "templeOfAnubis", "malevento"
+                "havana", "petra", "workshopIsland", "workshopChamber", 'malevento', 'paris', 'dorado', 'hollywood', 'oasisGardens', 'templeOfAnubis', 'kingsRow'
             ]
         },
         "general": {
@@ -34,6 +34,8 @@ settings {
     }
 }
 
+#!optimizeForSize
+
 enum gameStyle:
     DEFAULT,
     CRAB,
@@ -47,11 +49,11 @@ globalvar WS_SET_RULES = [gameStyle.DEFAULT, gameStyle.CRAB, gameStyle.TURNOVER,
 
 #!define cardSelection sentences if WS_SET_RULES == gameStyle.TURNOVER else cards
 
-#!define GetStrings(obj) __script__('../../../overpy-modules/src/translation.js')
+#!define GetStrings(data) __script__('../../../overpy-modules/src/translation.js')
 GetStrings({
     availableLanguages: ["en-US"],
-    practiceRangeTranslations: ['"Practice Range"'],
-    translations: {
+    practiceRangeTranslations: ["Practice Range"],
+    strings: {
         GAME_NAME: {
             "en-US": "Cards Against Humanity by CaptCaptain#11421"
         },
@@ -59,7 +61,7 @@ GetStrings({
             "en-US": "https://workshop.codes/AHJXV"
         },
         VERSION: {
-            "en-US": "Version: 1.1.0"
+            "en-US": "Version: 1.2.0"
         },
         PLAY_CARDS: {
             "en-US": "Play your cards"
@@ -129,10 +131,22 @@ GetStrings({
             "en-US": "Your Cards"
         },
         PLAYER_WON: {
-            "en-US": "won this round!"
+            "en-US": "'s card"
+        },
+        GAME_CONTROLS: {
+            "en-US": "{0} CONTROLS {0}",
+            format: "iconString(Icon.ARROW_DOWN)"
         },
         SELECTED_CARD: {
             "en-US": "Your selected card"
+        },
+        CARD_SELECTION_TUTORIAL_1:{
+            "en-US": "Press {} or {} to select a card",
+            format: "buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE)"
+        },
+        CARD_SELECTION_TUTORIAL_2:{
+            "en-US": "Press {} to confirm your selection",
+            format: "buttonString(Button.INTERACT)"
         },
         SELECTED_CARD_CONTROLS: {
             "en-US": "{}{} Select {}{}",
@@ -144,6 +158,25 @@ GetStrings({
         },
         PLAY_CARD_CONTROL: {
             "en-US": "Play Card"
+        },
+        JUDGE_VOTED:{
+            "en-US": "The Card Czar has voted for {} {}",
+            format: 'heroIcon(cardJudge.cardVoted.getCurrentHero()), cardJudge.cardVoted'
+        },
+        CURRENT_JUDGE_CARD:{
+            "en-US": "{} CARD CZAR {} {}",
+            format: 'heroIcon(cardJudge.getCurrentHero()), iconString(Icon.ARROW_RIGHT), getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard]'
+        },
+        WINNING_PLAYER:{
+            "en-US": "Winner",
+        },
+        CARD_FORMAT:{
+            "en-US": "{}",
+            format: '""'
+        }, 
+        PLAY_CARD:{
+            "en-US": '{} SELECTED "{}"',
+            format: 'iconString(Icon.CHECKMARK), eventPlayer.cards[eventPlayer.selectedCard]'
         },
         FORFEIT_CARD_CONTROL_ICON: {
             "en-US": "{}{}",
@@ -167,6 +200,26 @@ GetStrings({
         CARD_CONTROLS: {
             "en-US": "{} — Play Selected Card\n{} — Get New Cards (Forfeit your turn)\n{} (Up) / {} (Down) — Select Card\n{} — Toggle Chat ({})",
             format: "buttonString(Button.INTERACT), buttonString(Button.ULTIMATE), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), buttonString(Button.ABILITY_2), localPlayer.chatEnabled"
+        },
+        CHAT_VISIBLE: {
+            "en-US": "{} Chat visible",
+            format: "iconString(Icon.CHECKMARK)"
+        },
+        CHAT_HIDDEN: {
+            "en-US": "{} Chat hidden",
+            format: "iconString(Icon.NO)"
+        },
+        CAMERA_MODE: {
+            "en-US": "Switch Camera View ({})",
+            format: "localPlayer.cameraMode"
+        },
+        CAMERA_MODE_ICON: {
+            "en-US": "{} [{}]",
+            format: "iconString(Icon.CHECKMARK) if localPlayer.cameraMode > 0 else iconString(Icon.NO), buttonString(Button.RELOAD)"
+        },
+        SWITCHED_CAMERA_MODE:{
+            "en-US": "Switched Camera to View [{}]",
+            format: "localPlayer.cameraMode"
         },
         JUDGE_VOTED:{
             "en-US": "The Judge has voted for {}",
@@ -194,6 +247,7 @@ GetStrings({
 #!define PRIMARY_COLOR Color.BLACK
 #!define SUB_COLOR Color.ORANGE
 #!define VOTE_COLOR Color.WHITE
+#!define USE_SMALL_CARD_FONT true
 
 #!include "../shared/setting.opy"
 #!include "../shared/game.opy"
