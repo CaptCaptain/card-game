@@ -863,6 +863,8 @@ const cards = [
 	`Wiping back to front.`,
 ];
 
+result = "";
+
 // shuffling
 function shuffleArray(arr) {
 	arr.sort(() => Math.random() - 0.5);
