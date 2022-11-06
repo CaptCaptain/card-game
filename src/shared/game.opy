@@ -121,9 +121,9 @@ var = []
     destroyEffect(var[i])\
 var = []
 
-#!define getJudgeCards sorted([player for player in getLivingPlayers(Team.ALL).exclude(cardJudge) if len(player.cards) > 0 or player.cards != null], lambda player: player.getSlot())
+#!define getJudgeCards sorted([player for player in playersInMatch(Team.ALL).exclude(cardJudge) if len(player.cards) > 0 and player.playedCard and not (len(player.cards) == 0 or player.cards == null or player.cards == 0 or player.cards == [])], lambda player: player.getSlot())
 
-#!define playersInMatch(team) [player for player in getLivingPlayers(team) if player.hasSpawned()]
+#!define playersInMatch(team) [player for player in getLivingPlayers(team) if player.hasSpawned() or player.hasSpawnedOnce]
 
 #!define sortedPlayers() sorted(getAllPlayers(), lambda x: x.getSlot())
 
@@ -164,11 +164,10 @@ globalvar scoringEnabled = true
 globalvar cardsLoaded = false
 
 playervar selectedCard = 0
+playervar hasSpawnedOnce = false
 
 subroutine dummyVote
 subroutine dummyJudgeVote
-
-#!define additionalTime strLen(cardSentence.replace(" ", "").replace("\n", ""))
 
 def dummyVote():
     wait(2)
@@ -252,7 +251,7 @@ rule "Game Loop":
                 else:
                     slot += 1
                 waitThrottle(0.016, 1)
-            roundTime = WS_SET_PICK_TIME + additionalTime
+            roundTime = WS_SET_PICK_TIME
 
             # Select judge and sentence
             cardJudge = sortedPlayers()[slot]
@@ -273,17 +272,14 @@ rule "Game Loop":
                 async(dummyVote, AsyncBehavior.NOOP)
 
             chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
-
-            # Automatically play cards of inactive players
-            [player for player in getAllPlayers() if not player.hasSpawned()].playedCard = true
             
             # Wait until everyone plays their cards or the time runs out
-            waitUntil(roundTime == 0 or all([player.playedCard == true for player in getAllPlayers().exclude(cardJudge)]) or not entityExists(cardJudge), WS_SET_PICK_TIME)
+            waitUntil(roundTime == 0 or all([player.playedCard == true for player in playersInMatch(Team.ALL).exclude(cardJudge)]) or not entityExists(cardJudge), WS_SET_PICK_TIME)
 
             stopChasingVariable(roundTime)
             
             # Any players automatically play their cards if they haven't already
-            getAllPlayers().exclude(cardJudge).playedCard = true
+            playersInMatch(Team.ALL).exclude(cardJudge).playedCard = true
 
             destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
             
@@ -304,19 +300,19 @@ rule "Game Loop":
                 break
 
             # If everyone forfeits, move to the next round
-            if all([player.cards == [] for player in getAllPlayers().exclude(cardJudge)]):
+            if all([player.cards == [] for player in playersInMatch(Team.ALL).exclude(cardJudge)]):
                 createCenterText(STR_NO_CARDS, '')
 
                 wait(2.5)
                 destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
                 break
             
-            roundTime = WS_SET_VOTING_TIME + additionalTime
+            roundTime = WS_SET_VOTING_TIME
 
             createCenterText(STR_CURRENT_JUDGE_CARD if not localPlayer == cardJudge else "", floor(roundTime))
 
             # Dummy bots automatically vote
-            async(dummyJudgeVote, AsyncBehavior.NOOP)
+            async(dummyJudgeVote, AsyncBehavior.RESTART)
 
             chase(roundTime, 0, rate=1, ChaseReeval.DESTINATION_AND_RATE)
 

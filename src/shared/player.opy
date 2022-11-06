@@ -10,12 +10,12 @@ if eventPlayer.cards[eventPlayer.selectedCard] == null or eventPlayer.cards[even
     eventPlayer.selectedCard -= value\
 
 #!define changeJudgeCard(value) eventPlayer.selectedCardJudge += value\
+if eventPlayer.cards[eventPlayer.selectedCardJudge] == null or eventPlayer.cards[eventPlayer.selectedCardJudge] == 0:\
+    eventPlayer.selectedCardJudge -= value\
 if eventPlayer.selectedCardJudge >= len(getJudgeCards) - 1:\
     eventPlayer.selectedCardJudge = len(getJudgeCards) - 1\
 if eventPlayer.selectedCardJudge < 0:\
     eventPlayer.selectedCardJudge = 0\
-if eventPlayer.cards[eventPlayer.selectedCardJudge] == null or eventPlayer.cards[eventPlayer.selectedCardJudge] == 0:\
-    eventPlayer.selectedCardJudge -= value\
 
 #!define cardSelectionFilter(player) cardSelection.exclude(player.cards).exclude(ignoreCardFilter)
 
@@ -47,7 +47,7 @@ def renderCards():
     # Create hud text for each card, and show the selected card
     for globalHudIndex in range(0, WS_SET_CARDS, 1):
         if USE_SMALL_CARD_FONT:
-            hudSubheader(localPlayer if localPlayer != cardJudge else null, "{} < {} >".format("" if localPlayer.selectedCard != evalOnce(globalHudIndex) else "▶▶", localPlayer.cards[evalOnce(globalHudIndex)]) if localPlayer.cards[evalOnce(globalHudIndex)] != null or localPlayer.cards[evalOnce(globalHudIndex)] != 0 else "", HudPosition.LEFT, evalOnce(globalHudIndex) + 5, Color.LIME_GREEN if localPlayer.selectedCard == evalOnce(globalHudIndex) and localPlayer.playedCard == true else lerp_color([255, 255, 255, 255], [160, 232, 27, 255], sin(getTotalTimeElapsed() * 10)) if localPlayer.selectedCard == evalOnce(globalHudIndex) else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+            hudSubheader(localPlayer if localPlayer != cardJudge else null, "{0} < {1} > {2}".format("" if localPlayer.selectedCard != evalOnce(globalHudIndex) else "▶▶", ("{}...".format(localPlayer.cards[evalOnce(globalHudIndex)].replace("\n", " ").substring(0, 40)) if strLen(localPlayer.cards[evalOnce(globalHudIndex)]) > 40 and localPlayer.selectedCard != evalOnce(globalHudIndex) else localPlayer.cards[evalOnce(globalHudIndex)].replace("\n", " ") if localPlayer.selectedCard != evalOnce(globalHudIndex) else localPlayer.cards[evalOnce(globalHudIndex)]), "" if localPlayer.selectedCard != evalOnce(globalHudIndex) else "◀◀") if localPlayer.cards[evalOnce(globalHudIndex)] != null or localPlayer.cards[evalOnce(globalHudIndex)] != 0 else "", HudPosition.LEFT, evalOnce(globalHudIndex) + 5, Color.LIME_GREEN if localPlayer.selectedCard == evalOnce(globalHudIndex) and localPlayer.playedCard == true else lerp_color([255, 255, 255, 255], [160, 232, 27, 255], sin(getTotalTimeElapsed() * 10)) if localPlayer.selectedCard == evalOnce(globalHudIndex) else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
             continue
         hudHeader(localPlayer if localPlayer != cardJudge else null, "{} {}".format("" if localPlayer.selectedCard != evalOnce(globalHudIndex) else "▶▶", localPlayer.cards[evalOnce(globalHudIndex)]) if localPlayer.cards[evalOnce(globalHudIndex)] != null or localPlayer.cards[evalOnce(globalHudIndex)] != 0 else "", HudPosition.LEFT, evalOnce(globalHudIndex) + 5, Color.LIME_GREEN if localPlayer.selectedCard == evalOnce(globalHudIndex) and localPlayer.playedCard == true else lerp_color([255, 255, 255, 255], [160, 232, 27, 255], sin(getTotalTimeElapsed() * 10)) if localPlayer.selectedCard == evalOnce(globalHudIndex) else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
         waitThrottle(0.016, 1)
@@ -167,6 +167,7 @@ rule "Player Setup":
     eventPlayer.disableTextChat()
     eventPlayer.disableGamemodeHud()
     eventPlayer.disableEnvironmentCollision(false)
+    eventPlayer.hasSpawnedOnce = true
 
     createEffect(getAllPlayers(), Effect.RING, SUB_COLOR if cardJudge == eventPlayer else VOTE_COLOR if eventPlayer.playedCard else PRIMARY_COLOR, getSpot(eventPlayer), 1.5, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
     
@@ -186,6 +187,7 @@ rule "Player Setup":
 rule "Get Cards":
     @Event eachPlayer
     @Condition currentGameState == gameState.ROUND
+    @Condition eventPlayer.hasSpawned()
     
     ignoreCardFilter.remove(eventPlayer.cards[eventPlayer.selectedCard])
     eventPlayer.cards.remove(eventPlayer.cards[eventPlayer.selectedCard])
@@ -256,14 +258,15 @@ rule "Inactivity Kick":
     else:
         removeFromGame(eventPlayer)
 
-rule "Forfeit":
+rule "Player Joined Late":
     @Event playerJoined
-    @Condition currentGameState == gameState.VOTING
     
-    eventPlayer.cards = [random.choice(cardSelection)]
-    eventPlayer.playedCard = true
     waitUntil(eventPlayer.hasSpawned(), 9999)
-    async(getCards, AsyncBehavior.NOOP)
+    if currentGameState == gameState.ROUND:
+        async(getCards, AsyncBehavior.NOOP)
+    elif currentGameState == gameState.VOTING:
+        async(getCards, AsyncBehavior.NOOP)
+        eventPlayer.playedCard = true
 
 rule "Clean up":
     @Event playerLeft
