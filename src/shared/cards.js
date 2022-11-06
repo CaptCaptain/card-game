@@ -49,11 +49,11 @@ result += 'rule "Load Card Pack":\n';
 
 for (let index = 0; index < subNumber; index++) {
 	result += "    setCardPack_" + index + "()\n";
-	result += "    wait()\n";
+	result += "    waitUntil(getServerLoad() < 255, 9999)\n";
 }
 result +=
 	'    cards.remove([card for card in cards if strContains(card, "**")])\n';
 result +=
 	'    sentences.remove([sentence for sentence in sentences if strContains(sentence, "**")])\n';
-
+result += "    cardsLoaded = true\n";
 result;

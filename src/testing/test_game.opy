@@ -10,7 +10,7 @@ settings {
     "gamemodes": {
         "ffa": {
             "enabledMaps": [
-                "havana", "petra", "workshopIsland", "workshopChamber", 'malevento', 'paris', 'dorado', 'hollywood', 'oasisGardens', 'templeOfAnubis', 'kingsRow'
+                "havana", "petra", "workshopIsland", "workshopChamber", 'malevento', 'paris', 'dorado', 'hollywood', 'oasisGardens', 'oasisUniversity', 'templeOfAnubis', 'kingsRow', 'necropolis', 'castillo'
             ]
         },
         "general": {
@@ -269,3 +269,4 @@ GetStrings({
 rule "Load Test Cards and Sentences":
     sentences = [heroIcon(hero) for hero in getAllHeroes()]
     cards = getAllHeroes()
+    cardsLoaded = true

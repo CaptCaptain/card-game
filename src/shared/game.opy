@@ -2,6 +2,10 @@
 
 #!include "../../../overpy-modules/src/fixedSmallMessages.opy"
 
+# waitThrottle pauses execution of the code for x seconds based on current server load
+#!define waitThrottle(minTime, maxTime) waitUntil(getAverageServerLoad() < 255, maxTime)\
+wait(minTime)\
+
 #!define GetMapData(data) __script__('../../../overpy-modules/src/map.js')
 GetMapData({
     availableMapData: ['CENTER'],
@@ -48,8 +52,11 @@ GetMapData({
         PARIS: {
             CENTER: '[vect(27.13, 12, -80.43), 6]'
         },
+        OASIS_CITY_CENTER: {
+            CENTER: '[vect(143.49, 2.15, 247.49), 9]'
+        },
         OASIS_UNIVERSITY: {
-            CENTER: '[vect(-188.021, 14.912, -0.099), 7]'
+            CENTER: '[vect(-188.07, 15, 0.02), 7]'
         },
         OASIS_GARDENS: {
             CENTER: '[vect(121.35, 5.50, -227.58), 7]'
@@ -80,6 +87,9 @@ GetMapData({
         },
         TEMPLE_OF_ANUBIS:{
             CENTER: '[vect(-6.07, 20.43, 129.45), 7]'
+        },
+        CASTILLO:{
+            CENTER: '[vect(-102.48, 33.28, 58.33), 9]'
         }
     }
 })
@@ -151,11 +161,14 @@ globalvar dummyNames = getDummyNames()
 globalvar selectedDummyName
 
 globalvar scoringEnabled = true
+globalvar cardsLoaded = false
 
 playervar selectedCard = 0
 
 subroutine dummyVote
 subroutine dummyJudgeVote
+
+#!define additionalTime strLen(cardSentence.replace(" ", "").replace("\n", ""))
 
 def dummyVote():
     wait(2)
@@ -203,7 +216,7 @@ rule "Disable Inspector / Update Match Time":
     
     while true:
         setMatchTime(roundTime)
-        wait(0.016)
+        waitThrottle(0.016, 1)
 
 rule "Game Loop":
     @Condition currentGameState == gameState.WAITING
@@ -216,6 +229,10 @@ rule "Game Loop":
     waitUntil(isGameInProgress(), 9999)
     disableMusic()
     pauseMatchTime()
+
+    # Wait for all cards to be loaded
+    waitUntil(cardsLoaded, 9999)
+
     waitUntil(len(playersInMatch(Team.ALL)) >= 3, 9999)
 
     destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
@@ -234,8 +251,8 @@ rule "Game Loop":
                     break
                 else:
                     slot += 1
-                wait(0.016)
-            roundTime = WS_SET_PICK_TIME
+                waitThrottle(0.016, 1)
+            roundTime = WS_SET_PICK_TIME + additionalTime
 
             # Select judge and sentence
             cardJudge = sortedPlayers()[slot]
@@ -294,7 +311,7 @@ rule "Game Loop":
                 destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
                 break
             
-            roundTime = WS_SET_VOTING_TIME
+            roundTime = WS_SET_VOTING_TIME + additionalTime
 
             createCenterText(STR_CURRENT_JUDGE_CARD if not localPlayer == cardJudge else "", floor(roundTime))
 
@@ -374,7 +391,7 @@ rule "Spawn Bots":
     @Condition WS_SET_ENABLE_BOTS == 1
     @Condition getNumberOfPlayers(Team.ALL) < 12
 
-    wait(0.25)
+    waitThrottle(0.25, 1)
     for dummyBotIndex in range(getNumberOfPlayers(Team.ALL), 12):
         createDummy(random.choice(getAllHeroes()), Team.ALL, -1, nearestWalkablePosition(getSpawnPoints(Team.1)), null)
         lastDummy = getLastCreatedEntity()
@@ -387,14 +404,14 @@ rule "Spawn Bots":
 
         lastDummy.startForcingName(selectedDummyName)
         lastDummy.startFacing(directionTowards(evalOnce(lastDummy).getEyePosition(), MAP_CENTER[mapData.POSITION] + Vector.UP), 100, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
-        wait(0.25)
+        waitThrottle(0.25, 1)
     if RULE_CONDITION: goto RULE_START
 
 rule "Spawn Bots While You Wait":
     @Condition WS_SET_ENABLE_BOTS == 2
     @Condition len([player for player in getAllPlayers() if not player.isDummy()]) < 3
 
-    wait(0.25)
+    waitThrottle(0.25, 1)
     for dummyBotIndex in range(getNumberOfPlayers(Team.ALL), 12):
         createDummy(random.choice(getAllHeroes()), Team.ALL, -1, nearestWalkablePosition(getSpawnPoints(Team.1)), null)
         lastDummy = getLastCreatedEntity()
@@ -407,7 +424,7 @@ rule "Spawn Bots While You Wait":
 
         lastDummy.startForcingName(selectedDummyName)
         lastDummy.startFacing(directionTowards(evalOnce(lastDummy).getEyePosition(), MAP_CENTER[mapData.POSITION] + Vector.UP), 100, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
-        wait(0.25)
+        waitThrottle(0.25, 1)
 
     fixedSmallMessage(getAllPlayers(), "{} Not enough players for match, enabling while you wait".format(iconString(Icon.EXCLAMATION_MARK)))
 

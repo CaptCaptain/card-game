@@ -41,7 +41,7 @@ def getCards():
 
         eventPlayer.cards.append(random.choice(cardSelectionFilter(eventPlayer)))
         ignoreCardFilter.append(eventPlayer.cards.last())
-        wait(0.016)
+        waitThrottle(0.016, 1)
 
 def renderCards():
     # Create hud text for each card, and show the selected card
@@ -50,7 +50,7 @@ def renderCards():
             hudSubheader(localPlayer if localPlayer != cardJudge else null, "{} < {} >".format("" if localPlayer.selectedCard != evalOnce(globalHudIndex) else "▶▶", localPlayer.cards[evalOnce(globalHudIndex)]) if localPlayer.cards[evalOnce(globalHudIndex)] != null or localPlayer.cards[evalOnce(globalHudIndex)] != 0 else "", HudPosition.LEFT, evalOnce(globalHudIndex) + 5, Color.LIME_GREEN if localPlayer.selectedCard == evalOnce(globalHudIndex) and localPlayer.playedCard == true else lerp_color([255, 255, 255, 255], [160, 232, 27, 255], sin(getTotalTimeElapsed() * 10)) if localPlayer.selectedCard == evalOnce(globalHudIndex) else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
             continue
         hudHeader(localPlayer if localPlayer != cardJudge else null, "{} {}".format("" if localPlayer.selectedCard != evalOnce(globalHudIndex) else "▶▶", localPlayer.cards[evalOnce(globalHudIndex)]) if localPlayer.cards[evalOnce(globalHudIndex)] != null or localPlayer.cards[evalOnce(globalHudIndex)] != 0 else "", HudPosition.LEFT, evalOnce(globalHudIndex) + 5, Color.LIME_GREEN if localPlayer.selectedCard == evalOnce(globalHudIndex) and localPlayer.playedCard == true else lerp_color([255, 255, 255, 255], [160, 232, 27, 255], sin(getTotalTimeElapsed() * 10)) if localPlayer.selectedCard == evalOnce(globalHudIndex) else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
-        wait(0.016)
+        waitThrottle(0.016, 1)
 
 rule "Global Huds":
 

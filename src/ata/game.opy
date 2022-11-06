@@ -14,7 +14,7 @@ settings {
     "gamemodes": {
         "ffa": {
             "enabledMaps": [
-                "havana", "petra", "workshopIsland", "workshopChamber", 'malevento', 'paris', 'dorado', 'hollywood', 'oasisGardens', 'templeOfAnubis', 'kingsRow'
+                "havana", "petra", "workshopIsland", "workshopChamber", 'malevento', 'paris', 'dorado', 'hollywood', 'oasisGardens', 'oasisUniversity', 'templeOfAnubis', 'kingsRow', 'necropolis', 'castillo'
             ]
         },
         "general": {
@@ -54,6 +54,7 @@ globalvar WS_SET_RULES = [gameStyle.DEFAULT, gameStyle.CRAB, gameStyle.TURNOVER,
 GetStrings({
     availableLanguages: ["en-US"],
     practiceRangeTranslations: ["Practice Range"],
+    disableDynamicTranslation: true,
     strings: {
         GAME_NAME: {
             "en-US": "Apples to Apples by CaptCaptain#11421"
@@ -62,7 +63,7 @@ GetStrings({
             "en-US": "https://workshop.codes/apples-to-apples"
         },
         VERSION: {
-            "en-US": "Version: 2.6.0"
+            "en-US": "Version: 2.7.0"
         },
         PLAY_CARDS: {
             "en-US": "Play your cards"
