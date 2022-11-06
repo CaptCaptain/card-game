@@ -83,17 +83,23 @@ rule "Global Huds":
     # Controls
     hudSubtext(localPlayer, STR_GAME_CONTROLS, HudPosition.LEFT, WS_SET_CARDS + 9, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
+    # Selection
+    hudText(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard else null, STR_SELECT_CARD_ICON, STR_SELECT_CARD, null, HudPosition.LEFT, WS_SET_CARDS + 9,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+
     # Play Card
-    hudText(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard else null, STR_PLAY_CARD_CONTROL_ICON, STR_PLAY_CARD_CONTROL, null, HudPosition.LEFT, WS_SET_CARDS + 10,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudText(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard else null, STR_PLAY_CARD_CONTROL_ICON, STR_PLAY_CARD_CONTROL, null, HudPosition.LEFT, WS_SET_CARDS + 11,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Redraw Card
-    hudText(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard else null, STR_FORFEIT_CARD_CONTROL_ICON, STR_FORFEIT_CARD_CONTROL, null, HudPosition.LEFT, WS_SET_CARDS + 11,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudText(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard else null, STR_FORFEIT_CARD_CONTROL_ICON, STR_FORFEIT_CARD_CONTROL, null, HudPosition.LEFT, WS_SET_CARDS + 12,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Toggle Chat
-    hudText(localPlayer, STR_TOGGLE_CHAT_ICON, STR_TOGGLE_CHAT, null, HudPosition.LEFT, WS_SET_CARDS + 12,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudText(localPlayer, STR_TOGGLE_CHAT_ICON, STR_TOGGLE_CHAT, null, HudPosition.LEFT, WS_SET_CARDS + 13,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Camera Mode
-    hudText(localPlayer, STR_CAMERA_MODE_ICON, STR_CAMERA_MODE, null, HudPosition.LEFT, WS_SET_CARDS + 13,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudText(localPlayer, STR_CAMERA_MODE_ICON, STR_CAMERA_MODE, null, HudPosition.LEFT, WS_SET_CARDS + 14,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+
+    # Camera Mode
+    hudText(localPlayer, STR_SWITCH_HERO_ICON, STR_SWITCH_HERO, null, HudPosition.LEFT, WS_SET_CARDS + 15,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Select the card that best fits the word hud
     hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING and not localPlayer.playedCard) or (localPlayer == cardJudge and currentGameState == gameState.VOTING) else null, "{}:".format(STR_CARD_INSTRUCTION), HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
@@ -153,6 +159,7 @@ rule "Player Setup":
     eventPlayer.disallowButton(Button.ABILITY_2)
     eventPlayer.disallowButton(Button.ULTIMATE)
     eventPlayer.disallowButton(Button.RELOAD)
+    eventPlayer.disallowButton(Button.ABILITY_1)
     eventPlayer.setStatusEffect(null, Status.PHASED_OUT, 9999)
     eventPlayer.setDamageDealt(0)
     eventPlayer.setDamageReceived(0)
@@ -252,10 +259,11 @@ rule "Inactivity Kick":
 rule "Forfeit":
     @Event playerJoined
     @Condition currentGameState == gameState.VOTING
-
+    
+    eventPlayer.cards = [random.choice(cardSelection)]
+    eventPlayer.playedCard = true
     waitUntil(eventPlayer.hasSpawned(), 9999)
     async(getCards, AsyncBehavior.NOOP)
-    eventPlayer.playedCard = true
 
 rule "Clean up":
     @Event playerLeft
@@ -382,11 +390,12 @@ rule "Tutorial":
 
         if eventPlayer.judgeTutorialComplete and eventPlayer.tutorialComplete:
             break
+    wait(Math.INFINITY)
     
 
 rule "Switch Camera Mode":
     @Event eachPlayer
-    @Condition eventPlayer.isHoldingButton(Button.RELOAD)
+    @Condition eventPlayer.isHoldingButton(Button.ABILITY_1)
     
     eventPlayer.cameraMode += 1
     if eventPlayer.cameraMode > 3:
@@ -416,3 +425,20 @@ rule "Switch Camera Mode":
             # Global Camera (Raycast)
             eventPlayer.startCamera(raycast(MAP_CENTER, MAP_CENTER + angleToDirection(getTotalTimeElapsed() * 5, -15) * (10), null, null, false).getHitPosition(), MAP_CENTER, 50)
             break
+
+rule "Switch Heroes":
+    @Event eachPlayer
+    @Condition eventPlayer.isHoldingButton(Button.RELOAD)
+
+    fixedSmallMessage(eventPlayer, STR_SWITCHING_HEROES)
+    waitUntil(not eventPlayer.isHoldingButton(Button.RELOAD), 1)
+    if not eventPlayer.isHoldingButton(Button.RELOAD):
+        fixedSmallMessage(eventPlayer, STR_SWITCHING_HEROES_CANCELLED)
+        return
+
+    eventPlayer.setAllowedHeroes(eventPlayer.getAllowedHeroes().exclude(eventPlayer.getCurrentHero()))
+    wait(0.25)
+    eventPlayer.resetHeroAvailability()
+    waitUntil(eventPlayer.hasSpawned(), 9999)
+    wait(0.08)
+    eventPlayer.setFacing(directionTowards(eventPlayer.getEyePosition(), MAP_CENTER), Relativity.TO_WORLD)
