@@ -21,7 +21,8 @@ settings {
             "gamemodeStartTrigger": "immediately",
             "heroLimit": "off",
             "scoreToWin": 1,
-            "spawnHealthPacks": "disabled"
+            "spawnHealthPacks": "disabled",
+            "enableHeroSwitching": false
         }
     },
     "heroes": {
@@ -61,7 +62,7 @@ GetStrings({
             "en-US": "https://workshop.codes/AHJXV"
         },
         VERSION: {
-            "en-US": "Version: 1.2.0"
+            "en-US": "Version: 1.3.0"
         },
         PLAY_CARDS: {
             "en-US": "Play your cards"
@@ -193,6 +194,13 @@ GetStrings({
             "en-US": "Toggle Chat ({})",
             format: "localPlayer.chatEnabled"
         },
+        SELECT_CARD_ICON: {
+            "en-US": "{} / {}",
+            format: "buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE)"
+        },
+        SELECT_CARD: {
+            "en-US": "Select Card",
+        },
         CARD_CONTROLS_TITLE: {
             "en-US": "{} Controls:",
             format: "iconString(Icon.EXCLAMATION_MARK)"
@@ -215,11 +223,28 @@ GetStrings({
         },
         CAMERA_MODE_ICON: {
             "en-US": "{} [{}]",
-            format: "iconString(Icon.CHECKMARK) if localPlayer.cameraMode > 0 else iconString(Icon.NO), buttonString(Button.RELOAD)"
+            format: "iconString(Icon.NO) if localPlayer.cameraMode == 0 else iconString(Icon.CHECKMARK), buttonString(Button.ABILITY_1)"
         },
         SWITCHED_CAMERA_MODE:{
             "en-US": "Switched Camera to View [{}]",
             format: "localPlayer.cameraMode"
+        },
+        SWITCHED_CAMERA_MODE:{
+            "en-US": "Switched Camera to View [{}]",
+            format: "localPlayer.cameraMode"
+        },
+        SWITCH_HERO: {
+            "en-US": "Switch Hero (Hold)"
+        },
+        SWITCH_HERO_ICON: {
+            "en-US": "{} [{}]",
+            format: "heroIcon(localPlayer.getCurrentHero()), buttonString(Button.RELOAD)"
+        },
+        SWITCHING_HEROES:{
+            "en-US": "Entering hero select..."
+        },
+        SWITCHING_HEROES_CANCELLED:{
+            "en-US": "Hero switch cancelled"
         },
         JUDGE_VOTED:{
             "en-US": "The Judge has voted for {}",

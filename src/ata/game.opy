@@ -62,7 +62,7 @@ GetStrings({
             "en-US": "https://workshop.codes/apples-to-apples"
         },
         VERSION: {
-            "en-US": "Version: 2.5.1"
+            "en-US": "Version: 2.6.0"
         },
         PLAY_CARDS: {
             "en-US": "Play your cards"
@@ -181,11 +181,35 @@ GetStrings({
         },
         CAMERA_MODE_ICON: {
             "en-US": "{} [{}]",
-            format: "iconString(Icon.NO) if localPlayer.cameraMode == 0 else iconString(Icon.CHECKMARK), buttonString(Button.RELOAD)"
+            format: "iconString(Icon.NO) if localPlayer.cameraMode == 0 else iconString(Icon.CHECKMARK), buttonString(Button.ABILITY_1)"
+        },
+        SELECT_CARD_ICON: {
+            "en-US": "{} / {}",
+            format: "buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE)"
+        },
+        SELECT_CARD: {
+            "en-US": "Select Card",
         },
         SWITCHED_CAMERA_MODE:{
             "en-US": "Switched Camera to View [{}]",
             format: "localPlayer.cameraMode"
+        },
+        SWITCHED_CAMERA_MODE:{
+            "en-US": "Switched Camera to View [{}]",
+            format: "localPlayer.cameraMode"
+        },
+        SWITCH_HERO: {
+            "en-US": "Switch Hero (Hold)"
+        },
+        SWITCH_HERO_ICON: {
+            "en-US": "{} [{}]",
+            format: "heroIcon(localPlayer.getCurrentHero()), buttonString(Button.RELOAD)"
+        },
+        SWITCHING_HEROES:{
+            "en-US": "Entering hero select..."
+        },
+        SWITCHING_HEROES_CANCELLED:{
+            "en-US": "Hero switch cancelled"
         },
         CARD_CONTROLS_TITLE: {
             "en-US": "{} Controls:",

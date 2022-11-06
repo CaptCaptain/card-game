@@ -141,6 +141,13 @@ GetStrings({
             "en-US": "{0} CONTROLS {0}",
             format: "iconString(Icon.ARROW_DOWN)"
         },
+        SELECT_CARD_ICON: {
+            "en-US": "{} / {}",
+            format: "buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE)"
+        },
+        SELECT_CARD: {
+            "en-US": "Select Card",
+        },
         PLAY_CARD_CONTROL_ICON: {
             "en-US": "{} [{}]",
             format: "abilityIconString(Hero.TRACER, Button.ABILITY_1), buttonString(Button.INTERACT)"
@@ -177,7 +184,24 @@ GetStrings({
         },
         CAMERA_MODE_ICON: {
             "en-US": "{} [{}]",
-            format: "iconString(Icon.NO) if localPlayer.cameraMode == 0 else iconString(Icon.CHECKMARK), buttonString(Button.RELOAD)"
+            format: "iconString(Icon.NO) if localPlayer.cameraMode == 0 else iconString(Icon.CHECKMARK), buttonString(Button.ABILITY_1)"
+        },
+        SWITCHED_CAMERA_MODE:{
+            "en-US": "Switched Camera to View [{}]",
+            format: "localPlayer.cameraMode"
+        },
+        SWITCH_HERO: {
+            "en-US": "Switch Hero (Hold)"
+        },
+        SWITCH_HERO_ICON: {
+            "en-US": "{} [{}]",
+            format: "heroIcon(localPlayer.getCurrentHero()), buttonString(Button.RELOAD)"
+        },
+        SWITCHING_HEROES:{
+            "en-US": "Entering hero select..."
+        },
+        SWITCHING_HEROES_CANCELLED:{
+            "en-US": "Hero switch cancelled"
         },
         CARD_CONTROLS_TITLE: {
             "en-US": "{} Controls:",
