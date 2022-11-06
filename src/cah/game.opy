@@ -1,7 +1,7 @@
 settings {
     "main": {
         "modeName": "Cards Against Humanity",
-        "description": "A fill-in-the-blank party game that turns your awkward personality and lackluster social skills into hours of fun!\nEach round, one topic card is provided, and everyone else answers with their funniest card.\n\nBased on the card game by Cards Against Humanity LLC\n[Note: This workshop mode contains content not suitable for all audiences] [Workshop Mode created by CaptCaptain#11421]",
+        "description": "A fill-in-the-blank party game that turns your awkward personality and lackluster social skills into hours of fun!\nEach round, one topic card is provided, and everyone else answers with their funniest card. Weekly card rotations keep the game fresh with different combinations!\n\nBased on the card game by Cards Against Humanity LLC\n[Note: This workshop mode contains content not suitable for all audiences]\n[Workshop Mode created by CaptCaptain#11421]\n[Join Workshop Creators at: https://workshop.codes/discord]",
     },
     "lobby": {
         "mapRotation": "afterGame",
@@ -63,7 +63,7 @@ GetStrings({
             "en-US": "https://workshop.codes/AHJXV"
         },
         VERSION: {
-            "en-US": "Version: 1.4.0"
+            "en-US": "Version: 1.5.0"
         },
         PLAY_CARDS: {
             "en-US": "Play your cards"
@@ -155,7 +155,7 @@ GetStrings({
             format: "iconString(Icon.ARROW_LEFT), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), iconString(Icon.ARROW_RIGHT)"
         },
         PLAY_CARD_CONTROL_ICON: {
-            "en-US": "{}{}",
+            "en-US": "{}[{}]",
             format: "abilityIconString(Hero.TRACER, Button.ABILITY_1), buttonString(Button.INTERACT)"
         },
         PLAY_CARD_CONTROL: {
@@ -181,14 +181,14 @@ GetStrings({
             format: 'iconString(Icon.CHECKMARK), eventPlayer.cards[eventPlayer.selectedCard]'
         },
         FORFEIT_CARD_CONTROL_ICON: {
-            "en-US": "{}{}",
+            "en-US": "{}[{}]",
             format: "abilityIconString(Hero.TRACER, Button.ABILITY_2), buttonString(Button.ULTIMATE)"
         },
         FORFEIT_CARD_CONTROL: {
             "en-US": "Redraw Cards (Forfeit Turn)"
         },
         TOGGLE_CHAT_ICON: {
-            "en-US": "{}{}",
+            "en-US": "{}[{}]",
             format: "iconString(Icon.CHECKMARK) if localPlayer.chatEnabled else iconString(Icon.NO), buttonString(Button.ABILITY_2)"
         },
         TOGGLE_CHAT: {
@@ -276,5 +276,10 @@ GetStrings({
 #!define USE_SMALL_CARD_FONT true
 
 #!include "../shared/setting.opy"
+
+rule "Double Time":
+    WS_SET_PICK_TIME *= 1
+    WS_SET_VOTING_TIME *= 2
+
 #!include "../shared/game.opy"
 #!include "../shared/player.opy"
