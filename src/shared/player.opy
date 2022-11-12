@@ -91,22 +91,22 @@ rule "Global Huds":
     hudSubtext(localPlayer, STR_GAME_CONTROLS, HudPosition.LEFT, WS_SET_CARDS + 9, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Selection
-    hudText(localPlayer if (len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard) or ([player.cards for player in getJudgeCards] != [] and localPlayer == cardJudge and not entityExists(localPlayer.cardVoted)) else null, STR_SELECT_CARD_ICON, STR_SELECT_CARD, null, HudPosition.LEFT, WS_SET_CARDS + 9,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudText(localPlayer if (len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard) or ([player.cards for player in getJudgeCards] != [] and localPlayer == cardJudge and not entityExists(localPlayer.cardVoted)) else null, STR_SELECT_CARD_ICON, STR_SELECT_CARD if USE_SMALL_CARD_FONT else null, STR_SELECT_CARD if not USE_SMALL_CARD_FONT else null, HudPosition.LEFT, WS_SET_CARDS + 9,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Play Card
-    hudText(localPlayer if (len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard) or ([player.cards for player in getJudgeCards] != [] and localPlayer == cardJudge and not entityExists(localPlayer.cardVoted)) else null, STR_PLAY_CARD_CONTROL_ICON, STR_PLAY_CARD_CONTROL, null, HudPosition.LEFT, WS_SET_CARDS + 11,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudText(localPlayer if (len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard) or ([player.cards for player in getJudgeCards] != [] and localPlayer == cardJudge and not entityExists(localPlayer.cardVoted)) else null, STR_PLAY_CARD_CONTROL_ICON, STR_PLAY_CARD_CONTROL if  USE_SMALL_CARD_FONT else null, STR_PLAY_CARD_CONTROL if not USE_SMALL_CARD_FONT else null, HudPosition.LEFT, WS_SET_CARDS + 11,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Redraw Card
-    hudText(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard else null, STR_FORFEIT_CARD_CONTROL_ICON, STR_FORFEIT_CARD_CONTROL, null, HudPosition.LEFT, WS_SET_CARDS + 12,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudText(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard else null, STR_FORFEIT_CARD_CONTROL_ICON, STR_FORFEIT_CARD_CONTROL if USE_SMALL_CARD_FONT else null, STR_FORFEIT_CARD_CONTROL if not USE_SMALL_CARD_FONT else null, HudPosition.LEFT, WS_SET_CARDS + 12,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Toggle Chat
-    hudText(localPlayer, STR_TOGGLE_CHAT_ICON, STR_TOGGLE_CHAT, null, HudPosition.LEFT, WS_SET_CARDS + 13,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudText(localPlayer, STR_TOGGLE_CHAT_ICON, STR_TOGGLE_CHAT if USE_SMALL_CARD_FONT else null, STR_TOGGLE_CHAT if not USE_SMALL_CARD_FONT else null, HudPosition.LEFT, WS_SET_CARDS + 13,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Camera Mode
-    hudText(localPlayer, STR_CAMERA_MODE_ICON, STR_CAMERA_MODE, null, HudPosition.LEFT, WS_SET_CARDS + 14,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudText(localPlayer, STR_CAMERA_MODE_ICON, STR_CAMERA_MODE if USE_SMALL_CARD_FONT else null, STR_CAMERA_MODE if not USE_SMALL_CARD_FONT else null, HudPosition.LEFT, WS_SET_CARDS + 14,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
-    # Camera Mode
-    hudText(localPlayer, STR_SWITCH_HERO_ICON, STR_SWITCH_HERO, null, HudPosition.LEFT, WS_SET_CARDS + 15,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    # Hero Switching
+    hudText(localPlayer, STR_SWITCH_HERO_ICON, STR_SWITCH_HERO if USE_SMALL_CARD_FONT else null, STR_SWITCH_HERO if not USE_SMALL_CARD_FONT else null, HudPosition.LEFT, WS_SET_CARDS + 15,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Select the card that best fits the word hud
     hudSubtext(localPlayer if (localPlayer != cardJudge and currentGameState != gameState.WAITING and not localPlayer.playedCard) or (localPlayer == cardJudge and currentGameState == gameState.VOTING) else null, "{}:".format(STR_CARD_INSTRUCTION), HudPosition.TOP, 2, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
@@ -174,6 +174,7 @@ rule "Player Setup":
     eventPlayer.disableTextChat()
     eventPlayer.disableGamemodeHud()
     eventPlayer.disableEnvironmentCollision(false)
+    eventPlayer.setStatusEffect(null, Status.INVINCIBLE, 9999)
     eventPlayer.hasSpawnedOnce = true
 
     createEffect(getAllPlayers(), Effect.RING, SUB_COLOR if cardJudge == eventPlayer else VOTE_COLOR if eventPlayer.playedCard else PRIMARY_COLOR, getSpot(eventPlayer), 1.5, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)
@@ -256,7 +257,7 @@ rule "Redraw Cards":
     playEffect(eventPlayer, DynamicEffect.BAD_PICKUP_EFFECT, VOTE_COLOR, getSpot(eventPlayer), 5)
     playEffect(eventPlayer, DynamicEffect.DEBUFF_IMPACT_SOUND, PRIMARY_COLOR, getSpot(eventPlayer), 100)
 
-    fixedSmallMessage(eventPlayer, "{} Turn forfeited, new cards given on next turn".format(iconString(Icon.EXCLAMATION_MARK)))
+    fixedSmallMessage(eventPlayer, STR_TURN_FORFEITED)
 
 rule "Inactivity Kick":
     @Event eachPlayer
