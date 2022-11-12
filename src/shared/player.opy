@@ -203,6 +203,10 @@ rule "Change Card (Left)":
     @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE)
 
     changeCard(-1)
+    wait(0.5, Wait.ABORT_WHEN_FALSE)
+    while eventPlayer.isHoldingButton(Button.PRIMARY_FIRE):
+        changeCard(-1)
+        wait(0.125, Wait.ABORT_WHEN_FALSE)
 
 rule "Change Card (Right)":
     @Event eachPlayer
@@ -212,6 +216,10 @@ rule "Change Card (Right)":
     @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE)
 
     changeCard(1)
+    wait(0.5, Wait.ABORT_WHEN_FALSE)
+    while eventPlayer.isHoldingButton(Button.SECONDARY_FIRE):
+        changeCard(1)
+        wait(0.125, Wait.ABORT_WHEN_FALSE)
 
 rule "Play Card":
     @Event eachPlayer
@@ -293,6 +301,10 @@ rule "Change Judge Card (Left)":
     @Condition eventPlayer.isHoldingButton(Button.PRIMARY_FIRE)
 
     changeJudgeCard(-1)
+    wait(0.5, Wait.ABORT_WHEN_FALSE)
+    while eventPlayer.isHoldingButton(Button.PRIMARY_FIRE):
+        changeJudgeCard(-1)
+        wait(0.125, Wait.ABORT_WHEN_FALSE)
 
 rule "Change Judge Card (Right)":
     @Event eachPlayer
@@ -302,6 +314,10 @@ rule "Change Judge Card (Right)":
     @Condition eventPlayer.isHoldingButton(Button.SECONDARY_FIRE)
 
     changeJudgeCard(1)
+    wait(0.5, Wait.ABORT_WHEN_FALSE)
+    while eventPlayer.isHoldingButton(Button.SECONDARY_FIRE):
+        changeJudgeCard(1)
+        wait(0.125, Wait.ABORT_WHEN_FALSE)
 
 rule "Judge Vote":
     @Event eachPlayer
