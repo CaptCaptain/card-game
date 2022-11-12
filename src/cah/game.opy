@@ -1,5 +1,6 @@
 settings {
     "main": {
+        # <FGFD841FFF>
         "modeName": "Cards Against Humanity",
         "description": "A fill-in-the-blank party game that turns your awkward personality and lackluster social skills into hours of fun!\nEach round, one topic card is provided, and everyone else answers with their funniest card. Weekly card rotations keep the game fresh with different combinations!\n\nBased on the card game by Cards Against Humanity LLC\n[Note: This workshop mode contains content not suitable for all audiences]\n[Workshop Mode created by CaptCaptain#11421]\n[Join Workshop Creators at: https://workshop.codes/discord]",
     },
@@ -267,6 +268,18 @@ GetStrings({
             "en-US": "Judge Voting Time: {}",
             format: 'WS_SET_VOTING_TIME'
         },
+        WYW_NOT_ENOUGH_PLAYERS:{
+            "en-US": "{} Not enough players for match, enabling while you wait",
+            format: 'iconString(Icon.EXCLAMATION_MARK)'
+        },
+        WYW_ENOUGH_PLAYERS:{
+            "en-US": "{} Enough players for match, disabling while you wait",
+            format: 'iconString(Icon.EXCLAMATION_MARK)'
+        },
+        TURN_FORFEITED:{
+            "en-US": "{} Turn forfeited, new cards given on next turn",
+            format: 'iconString(Icon.EXCLAMATION_MARK)'
+        }
     }
 })
 

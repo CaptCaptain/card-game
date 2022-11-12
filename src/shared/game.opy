@@ -14,7 +14,7 @@ GetMapData({
             CENTER: '[vect(7, -12.10, 55.94), 7]'
         },
         HAVANA: {
-            CENTER: '[vect(135.35, 6, -46.49), 7]'
+            CENTER: '[vect(185.93, 11.25, -46.55), 7]'
         },
         WORKSHOP_ISLAND: {
             CENTER: '[vect(0, 0, 0), 7]'
@@ -422,11 +422,11 @@ rule "Spawn Bots While You Wait":
         lastDummy.startFacing(directionTowards(evalOnce(lastDummy).getEyePosition(), MAP_CENTER[mapData.POSITION] + Vector.UP), 100, Relativity.TO_WORLD, FacingReeval.DIRECTION_AND_TURN_RATE)
         waitThrottle(0.25, 1)
 
-    fixedSmallMessage(getAllPlayers(), "{} Not enough players for match, enabling while you wait".format(iconString(Icon.EXCLAMATION_MARK)))
+    fixedSmallMessage(getAllPlayers(), STR_WYW_NOT_ENOUGH_PLAYERS)
 
     waitUntil(len([player for player in getAllPlayers() if not player.isDummy()]) >= 3, 9999)
 
-    fixedSmallMessage(getAllPlayers(), "{} Enough players for match, disabling while you wait".format(iconString(Icon.EXCLAMATION_MARK)))
+    fixedSmallMessage(getAllPlayers(), STR_WYW_ENOUGH_PLAYERS)
 
     destroyAllDummies()
 

@@ -254,13 +254,25 @@ GetStrings({
             "en-US": "Judge Voting Time: {}",
             format: 'WS_SET_VOTING_TIME'
         },
+        WYW_NOT_ENOUGH_PLAYERS:{
+            "en-US": "{} Not enough players for match, enabling while you wait",
+            format: 'iconString(Icon.EXCLAMATION_MARK)'
+        },
+        WYW_ENOUGH_PLAYERS:{
+            "en-US": "{} Enough players for match, disabling while you wait",
+            format: 'iconString(Icon.EXCLAMATION_MARK)'
+        },
+        TURN_FORFEITED:{
+            "en-US": "{} Turn forfeited, new cards given on next turn",
+            format: 'iconString(Icon.EXCLAMATION_MARK)'
+        }
     }
 })
 
 #!define PRIMARY_COLOR Color.WHITE
 #!define SUB_COLOR Color.WHITE
 #!define VOTE_COLOR Color.ORANGE
-#!define USE_SMALL_CARD_FONT false
+#!define USE_SMALL_CARD_FONT true
 
 #!include "../shared/setting.opy"
 #!include "../shared/game.opy"
@@ -270,3 +282,9 @@ rule "Load Test Cards and Sentences":
     sentences = [heroIcon(hero) for hero in getAllHeroes()]
     cards = getAllHeroes()
     cardsLoaded = true
+
+rule "Debug: Show Judge Cards":
+    @Event eachPlayer
+    @Condition eventPlayer.isCrouching()
+
+    fixedSmallMessage(eventPlayer, len(getJudgeCards))
