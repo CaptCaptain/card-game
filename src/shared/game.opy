@@ -38,7 +38,10 @@ GetMapData({
             CENTER: '[vect(183.99, 13.80, 40.96), 7]'
         },
         LIJIANG_NIGHT_MARKET: {
-            CENTER: '[vect(1.193, -0.996, -60.635), 7]'
+            CENTER: '[vect(1, -0.97, -61.59), 8]'
+        },
+        LIJIANG_NIGHT_MARKET_LNY: {
+            CENTER: '[vect(1, -0.97, -61.59), 8]'
         },
         NEPAL_VILLAGE: {
             CENTER: '[vect(-195.075, -93.874, -0.174), 6]'
@@ -62,13 +65,19 @@ GetMapData({
             CENTER: '[vect(121.35, 5.50, -227.58), 7]'
         },
         CHATEAU_GUILLARD: {
-            CENTER: '[vect(206.236, 7.993, 56.962), 7]'
+            CENTER: '[vect(206.22, 8, 56.98), 7]'
+        },
+        CHATEAU_GUILLARD_HALLOWEEN: {
+            CENTER: '[vect(206.22, 8, 56.98), 7]'
         },
         HOLLYWOOD: {
             CENTER: '[vect(-12.459, -0.108, 56.391), 7]'
         },
         EICHENWALDE: {
-            CENTER: '[vect(119.594, 8.726, -43.914), 6]'
+            CENTER: '[vect(11.95, 5.81, -72.78), 7]'
+        },
+        EICHENWALDE_HALLOWEEN: {
+            CENTER: '[vect(11.95, 5.81, -72.78), 7]'
         },
         KINGS_ROW: {
             CENTER: '[vect(-149.26, -2.85, 24.29), 6]'
@@ -93,6 +102,9 @@ GetMapData({
         },
         ILIOS_WELL:{
             CENTER: '[vect(-208.48, 0, -16.63), 7]'
+        },
+        HORIZON_LUNAR_COLONY:{
+            CENTER: '[vect(-24.71, 2.79, -120.84), 7]'
         }
     }
 })
