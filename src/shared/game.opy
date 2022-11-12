@@ -90,6 +90,9 @@ GetMapData({
         },
         CASTILLO:{
             CENTER: '[vect(-102.48, 33.28, 58.33), 9]'
+        },
+        ILIOS_WELL:{
+            CENTER: '[vect(-208.48, 0, -16.63), 7]'
         }
     }
 })
