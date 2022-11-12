@@ -133,6 +133,9 @@ GetStrings({
         YOUR_CARDS: {
             "en-US": "Your Cards"
         },
+        YOUR_CARDS_JUDGE:{
+            "en-US": "All Cards"
+        },
         PLAYER_WON: {
             "en-US": "'s card"
         },

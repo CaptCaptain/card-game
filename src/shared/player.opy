@@ -48,8 +48,15 @@ def renderCards():
     for globalHudIndex in range(0, WS_SET_CARDS, 1):
         if USE_SMALL_CARD_FONT:
             hudSubheader(localPlayer if localPlayer != cardJudge else null, "{0} < {1} > {2}".format("" if localPlayer.selectedCard != evalOnce(globalHudIndex) else "▶▶", ("{}...".format(localPlayer.cards[evalOnce(globalHudIndex)].replace("\n", " ").substring(0, 40)) if strLen(localPlayer.cards[evalOnce(globalHudIndex)]) > 40 and localPlayer.selectedCard != evalOnce(globalHudIndex) else localPlayer.cards[evalOnce(globalHudIndex)].replace("\n", " ") if localPlayer.selectedCard != evalOnce(globalHudIndex) else localPlayer.cards[evalOnce(globalHudIndex)]), "" if localPlayer.selectedCard != evalOnce(globalHudIndex) else "◀◀") if localPlayer.cards[evalOnce(globalHudIndex)] != null or localPlayer.cards[evalOnce(globalHudIndex)] != 0 else "", HudPosition.LEFT, evalOnce(globalHudIndex) + 5, Color.LIME_GREEN if localPlayer.selectedCard == evalOnce(globalHudIndex) and localPlayer.playedCard == true else lerp_color([255, 255, 255, 255], [160, 232, 27, 255], sin(getTotalTimeElapsed() * 10)) if localPlayer.selectedCard == evalOnce(globalHudIndex) else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+            waitThrottle(0.016, 1)
+            # Judge Cards
+            hudSubheader(localPlayer if localPlayer == cardJudge else null, "{0} < {1} > {2}".format("" if localPlayer.selectedCardJudge != evalOnce(globalHudIndex) else "▶▶", ("{}...".format(getJudgeCards[evalOnce(globalHudIndex)].cards[getJudgeCards[evalOnce(globalHudIndex)].selectedCard].replace("\n", " ").substring(0, 40)) if strLen(getJudgeCards[evalOnce(globalHudIndex)].cards[getJudgeCards[evalOnce(globalHudIndex)].selectedCard]) > 40 and localPlayer.selectedCardJudge != evalOnce(globalHudIndex) else getJudgeCards[evalOnce(globalHudIndex)].cards[getJudgeCards[evalOnce(globalHudIndex)].selectedCard].replace("\n", " ") if localPlayer.selectedCardJudge != evalOnce(globalHudIndex) else getJudgeCards[evalOnce(globalHudIndex)].cards[getJudgeCards[evalOnce(globalHudIndex)].selectedCard]), "" if localPlayer.selectedCardJudge != evalOnce(globalHudIndex) else "◀◀") if getJudgeCards[evalOnce(globalHudIndex)] != null or getJudgeCards[evalOnce(globalHudIndex)] != 0 else "", HudPosition.LEFT, evalOnce(globalHudIndex) + 5, Color.LIME_GREEN if localPlayer.selectedCardJudge == evalOnce(globalHudIndex) and localPlayer.cardVoted != null else lerp_color([255, 255, 255, 255], [160, 232, 27, 255], sin(getTotalTimeElapsed() * 10)) if localPlayer.selectedCardJudge == evalOnce(globalHudIndex) else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+            waitThrottle(0.016, 1)
             continue
         hudHeader(localPlayer if localPlayer != cardJudge else null, "{} {}".format("" if localPlayer.selectedCard != evalOnce(globalHudIndex) else "▶▶", localPlayer.cards[evalOnce(globalHudIndex)]) if localPlayer.cards[evalOnce(globalHudIndex)] != null or localPlayer.cards[evalOnce(globalHudIndex)] != 0 else "", HudPosition.LEFT, evalOnce(globalHudIndex) + 5, Color.LIME_GREEN if localPlayer.selectedCard == evalOnce(globalHudIndex) and localPlayer.playedCard == true else lerp_color([255, 255, 255, 255], [160, 232, 27, 255], sin(getTotalTimeElapsed() * 10)) if localPlayer.selectedCard == evalOnce(globalHudIndex) else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
+        waitThrottle(0.016, 1)
+        # Judge Cards
+        hudHeader(localPlayer if localPlayer == cardJudge else null, "{} {}".format("" if localPlayer.selectedCardJudge != evalOnce(globalHudIndex) else "▶▶", getJudgeCards[evalOnce(globalHudIndex)].cards[getJudgeCards[evalOnce(globalHudIndex)].selectedCard]) if getJudgeCards[evalOnce(globalHudIndex)] != null or getJudgeCards[evalOnce(globalHudIndex)] != 0 else "", HudPosition.LEFT, evalOnce(globalHudIndex) + 5, Color.LIME_GREEN if localPlayer.selectedCardJudge == evalOnce(globalHudIndex) and localPlayer.cardVoted != null else lerp_color([255, 255, 255, 255], [160, 232, 27, 255], sin(getTotalTimeElapsed() * 10)) if localPlayer.selectedCardJudge == evalOnce(globalHudIndex) else Color.WHITE, HudReeval.VISIBILITY_STRING_AND_COLOR, SpecVisibility.DEFAULT)
         waitThrottle(0.016, 1)
 
 rule "Global Huds":
@@ -57,7 +64,7 @@ rule "Global Huds":
     renderCards()
 
     # Your cards hud text
-    hudSubtext(localPlayer if localPlayer.cards != null and localPlayer != cardJudge else null, STR_YOUR_CARDS, HudPosition.LEFT, 4, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudSubtext(localPlayer if (localPlayer.cards != null and localPlayer != cardJudge) or ([player.cards for player in getJudgeCards] != [] and localPlayer == cardJudge) else null, STR_YOUR_CARDS if localPlayer != cardJudge else STR_YOUR_CARDS_JUDGE, HudPosition.LEFT, 4, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Credit huds
     hudSubheader(localPlayer, STR_VERSION, HudPosition.RIGHT, -1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
@@ -76,18 +83,18 @@ rule "Global Huds":
 
     #hudSubtext(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge else null, STR_CARD_CONTROLS, HudPosition.RIGHT, WS_SET_CARDS + 7, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
-    hudSubheader(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge  and not localPlayer.playedCard else null, " \n{}{}  {}{}".format(iconString(Icon.ARROW_UP), buttonString(Button.PRIMARY_FIRE), iconString(Icon.ARROW_DOWN), buttonString(Button.SECONDARY_FIRE)), HudPosition.LEFT, WS_SET_CARDS + 7, SUB_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudSubheader(localPlayer if (len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard) or ([player.cards for player in getJudgeCards] != [] and localPlayer == cardJudge and not entityExists(localPlayer.cardVoted)) else null, " \n{}{}  {}{}".format(iconString(Icon.ARROW_UP), buttonString(Button.PRIMARY_FIRE), iconString(Icon.ARROW_DOWN), buttonString(Button.SECONDARY_FIRE)), HudPosition.LEFT, WS_SET_CARDS + 7, SUB_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
-    hudSubtext(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge else null, " \n", HudPosition.LEFT, WS_SET_CARDS + 8, SUB_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudSubtext(localPlayer if (len(localPlayer.cards) > 0 and localPlayer != cardJudge) or ([player.cards for player in getJudgeCards] != [] and localPlayer == cardJudge) else null, " \n", HudPosition.LEFT, WS_SET_CARDS + 8, SUB_COLOR, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Controls
     hudSubtext(localPlayer, STR_GAME_CONTROLS, HudPosition.LEFT, WS_SET_CARDS + 9, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Selection
-    hudText(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard else null, STR_SELECT_CARD_ICON, STR_SELECT_CARD, null, HudPosition.LEFT, WS_SET_CARDS + 9,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudText(localPlayer if (len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard) or ([player.cards for player in getJudgeCards] != [] and localPlayer == cardJudge and not entityExists(localPlayer.cardVoted)) else null, STR_SELECT_CARD_ICON, STR_SELECT_CARD, null, HudPosition.LEFT, WS_SET_CARDS + 9,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Play Card
-    hudText(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard else null, STR_PLAY_CARD_CONTROL_ICON, STR_PLAY_CARD_CONTROL, null, HudPosition.LEFT, WS_SET_CARDS + 11,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
+    hudText(localPlayer if (len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard) or ([player.cards for player in getJudgeCards] != [] and localPlayer == cardJudge and not entityExists(localPlayer.cardVoted)) else null, STR_PLAY_CARD_CONTROL_ICON, STR_PLAY_CARD_CONTROL, null, HudPosition.LEFT, WS_SET_CARDS + 11,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
 
     # Redraw Card
     hudText(localPlayer if len(localPlayer.cards) > 0 and localPlayer != cardJudge and not localPlayer.playedCard else null, STR_FORFEIT_CARD_CONTROL_ICON, STR_FORFEIT_CARD_CONTROL, null, HudPosition.LEFT, WS_SET_CARDS + 12,SUB_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.NEVER)
@@ -127,7 +134,7 @@ rule "Global Huds":
 
     #hudSubtext(localPlayer, " \n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", HudPosition.TOP, 1, Color.WHITE, HudReeval.VISIBILITY_AND_SORT_ORDER, SpecVisibility.DEFAULT)
 
-    hudText(localPlayer if localPlayer == cardJudge and currentGameState == gameState.VOTING else null, getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard], "", STR_JUDGE_VOTE_INSTRUCTION,HudPosition.TOP, 5, Color.WHITE, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
+    hudText(localPlayer if localPlayer == cardJudge and currentGameState == gameState.VOTING else null, getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard], "", STR_JUDGE_VOTE_INSTRUCTION,HudPosition.TOP, 5, VOTE_COLOR, Color.WHITE, Color.WHITE, HudReeval.VISIBILITY_AND_STRING, SpecVisibility.DEFAULT)
 
     # The effect that will be shown on the player the judge is currently selecting
     createEffect(localPlayer if (localPlayer == cardJudge and entityExists(localPlayer.cardVoted)) or (localPlayer != cardJudge and (currentGameState == gameState.END)) else null, Effect.LIGHT_SHAFT, VOTE_COLOR if entityExists(cardJudge.cardVoted) else SUB_COLOR, getJudgeCards[cardJudge.selectedCardJudge].getPosition(), 0.5, EffectReeval.VISIBILITY_POSITION_RADIUS_AND_COLOR)

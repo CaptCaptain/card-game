@@ -132,6 +132,9 @@ GetStrings({
         YOUR_CARDS: {
             "en-US": "Your Cards"
         },
+        YOUR_CARDS_JUDGE:{
+            "en-US": "All Cards"
+        },
         PLAYER_WON: {
             "en-US": "'s card"
         },
@@ -263,6 +266,18 @@ GetStrings({
             "en-US": "Judge Voting Time: {}",
             format: 'WS_SET_VOTING_TIME'
         },
+        WYW_NOT_ENOUGH_PLAYERS:{
+            "en-US": "{} Not enough players for match, enabling while you wait",
+            format: 'iconString(Icon.EXCLAMATION_MARK)'
+        },
+        WYW_ENOUGH_PLAYERS:{
+            "en-US": "{} Enough players for match, disabling while you wait",
+            format: 'iconString(Icon.EXCLAMATION_MARK)'
+        },
+        TURN_FORFEITED:{
+            "en-US": "{} Turn forfeited, new cards given on next turn",
+            format: 'iconString(Icon.EXCLAMATION_MARK)'
+        }
     }
 })
 

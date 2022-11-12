@@ -127,6 +127,9 @@ GetStrings({
         YOUR_CARDS: {
             "en-US": "Your Cards"
         },
+        YOUR_CARDS_JUDGE:{
+            "en-US": "All Cards"
+        },
         PLAYER_WON: {
             "en-US": "'s card"
         },
@@ -287,4 +290,4 @@ rule "Debug: Show Judge Cards":
     @Event eachPlayer
     @Condition eventPlayer.isCrouching()
 
-    fixedSmallMessage(eventPlayer, len(getJudgeCards))
+    fixedSmallMessage(eventPlayer, getNumberOfTextIds())
