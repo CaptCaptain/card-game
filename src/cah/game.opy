@@ -64,7 +64,7 @@ GetStrings({
             "en-US": "https://workshop.codes/AHJXV"
         },
         VERSION: {
-            "en-US": "Version: 1.5.0"
+            "en-US": "Version: 1.6.0"
         },
         PLAY_CARDS: {
             "en-US": "Play your cards"
