@@ -469,3 +469,12 @@ rule "Switch Heroes":
     waitUntil(eventPlayer.hasSpawned(), 9999)
     wait(0.08)
     eventPlayer.setFacing(directionTowards(eventPlayer.getEyePosition(), MAP_CENTER), Relativity.TO_WORLD)
+
+rule "Winston: Disable Secondary":
+    @Event eachPlayer
+    @Hero winston
+    @Condition eventPlayer.isFiringSecondaryFire()
+
+    eventPlayer.cancelPrimaryAction()
+    wait(0.016)
+    if RULE_CONDITION: goto RULE_START
