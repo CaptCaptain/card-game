@@ -2,6 +2,8 @@
 
 #!include "../../../overpy-modules/src/fixedSmallMessages.opy"
 
+#!suppressWarnings w_ow2_communicate_bug w_wait_until
+
 # waitThrottle pauses execution of the code for x seconds based on current server load
 #!define waitThrottle(minTime, maxTime) waitUntil(getAverageServerLoad() < 255, maxTime)\
 wait(minTime)\
@@ -32,7 +34,13 @@ GetMapData({
             CENTER: '[vect(-13.680, -3.713, 90.259), 7]'
         },
         BLIZZ_WORLD: {
-            CENTER: '[vect(-122.206, -0.156, 110.472), 7]'
+            CENTER: '[vect(3.24, -6, -77.62), 8]'
+        },
+        BLIZZ_WORLD_WINTER: {
+            CENTER: '[vect(3.24, -6, -77.62), 8]'
+        },
+        KANEZAKA:{
+            CENTER: '[vect(-30.67, 6.55, -9.58), 6]'
         },
         DORADO: {
             CENTER: '[vect(183.99, 13.80, 40.96), 7]'
@@ -105,6 +113,21 @@ GetMapData({
         },
         HORIZON_LUNAR_COLONY:{
             CENTER: '[vect(-24.71, 2.79, -120.84), 7]'
+        },
+        LIJIANG_CONTROL_CENTER:{
+            CENTER: '[vect(-0.03, 267.28, 280.09), 6]'
+        },
+        LIJIANG_CONTROL_CENTER_LNY:{
+            CENTER: '[vect(-0.03, 267.28, 280.09), 6]'
+        },
+        LIJIANG_GARDEN:{
+            CENTER: '[vect(0.05, 94.00, 150.04), 6]'
+        },
+        LIJIANG_GARDEN_LNY:{
+            CENTER: '[vect(0.05, 94.00, 150.04), 6]'
+        },
+        VOLSKAYA:{
+            CENTER: '[vect(-94.31, -1.98, 49.25), 6]'
         }
     }
 })
@@ -180,6 +203,7 @@ globalvar cardsLoaded = false
 
 playervar selectedCard = 0
 playervar hasSpawnedOnce = false
+playervar wantsToSkipVoting = false
 
 subroutine dummyVote
 subroutine dummyJudgeVote
@@ -300,12 +324,14 @@ rule "Game Loop":
             
             # Change game state to voting
             currentGameState = gameState.VOTING
+            getAllPlayers().wantsToSkipVoting = false
 
             # If judge does not exist, skip round
             if not entityExists(cardJudge):
                 currentGameState = gameState.END
                 
                 getAllPlayers().playedCard = false
+                getAllPlayers().wantsToSkipVoting = false
                 cardJudge.selectedCardJudge = 0
                 cardJudge.cardVoted = null
                 cardJudge = null
@@ -373,6 +399,7 @@ rule "Game Loop":
             wait(5)
             
             getAllPlayers().playedCard = false
+            getAllPlayers().wantsToSkipVoting = false
             cardJudge.selectedCardJudge = 0
             cardJudge.cardVoted = null
             cardJudge = null
@@ -384,6 +411,12 @@ rule "Game Loop":
                 wait(9999)
 
             destroyInWorldTextLoop(globalHudIndex, hud_gameMessages)
+
+rule "Shorten Voting Time":
+    @Event global
+    @Condition len([player for player in getAllPlayers() if player.wantsToSkipVoting]) >= len(playersInMatch(Team.ALL)) / 2
+
+    roundTime = roundTime / 2
 
 rule "Restart Match":
     @Condition isMatchComplete()

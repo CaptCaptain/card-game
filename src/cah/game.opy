@@ -1,8 +1,8 @@
 settings {
     "main": {
         # <FGFD841FFF>
-        "modeName": "Cards Against Humanity",
-        "description": "A fill-in-the-blank party game that turns your awkward personality and lackluster social skills into hours of fun!\nEach round, one topic card is provided, and everyone else answers with their funniest card. Weekly card rotations keep the game fresh with different combinations!\n\nBased on the card game by Cards Against Humanity LLC\n[Note: This workshop mode contains content not suitable for all audiences]\n[Workshop Mode created by CaptCaptain#11421]\n[Join Workshop Creators at: https://workshop.codes/discord]",
+        "modeName": "<FGFD841FFF>Cards Against Humanity</FG>",
+        "description": "<FGFD841FFF>A fill-in-the-blank party game that turns your awkward personality and lackluster social skills into hours of fun!\n</FG>• Each round, one topic card is provided, and everyone else answers with their funniest card.\n• Over 600+ cards and topic cards that rotate every update.\n\nLatest Version:\n1.8.0 / 12-02-2022\n\n<FG68B984FF>Join Workshop Creators at: https://workshop.codes/discord</FG>",
     },
     "lobby": {
         "mapRotation": "afterGame",
@@ -15,7 +15,7 @@ settings {
     "gamemodes": {
         "ffa": {
             "enabledMaps": [
-                "havana", "petra", "workshopIsland", "workshopChamber", 'malevento', 'paris', 'dorado', 'hollywood', 'oasisGardens', 'oasisUniversity', 'templeOfAnubis', 'kingsRow', 'necropolis', 'castillo'
+                "havana", "petra", "workshopIsland", "workshopChamber", 'malevento', 'paris', 'dorado', 'hollywood', 'oasisGardens', 'oasisUniversity', 'templeOfAnubis', 'kingsRow', 'necropolis', 'castillo', 'chateauGuillard', 'lijiangNightMarket', 'horizonLunarColony', 'lijiangControlCenter', 'lijiangControlCenterLny', 'lijiangGarden', 'lijiangGardenLny', 'volskaya', 'blizzWorld', 'blizzWorldWinter', 'kanezaka'
             ]
         },
         "general": {
@@ -58,13 +58,16 @@ GetStrings({
     disableDynamicTranslation: true,
     strings: {
         GAME_NAME: {
-            "en-US": "Cards Against Humanity by CaptCaptain#11421"
+            "en-US": "Cards Against Humanity"
+        },
+        CREATOR: {
+            "en-US": "Created by: CaptCaptain#11421"
         },
         WEBLINK: {
-            "en-US": "https://workshop.codes/AHJXV"
+            "en-US": "Code Description: https://workshop.codes/709ZF"
         },
         VERSION: {
-            "en-US": "Version: 1.6.0"
+            "en-US": "Version: 1.9.0"
         },
         PLAY_CARDS: {
             "en-US": "Play your cards"
@@ -165,20 +168,33 @@ GetStrings({
         PLAY_CARD_CONTROL: {
             "en-US": "Play Card"
         },
+        VOTE_SKIP_CONTROL_ICON: {
+            "en-US": "{} [{}]",
+            format: "abilityIconString(Hero.LUCIO, Button.ABILITY_2), buttonString(Button.INTERACT)"
+        },
+        VOTE_SKIP_CONTROL: {
+            "en-US": "Hurry Up!"
+        },
+        HURRY_UP: {
+            "en-uS": "{} wishes to hurry it up!",
+            format: "eventPlayer"
+        },
         JUDGE_VOTED:{
-            "en-US": "The Card Czar has voted for {} {}",
-            format: 'heroIcon(cardJudge.cardVoted.getCurrentHero()), cardJudge.cardVoted'
+            "en-US": "The Card Czar has voted for",
+        },
+        BOX:{
+            "en-US": "┌─ CARD CZAR'S SELECTION ─┐\n<space>\n└───────────────┘",
         },
         CURRENT_JUDGE_CARD:{
-            "en-US": "{} CARD CZAR {} {}",
-            format: 'heroIcon(cardJudge.getCurrentHero()), iconString(Icon.ARROW_RIGHT), getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard]'
+            "en-US": "{0}\n",
+            format: 'getJudgeCards[cardJudge.selectedCardJudge].cards[getJudgeCards[cardJudge.selectedCardJudge].selectedCard]'
         },
         WINNING_PLAYER:{
             "en-US": "Winner",
         },
         CARD_FORMAT:{
-            "en-US": "{}",
-            format: '""'
+            "en-US": "{} {}",
+            format: "heroIcon(getJudgeCards[cardJudge.selectedCardJudge].getCurrentHero()), cardJudge.cardVoted",
         }, 
         PLAY_CARD:{
             "en-US": '{} SELECTED "{}"',
@@ -251,10 +267,6 @@ GetStrings({
         SWITCHING_HEROES_CANCELLED:{
             "en-US": "Hero switch cancelled"
         },
-        JUDGE_VOTED:{
-            "en-US": "The Judge has voted for {}",
-            format: 'cardJudge.cardVoted'
-        },
         LOBBY_RULESET:{
             "en-US": "{0} Host Settings:",
             format: 'abilityIconString(Hero.TORBJORN, Button.ABILITY_2)'
@@ -290,6 +302,7 @@ GetStrings({
 #!define SUB_COLOR Color.ORANGE
 #!define VOTE_COLOR Color.WHITE
 #!define USE_SMALL_CARD_FONT true
+#!define USE_SMALL_UI_TEXT_FONT true
 
 #!include "../shared/setting.opy"
 

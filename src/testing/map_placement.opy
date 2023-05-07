@@ -91,3 +91,8 @@ rule "Decrease Radius":
     @Condition hostPlayer.isHoldingButton(Button.SECONDARY_FIRE)
 
     map_radius -= 1
+
+rule "Invincibility":
+    @Event eachPlayer
+
+    eventPlayer.setStatusEffect(null, Status.INVINCIBLE, 9999)

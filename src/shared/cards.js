@@ -16,7 +16,7 @@ result += "subroutine setCardPack_" + subNumber + "\n";
 result += "def setCardPack_" + subNumber + "():\n";
 shuffleArray(cards);
 for (var card of cards) {
-	if (remaining >= 600) {
+	if (remaining >= 300) {
 		remaining = 0;
 		subNumber += 1;
 		result += "subroutine setCardPack_" + subNumber + "\n";
@@ -33,7 +33,7 @@ subNumber += 1;
 result += "subroutine setCardPack_" + subNumber + "\n";
 result += "def setCardPack_" + subNumber + "():\n";
 for (var sentence of sentences) {
-	if (remaining >= 600) {
+	if (remaining >= 300) {
 		remaining = 0;
 		subNumber += 1;
 		result += "subroutine setCardPack_" + subNumber + "\n";

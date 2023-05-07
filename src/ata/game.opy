@@ -1,7 +1,8 @@
 settings {
     "main": {
-        "modeName": "Apples to Apples",
-        "description": 'The Game of Crazy Comparisons!\nEach round, one topic card is provided, and everyone else answers with a card that best matches the topic card.\nBased on the Apples to Apples card game by Mattel Games. [Workshop Mode created by CaptCaptain#11421]'
+        #<FGFF8FB1FF>
+        "modeName": "⊙ﾝ Apples to Apples Cardgame",
+        "description": 'The Game of Crazy Comparisons!\n◆ Each round, one topic card is provided, and everyone else answers with a card that best matches the topic card.\n◆ Create the most interesting combination to win everyones\' vote.\n◆ Over 300+ cards and topic cards.\n\nLatest Version:\n2.9.0 / 05-06-2023\n\nWorkshop Page: https://workshop.codes/apples-to-apples\nJoin Workshop Creators at: https://workshop.codes/discord'
     },
     "lobby": {
         "mapRotation": "afterGame",
@@ -14,7 +15,7 @@ settings {
     "gamemodes": {
         "ffa": {
             "enabledMaps": [
-                "havana", "petra", "workshopIsland", "workshopChamber", 'malevento', 'paris', 'dorado', 'hollywood', 'oasisGardens', 'oasisUniversity', 'templeOfAnubis', 'kingsRow', 'necropolis', 'castillo'
+                "havana", "petra", "workshopIsland", "workshopChamber", 'malevento', 'paris', 'dorado', 'hollywood', 'oasisGardens', 'oasisUniversity', 'templeOfAnubis', 'kingsRow', 'necropolis', 'castillo', 'chateauGuillard', 'lijiangNightMarket', 'horizonLunarColony', 'lijiangControlCenter', 'lijiangControlCenterLny', 'lijiangGarden', 'lijiangGardenLny', 'volskaya', 'blizzWorld', 'blizzWorldWinter', 'kanezaka'
             ]
         },
         "general": {
@@ -32,7 +33,7 @@ settings {
                 "enableUlt": false
             }
         }
-    }
+    },
 }
 
 #!optimizeForSize
@@ -57,13 +58,16 @@ GetStrings({
     disableDynamicTranslation: true,
     strings: {
         GAME_NAME: {
-            "en-US": "Apples to Apples by CaptCaptain#11421"
+            "en-US": "Apples to Apples"
+        },
+        CREATOR: {
+            "en-US": "Created by CaptCaptain#11421"
         },
         WEBLINK: {
             "en-US": "https://workshop.codes/apples-to-apples"
         },
         VERSION: {
-            "en-US": "Version: 2.7.0"
+            "en-US": "Version: 2.9.0"
         },
         PLAY_CARDS: {
             "en-US": "Play your cards"
@@ -129,6 +133,13 @@ GetStrings({
             "en-US": "Card #{}/{}",
             format: "cardJudge.selectedCardJudge + 1, len(getJudgeCards)"
         },
+        BOX:{
+            "en-US": "",
+        },
+        HURRY_UP: {
+            "en-uS": "{} wishes to hurry it up!",
+            format: "eventPlayer"
+        },
         YOUR_CARDS: {
             "en-US": "Your Cards"
         },
@@ -155,6 +166,13 @@ GetStrings({
         },
         PLAY_CARD_CONTROL: {
             "en-US": "Play Card"
+        },
+        VOTE_SKIP_CONTROL_ICON: {
+            "en-US": "{} [{}]",
+            format: "abilityIconString(Hero.LUCIO, Button.ABILITY_2), buttonString(Button.INTERACT)"
+        },
+        VOTE_SKIP_CONTROL: {
+            "en-US": "Hurry Up!"
         },
         FORFEIT_CARD_CONTROL_ICON: {
             "en-US": "{} [{}]",
@@ -284,7 +302,8 @@ GetStrings({
 #!define PRIMARY_COLOR Color.WHITE
 #!define SUB_COLOR Color.ROSE
 #!define VOTE_COLOR Color.TURQUOISE
-#!define USE_SMALL_CARD_FONT false
+#!define USE_SMALL_CARD_FONT WS_SET_GRAPHICS_SMALL_CARD_FONT
+#!define USE_SMALL_UI_TEXT_FONT WS_SET_GRAPHICS_SMALL_UI_FONT
 
 #!include "../shared/setting.opy"
 #!include "../shared/game.opy"

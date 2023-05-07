@@ -10,7 +10,7 @@ settings {
     "gamemodes": {
         "ffa": {
             "enabledMaps": [
-                "havana", "petra", "workshopIsland", "workshopChamber", 'malevento', 'paris', 'dorado', 'hollywood', 'oasisGardens', 'oasisUniversity', 'templeOfAnubis', 'kingsRow', 'necropolis', 'castillo'
+                "havana", "petra", "workshopIsland", "workshopChamber", 'malevento', 'paris', 'dorado', 'hollywood', 'oasisGardens', 'oasisUniversity', 'templeOfAnubis', 'kingsRow', 'necropolis', 'castillo', 'chateauGuillard', 'lijiangNightMarket', 'horizonLunarColony', 'lijiangControlCenter', 'lijiangControlCenterLny', 'lijiangGarden', 'lijiangGardenLny', 'volskaya'
             ]
         },
         "general": {
@@ -31,8 +31,6 @@ settings {
     }
 }
 
-#!optimizeForSize
-
 enum gameStyle:
     DEFAULT,
     CRAB,
@@ -50,8 +48,12 @@ globalvar WS_SET_RULES = [gameStyle.DEFAULT, gameStyle.CRAB, gameStyle.TURNOVER,
 GetStrings({
     availableLanguages: ["en-US"],
     practiceRangeTranslations: ["Practice Range"],
+    disableDynamicTranslation: true,
     strings: {
         GAME_NAME: {
+            "en-US": ""
+        },
+        CREATOR: {
             "en-US": ""
         },
         WEBLINK: {
@@ -140,6 +142,13 @@ GetStrings({
             "en-US": "{}{} Select {}{}",
             format: "iconString(Icon.ARROW_LEFT), buttonString(Button.PRIMARY_FIRE), buttonString(Button.SECONDARY_FIRE), iconString(Icon.ARROW_RIGHT)"
         },
+        BOX:{
+            "en-US": "",
+        },
+        HURRY_UP: {
+            "en-uS": "{} wishes to hurry it up!",
+            format: "eventPlayer"
+        },
         GAME_CONTROLS: {
             "en-US": "{0} CONTROLS {0}",
             format: "iconString(Icon.ARROW_DOWN)"
@@ -157,6 +166,13 @@ GetStrings({
         },
         PLAY_CARD_CONTROL: {
             "en-US": "Play Card"
+        },
+        VOTE_SKIP_CONTROL_ICON: {
+            "en-US": "{} [{}]",
+            format: "abilityIconString(Hero.LUCIO, Button.ABILITY_2), buttonString(Button.INTERACT)"
+        },
+        VOTE_SKIP_CONTROL: {
+            "en-US": "Hurry Up!"
         },
         FORFEIT_CARD_CONTROL_ICON: {
             "en-US": "{} [{}]",
@@ -276,6 +292,7 @@ GetStrings({
 #!define SUB_COLOR Color.WHITE
 #!define VOTE_COLOR Color.ORANGE
 #!define USE_SMALL_CARD_FONT true
+#!define USE_SMALL_UI_TEXT_FONT true
 
 #!include "../shared/setting.opy"
 #!include "../shared/game.opy"

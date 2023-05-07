@@ -3123,7 +3123,7 @@ result += "\n";
 // Set Cards
 let remaining = 0;
 let subNumber = 0;
-let maxCards = 1000;
+let maxCards = 500;
 let cardTracker = 0;
 result += "subroutine setCardPack_" + subNumber + "\n";
 result += "def setCardPack_" + subNumber + "():\n";
