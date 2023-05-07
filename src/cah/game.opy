@@ -1,8 +1,8 @@
 settings {
     "main": {
         # <FGFD841FFF>
-        "modeName": "<FGFD841FFF>Cards Against Humanity</FG>",
-        "description": "<FGFD841FFF>A fill-in-the-blank party game that turns your awkward personality and lackluster social skills into hours of fun!\n</FG>• Each round, one topic card is provided, and everyone else answers with their funniest card.\n• Over 600+ cards and topic cards that rotate every update.\n\nLatest Version:\n1.8.0 / 12-02-2022\n\n<FG68B984FF>Join Workshop Creators at: https://workshop.codes/discord</FG>",
+        "modeName": "◇ Cards Against Humanity",
+        "description": "A fill-in-the-blank party game that turns your awkward personality and lackluster social skills into hours of fun!\n◈ Each round, one topic card is provided, and everyone else answers with their funniest card.\n◈ Create funny combinations to win everyone's vote.\n◈ Over 600+ cards and topic cards available.\n\nLatest Version:\n1.9.0 / 05-07-2023\n\nJoin Workshop Creators at: https://workshop.codes/discord",
     },
     "lobby": {
         "mapRotation": "afterGame",
@@ -64,7 +64,7 @@ GetStrings({
             "en-US": "Created by: CaptCaptain#11421"
         },
         WEBLINK: {
-            "en-US": "Code Description: https://workshop.codes/709ZF"
+            "en-US": "Always import 709ZF to play on the latest version"
         },
         VERSION: {
             "en-US": "Version: 1.9.0"
